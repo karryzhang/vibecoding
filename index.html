@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeCoding — Project Directory</title>
+<style>
+  :root {
+    --bg: #f7f8fb; --surface: #fff; --border: #e8ecf1;
+    --text: #1a2030; --muted: #8993a8; --blue: #4f8ff7; --purple: #8b6cf6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1525; --surface: #182032; --border: #2a3548;
+      --text: #e4e9f1; --muted: #8694ab; --blue: #5b9cf7; --purple: #a48bfa;
+    }
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'SF Pro Display', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 60px 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .header { text-align: center; margin-bottom: 48px; }
+  .header h1 {
+    font-size: 2.2rem; font-weight: 900;
+    background: linear-gradient(125deg, var(--blue), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .header p { font-size: 0.95rem; color: var(--muted); }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px; width: 100%; max-width: 800px;
+  }
+  .card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 24px; text-decoration: none; color: var(--text);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: block;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+  .card-icon { font-size: 2rem; margin-bottom: 12px; }
+  .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+  .card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .card-tag {
+    display: inline-block; margin-top: 12px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 8px;
+    background: color-mix(in srgb, var(--blue) 12%, var(--surface));
+    color: var(--blue);
+  }
+  .footer {
+    margin-top: 60px; font-size: 0.75rem; color: var(--muted); text-align: center;
+  }
+  .footer a { color: var(--blue); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎸 VibeCoding</h1>
+  <p>临时项目和实验页面</p>
+</div>
+
+<div class="grid">
+  <a class="card" href="bitget-aggregator.html">
+    <div class="card-icon">💱</div>
+    <div class="card-title">Bitget Wallet Aggregator</div>
+    <div class="card-desc">Bitget 钱包聚合器页面，支持中英双语切换</div>
+    <span class="card-tag">双语版</span>
+  </a>
+
+  <a class="card" href="bitget-aggregator-en.html">
+    <div class="card-icon">🌐</div>
+    <div class="card-title">Bitget Aggregator (EN)</div>
+    <div class="card-desc">English-only version of the Bitget Wallet Aggregator</div>
+    <span class="card-tag">English</span>
+  </a>
+
+  <a class="card" href="bitget-aggregator-zh.html">
+    <div class="card-icon">🇨🇳</div>
+    <div class="card-title">Bitget 聚合器 (中文)</div>
+    <div class="card-desc">Bitget 钱包聚合器中文版</div>
+    <span class="card-tag">中文</span>
+  </a>
+</div>
+
+<div class="footer">
+  <a href="https://github.com/karryzhang/vibecoding">GitHub</a> · VibeCoding
+</div>
+
+</body>
+</html>
