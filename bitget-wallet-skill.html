@@ -75,6 +75,32 @@ body {
   transform: translateY(0);
 }
 
+/* ---- Directional slide animations ---- */
+.slide-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.slide-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.slide-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---- Stagger delays for children ---- */
+.stagger-1 { transition-delay: 0ms !important; }
+.stagger-2 { transition-delay: 100ms !important; }
+.stagger-3 { transition-delay: 200ms !important; }
+.stagger-4 { transition-delay: 300ms !important; }
+
 /* ---- Nav ---- */
 .nav {
   position: fixed;
@@ -673,9 +699,229 @@ body {
   margin: 0 auto;
   max-width: 800px;
 }
+
+/* ---- Hero Slide-Up Animation ---- */
+@keyframes heroSlideUp {
+  from { opacity: 0; transform: translateY(48px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-content > .fade-in:first-child {
+  animation: heroSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-stats.fade-in {
+  animation: heroSlideUp 0.9s 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ---- Background Ambient Orbs ---- */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(100px);
+}
+@keyframes floatOrb1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.05); }
+  66% { transform: translate(-25px, 20px) scale(0.95); }
+}
+@keyframes floatOrb2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-30px, 25px) scale(0.95); }
+  66% { transform: translate(20px, -35px) scale(1.05); }
+}
+.bg-orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.07), transparent 70%);
+  top: 25%; left: 5%;
+  animation: floatOrb1 22s ease-in-out infinite;
+}
+.bg-orb-2 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(0, 140, 255, 0.05), transparent 70%);
+  top: 55%; right: 0%;
+  animation: floatOrb2 28s ease-in-out infinite;
+}
+
+/* ---- Hero Background Particles (CSS gradient dots) ---- */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-particles span {
+  position: absolute;
+  width: 4px; height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 6s ease-in-out infinite;
+}
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.3; }
+  100% { opacity: 0; transform: translateY(-120px) translateX(20px); }
+}
+.hero-particles span:nth-child(1) { left: 10%; top: 80%; animation-delay: 0s; animation-duration: 5s; }
+.hero-particles span:nth-child(2) { left: 25%; top: 70%; animation-delay: 1.2s; animation-duration: 6s; }
+.hero-particles span:nth-child(3) { left: 45%; top: 85%; animation-delay: 2.5s; animation-duration: 7s; }
+.hero-particles span:nth-child(4) { left: 60%; top: 75%; animation-delay: 0.8s; animation-duration: 5.5s; }
+.hero-particles span:nth-child(5) { left: 78%; top: 80%; animation-delay: 3s; animation-duration: 6.5s; }
+.hero-particles span:nth-child(6) { left: 90%; top: 70%; animation-delay: 1.8s; animation-duration: 5.8s; }
+.hero-particles span:nth-child(7) { left: 35%; top: 90%; animation-delay: 4s; animation-duration: 6.2s; }
+.hero-particles span:nth-child(8) { left: 55%; top: 65%; animation-delay: 2s; animation-duration: 7.5s; }
+
+/* ---- Comparison Table Enhancements ---- */
+@keyframes columnGlow {
+  0%, 100% { box-shadow: inset 0 0 15px rgba(0, 212, 170, 0.05), 0 0 15px rgba(0, 212, 170, 0.03); }
+  50% { box-shadow: inset 0 0 25px rgba(0, 212, 170, 0.12), 0 0 25px rgba(0, 212, 170, 0.06); }
+}
+.compare-table tbody td:nth-child(2) {
+  animation: columnGlow 3s ease-in-out infinite;
+}
+.ico-yes {
+  text-shadow: 0 0 8px rgba(0, 212, 170, 0.5);
+}
+.compare-table tbody tr {
+  transition: background 0.25s ease;
+}
+.compare-table tbody tr:hover {
+  background: rgba(0, 212, 170, 0.04);
+}
+/* Table row stagger animation */
+.compare-table tbody tr.row-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ---- Core Card 3D Tilt + Gradient Glow ---- */
+.core-card {
+  transform-style: preserve-3d;
+}
+.core-card:hover {
+  transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
+  box-shadow: 0 12px 40px var(--accent-glow), 0 0 0 1px var(--card-hover-border);
+}
+.core-card:hover::before { opacity: 1; }
+
+/* ---- Capability Card Hover Glow Border ---- */
+.cap-item {
+  position: relative;
+}
+.cap-item::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--accent), rgba(0, 140, 255, 0.5), var(--accent-light));
+  opacity: 0;
+  transition: opacity 0.35s;
+  z-index: -1;
+}
+.cap-item:hover::before {
+  opacity: 1;
+}
+.cap-item:hover {
+  background: var(--bg-secondary);
+  border-color: transparent;
+}
+
+/* ---- Code Block Blinking Cursor ---- */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.code-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1.15em;
+  background: var(--accent);
+  animation: cursorBlink 1.1s step-end infinite;
+  vertical-align: text-bottom;
+  margin-left: 3px;
+  border-radius: 1px;
+}
+
+/* ---- CTA Button Shimmer ---- */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 3.5s ease-in-out infinite;
+}
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 48px var(--accent-glow-strong), 0 0 16px var(--accent-glow);
+}
+
+/* ---- Stat Card Count-Up Ready ---- */
+.stat-number {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Cost Big Number Glow ---- */
+@keyframes costPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(0, 212, 170, 0.3); }
+  50% { text-shadow: 0 0 40px rgba(0, 212, 170, 0.6), 0 0 80px rgba(0, 212, 170, 0.15); }
+}
+.cost-big-number {
+  animation: costPulse 3s ease-in-out infinite;
+}
+
+/* ---- Advantage Card New Glow ---- */
+.adv-card.new {
+  position: relative;
+}
+@keyframes advGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(0, 212, 170, 0.05); }
+  50% { box-shadow: 0 0 30px rgba(0, 212, 170, 0.12); }
+}
+.adv-card.new {
+  animation: advGlow 4s ease-in-out infinite;
+}
+
+/* ---- prefers-reduced-motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+  .bg-orb, .hero-particles { display: none; }
+  .fade-in, .slide-left, .slide-right {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ---- Mobile: reduce heavy animations ---- */
+@media (max-width: 600px) {
+  .bg-orb { opacity: 0.5; }
+  .hero-particles span:nth-child(n+5) { display: none; }
+}
 </style>
 </head>
 <body>
+
+<!-- Background Ambient Orbs -->
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
 
 <!-- Nav -->
 <nav class="nav">
@@ -691,6 +937,10 @@ body {
 
 <!-- Hero -->
 <section class="hero">
+  <div class="hero-particles">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
   <div class="container hero-content">
     <div class="fade-in">
       <div class="hero-badge">
@@ -736,20 +986,20 @@ body {
   <div class="container">
     <div class="fade-in">
       <h2 class="section-title" data-en="Core Capabilities" data-zh="核心能力">Core Capabilities</h2>
-      <p class="section-subtitle" data-en="Three pillars that make BGW Skill the ultimate on-chain infrastructure for AI agents." data-zh="三大支柱，让 BGW Skill 成为 AI Agent 的终极链上基础设施。">Three pillars that make BGW Skill the ultimate on-chain infrastructure for AI agents.</p>
+      <p class="section-subtitle" data-en="Three pillars that make Bitget Wallet Skill the ultimate on-chain infrastructure for AI agents." data-zh="三大支柱，让 Bitget Wallet Skill 成为 AI Agent 的终极链上基础设施。">Three pillars that make Bitget Wallet Skill the ultimate on-chain infrastructure for AI agents.</p>
     </div>
-    <div class="core-grid fade-in">
-      <div class="core-card">
+    <div class="core-grid">
+      <div class="core-card fade-in stagger-1">
         <span class="core-icon">⛽</span>
         <h3 data-en="Gasless Transactions" data-zh="Gasless 交易">Gasless Transactions</h3>
         <p data-en="Zero gas balance required. Powered by EIP-7702, gas fees are deducted from the input token — no need to hold native tokens on any chain." data-zh="零 gas 余额即可交易。基于 EIP-7702，gas 费从输入代币中扣除 — 无需在任何链上持有原生代币。">Zero gas balance required. Powered by EIP-7702, gas fees are deducted from the input token — no need to hold native tokens on any chain.</p>
       </div>
-      <div class="core-card">
+      <div class="core-card fade-in stagger-2">
         <span class="core-icon">🌉</span>
         <h3 data-en="One-Step Cross-Chain" data-zh="一步跨链">One-Step Cross-Chain</h3>
         <p data-en="Bridge + swap in a single order. No manual bridging, no waiting for confirmations — one API call handles everything." data-zh="一个订单完成桥接 + swap。无需手动桥接，无需等待确认 — 一个 API 调用搞定一切。">Bridge + swap in a single order. No manual bridging, no waiting for confirmations — one API call handles everything.</p>
       </div>
-      <div class="core-card">
+      <div class="core-card fade-in stagger-3">
         <span class="core-icon">🔒</span>
         <h3 data-en="Security Audit" data-zh="安全审计">Security Audit</h3>
         <p data-en="Built-in token contract security detection. Protect your agent from malicious tokens and rug pulls before any transaction." data-zh="内置代币合约安全检测。在任何交易前，保护你的 Agent 免受恶意代币和 rug pull。">Built-in token contract security detection. Protect your agent from malicious tokens and rug pulls before any transaction.</p>
@@ -764,7 +1014,7 @@ body {
 <section class="section" id="compare">
   <div class="container">
     <div class="fade-in">
-      <h2 class="section-title" data-en="Why BGW Skill?" data-zh="为什么选择 BGW Skill？">Why BGW Skill?</h2>
+      <h2 class="section-title" data-en="Why Bitget Wallet Skill?" data-zh="为什么选择 Bitget Wallet Skill？">Why Bitget Wallet Skill?</h2>
       <p class="section-subtitle" data-en="Side-by-side comparison with leading on-chain AI infrastructure." data-zh="与领先链上 AI 基础设施的并排对比。">Side-by-side comparison with leading on-chain AI infrastructure.</p>
     </div>
     <div class="table-wrap fade-in">
@@ -772,7 +1022,7 @@ body {
         <thead>
           <tr>
             <th data-en="Capability" data-zh="能力">Capability</th>
-            <th>BGW Skill ✅</th>
+            <th>Bitget Wallet Skill ✅</th>
             <th>OKX OnchainOS</th>
             <th>Binance Skills Hub</th>
           </tr>
@@ -871,7 +1121,7 @@ body {
           </ul>
         </div>
         <div class="adv-card new">
-          <div class="adv-card-label">BGW Skill</div>
+          <div class="adv-card-label">Bitget Wallet Skill</div>
           <ul>
             <li data-en="Zero gas balance required" data-zh="零 gas 余额即可交易">Zero gas balance required</li>
             <li data-en="EIP-7702 powered" data-zh="EIP-7702 技术驱动">EIP-7702 powered</li>
@@ -903,7 +1153,7 @@ body {
           <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem" data-en="2 steps, 2 signatures, error-prone" data-zh="2 步，2 次签名，容易出错">2 steps, 2 signatures, error-prone</p>
         </div>
         <div class="adv-card new">
-          <div class="adv-card-label">BGW Skill</div>
+          <div class="adv-card-label">Bitget Wallet Skill</div>
           <div class="flow-steps">
             <span class="flow-step new-step">order-create</span>
             <span class="flow-arrow">→</span>
@@ -920,7 +1170,7 @@ body {
     <div class="adv-block fade-in">
       <div class="adv-header">
         <span class="icon">⚡</span>
-        <h3 data-en="Cross-Chain + Gasless Combo — Only BGW" data-zh="跨链 + Gasless 组合拳 — 独此一家">Cross-Chain + Gasless Combo — Only BGW</h3>
+        <h3 data-en="Cross-Chain + Gasless Combo — Only Bitget Wallet" data-zh="跨链 + Gasless 组合拳 — 独此一家">Cross-Chain + Gasless Combo — Only Bitget Wallet</h3>
       </div>
       <div class="adv-scenario">
         <h4 data-en="Scenario" data-zh="场景">Scenario</h4>
@@ -933,7 +1183,7 @@ body {
           <p style="text-align:center" data-en="Cannot do it. Need native gas token first." data-zh="做不到。需要先有原生 gas 代币。">Cannot do it. Need native gas token first.</p>
         </div>
         <div class="adv-card new">
-          <div class="adv-card-label">BGW Skill</div>
+          <div class="adv-card-label">Bitget Wallet Skill</div>
           <p style="font-size:2rem;text-align:center;padding:24px 0">✅</p>
           <p style="text-align:center" data-en="One order. Zero gas. Cross-chain done." data-zh="一个订单。零 gas。跨链完成。">One order. Zero gas. Cross-chain done.</p>
         </div>
@@ -1038,7 +1288,7 @@ body {
   <div class="container">
     <div class="fade-in">
       <h2 class="section-title" data-en="Developer Cost Comparison" data-zh="开发者成本对比">Developer Cost Comparison</h2>
-      <p class="section-subtitle" data-en="BGW Order Mode dramatically reduces operational complexity." data-zh="BGW Order Mode 大幅降低运营复杂度。">BGW Order Mode dramatically reduces operational complexity.</p>
+      <p class="section-subtitle" data-en="Bitget Wallet Order Mode dramatically reduces operational complexity." data-zh="Bitget Wallet Order Mode 大幅降低运营复杂度。">Bitget Wallet Order Mode dramatically reduces operational complexity.</p>
     </div>
     <div class="cost-compare fade-in">
       <div class="cost-card old-cost">
@@ -1065,7 +1315,7 @@ body {
         </div>
       </div>
       <div class="cost-card new-cost">
-        <h3>BGW Order Mode</h3>
+        <h3>Bitget Wallet Order Mode</h3>
         <div class="cost-metric">
           <span data-en="Gas Token Types" data-zh="Gas 代币种类">Gas Token Types</span>
           <span class="val-good">0</span>
@@ -1174,7 +1424,7 @@ console.<span class="fn">log</span>(<span class="str">'Order:'</span>, status.or
   <div class="container">
     <div class="fade-in">
       <h2 data-en="Build the Future of On-Chain AI" data-zh="构建链上 AI 的未来">Build the Future of On-Chain AI</h2>
-      <p data-en="Start integrating BGW Skill into your AI agent today." data-zh="立即将 BGW Skill 集成到你的 AI Agent 中。">Start integrating BGW Skill into your AI agent today.</p>
+      <p data-en="Start integrating Bitget Wallet Skill into your AI agent today." data-zh="立即将 Bitget Wallet Skill 集成到你的 AI Agent 中。">Start integrating Bitget Wallet Skill into your AI agent today.</p>
       <div class="hero-buttons">
         <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-primary" target="_blank" rel="noopener">
           GitHub Star <span style="font-size:1.1em">→</span>
