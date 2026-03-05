@@ -811,16 +811,17 @@ body {
   .orbital-core { width: 32px; height: 32px; box-shadow: 0 0 40px rgba(0,212,170,0.3), 0 0 80px rgba(0,212,170,0.1); }
   .orbital-dot { width: 4px; height: 4px; }
   .orbital-dot.sm { width: 2px; height: 2px; }
-  .hero-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-stats-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .core-grid { grid-template-columns: 1fr; }
   .adv-compare { grid-template-columns: 1fr; }
   .cost-compare { grid-template-columns: 1fr; }
   .section { padding: 64px 0; }
 }
 @media (max-width: 600px) {
-  .hero-stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .stat-card { padding: 16px; }
-  .stat-number { font-size: 1.5rem; }
+  .hero-stats-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .stat-card { padding: 12px 8px; border-radius: 12px; }
+  .stat-number { font-size: 1.25rem; }
+  .stat-label { font-size: 0.68rem; }
   .hero h1 { font-size: 2.2rem; margin-bottom: 8px; }
   .hero-tagline { font-size: 1.05rem; margin-bottom: 12px; }
   .hero-desc { font-size: 0.88rem; margin-bottom: 20px; }
