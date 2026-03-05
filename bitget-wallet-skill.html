@@ -376,39 +376,110 @@ body::after {
 
 /* ---- Orbital Ring System ---- */
 .orbital {
-  width: 380px; height: 380px;
+  width: 420px; height: 420px;
   position: relative;
-  perspective: 800px;
+  perspective: 900px;
   transform-style: preserve-3d;
 }
+/* Core — multi-layer glow */
 .orbital-core {
-  width: 48px; height: 48px;
-  background: radial-gradient(circle, #00FFD1 0%, var(--accent) 30%, rgba(79,143,255,0.3) 60%, transparent 70%);
+  width: 56px; height: 56px;
+  background: radial-gradient(circle, #00FFE0 0%, var(--accent) 25%, rgba(79,143,255,0.4) 50%, rgba(139,92,246,0.15) 70%, transparent 85%);
   border-radius: 50%;
-  box-shadow: 0 0 60px rgba(0,230,184,0.5), 0 0 120px rgba(79,143,255,0.15), 0 0 180px rgba(139,92,246,0.08);
+  box-shadow:
+    0 0 40px rgba(0,230,184,0.6),
+    0 0 80px rgba(0,230,184,0.3),
+    0 0 140px rgba(79,143,255,0.2),
+    0 0 200px rgba(139,92,246,0.1);
   position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: 3;
+  animation: coreBreath 4s ease-in-out infinite;
 }
+@keyframes coreBreath {
+  0%, 100% { transform: translate(-50%,-50%) scale(1); box-shadow: 0 0 40px rgba(0,230,184,0.6), 0 0 80px rgba(0,230,184,0.3), 0 0 140px rgba(79,143,255,0.2), 0 0 200px rgba(139,92,246,0.1); }
+  50% { transform: translate(-50%,-50%) scale(1.08); box-shadow: 0 0 50px rgba(0,230,184,0.7), 0 0 100px rgba(0,230,184,0.4), 0 0 160px rgba(79,143,255,0.25), 0 0 240px rgba(139,92,246,0.15); }
+}
+/* Pulse ring 1 — slow expanding */
+.orbital-core::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 100%; height: 100%;
+  border: 1.5px solid rgba(0,230,184,0.4);
+  border-radius: 50%;
+  animation: pulseRing 3s ease-out infinite;
+  transform: translate(-50%,-50%) scale(1);
+}
+/* Pulse ring 2 — offset timing */
 .orbital-core::after {
   content: '';
-  position: absolute;
-  inset: -8px;
+  position: absolute; top: 50%; left: 50%;
+  width: 100%; height: 100%;
+  border: 1px solid rgba(79,143,255,0.3);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,209,0.2) 0%, transparent 70%);
-  animation: corePulse 3s ease-in-out infinite;
+  animation: pulseRing 3s ease-out infinite 1.5s;
+  transform: translate(-50%,-50%) scale(1);
 }
-@keyframes corePulse {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.4); opacity: 0.2; }
+@keyframes pulseRing {
+  0% { transform: translate(-50%,-50%) scale(1); opacity: 0.8; }
+  100% { transform: translate(-50%,-50%) scale(4); opacity: 0; }
 }
+/* Ripple waves — CSS generated */
+.orbital-ripple {
+  position: absolute; top: 50%; left: 50%;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,230,184,0.15);
+  transform: translate(-50%,-50%);
+  animation: ripple 5s linear infinite;
+  z-index: 1;
+}
+.orbital-ripple:nth-child(2) { animation-delay: -1.25s; }
+.orbital-ripple:nth-child(3) { animation-delay: -2.5s; }
+.orbital-ripple:nth-child(4) { animation-delay: -3.75s; }
+@keyframes ripple {
+  0% { width: 60px; height: 60px; opacity: 0.4; border-color: rgba(0,230,184,0.2); }
+  100% { width: 400px; height: 400px; opacity: 0; border-color: rgba(139,92,246,0.05); }
+}
+/* Radial light beams */
+.orbital-beams {
+  position: absolute; top: 50%; left: 50%;
+  width: 0; height: 0;
+  z-index: 1;
+}
+.orbital-beam {
+  position: absolute; top: 0; left: 0;
+  width: 1px; height: 160px;
+  background: linear-gradient(180deg, rgba(0,230,184,0.3) 0%, transparent 100%);
+  transform-origin: top center;
+  opacity: 0.4;
+}
+.orbital-beam:nth-child(1) { transform: rotate(0deg); }
+.orbital-beam:nth-child(2) { transform: rotate(60deg); }
+.orbital-beam:nth-child(3) { transform: rotate(120deg); }
+.orbital-beam:nth-child(4) { transform: rotate(180deg); }
+.orbital-beam:nth-child(5) { transform: rotate(240deg); }
+.orbital-beam:nth-child(6) { transform: rotate(300deg); }
 .orbital-ring {
   position: absolute; top:0;right:0;bottom:0;left:0;
-  border: 1px solid rgba(0,212,170,0.15);
+  border: 1px solid rgba(0,230,184,0.1);
   border-radius: 50%;
   transform-style: preserve-3d;
   will-change: transform;
 }
+/* Flowing light arc on ring */
+.orbital-ring::before {
+  content: '';
+  position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0%, transparent 70%, rgba(0,230,184,0.25) 85%, rgba(79,143,255,0.15) 95%, transparent 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 2px), #fff calc(100% - 1px), transparent 100%);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 2px), #fff calc(100% - 1px), transparent 100%);
+  animation: ringGlow 6s linear infinite;
+}
+.orbital-ring:nth-child(3)::before { animation-direction: reverse; animation-duration: 8s; }
+.orbital-ring:nth-child(4)::before { animation-duration: 10s; }
+@keyframes ringGlow { to { transform: rotate(360deg); } }
 .orbital-ring:nth-child(2) {
   transform: rotateX(70deg) rotateZ(20deg);
   border-color: rgba(0,212,170,0.12);
@@ -434,11 +505,21 @@ body::after {
 
 /* Orbital moving dots */
 .orbital-dot {
-  width: 6px; height: 6px;
-  background: var(--accent);
+  width: 7px; height: 7px;
+  background: #00FFE0;
   border-radius: 50%;
-  box-shadow: 0 0 12px var(--accent), 0 0 24px rgba(0,212,170,0.3);
+  box-shadow: 0 0 8px var(--accent), 0 0 20px rgba(0,230,184,0.5), 0 0 40px rgba(0,230,184,0.2);
   position: absolute;
+}
+/* Dot trailing glow */
+.orbital-dot::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 20px; height: 20px;
+  background: radial-gradient(circle, rgba(0,230,184,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
 }
 .orbital-ring:nth-child(2) .orbital-dot { animation: orbitDot1 8s linear infinite; }
 .orbital-ring:nth-child(3) .orbital-dot { animation: orbitDot2 10s linear infinite; }
@@ -1101,7 +1182,7 @@ body::after {
   .orbital { width: 160px; height: 160px; margin-bottom: 0; }
   .hero-stats { padding-top: 24px; border-top: 1px solid var(--card-border); }
   .hero-stats-grid { max-width: 100%; }
-  .orbital-core { width: 32px; height: 32px; box-shadow: 0 0 40px rgba(0,212,170,0.3), 0 0 80px rgba(0,212,170,0.1); }
+  .orbital-core { width: 40px; height: 40px; }
   .orbital-dot { width: 4px; height: 4px; }
   .orbital-dot.sm { width: 2px; height: 2px; }
   .hero-stats-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -1123,9 +1204,11 @@ body::after {
   .hero-buttons { margin-bottom: 32px; gap: 10px; }
   .hero-badge { margin-bottom: 12px; }
   .quick-deploy { margin-bottom: 14px; }
-  .hero-visual { opacity: 0.5; }
-  .orbital { width: 140px; height: 140px; }
-  .orbital-core { width: 20px; height: 20px; }
+  .hero-visual { opacity: 0.4; }
+  .orbital { width: 160px; height: 160px; }
+  .orbital-core { width: 24px; height: 24px; }
+  .orbital-beams { display: none; }
+  .orbital-ripple { display: none; }
   .core-grid { grid-template-columns: 1fr; }
   .cap-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .cap-item { padding: 14px; }
@@ -1498,7 +1581,23 @@ a[target="_blank"]::after {
     </div>
     <div class="hero-visual fade-in">
       <div class="orbital">
+        <!-- Ripple waves -->
+        <div class="orbital-ripple"></div>
+        <div class="orbital-ripple"></div>
+        <div class="orbital-ripple"></div>
+        <div class="orbital-ripple"></div>
+        <!-- Light beams -->
+        <div class="orbital-beams">
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+        </div>
+        <!-- Core -->
         <div class="orbital-core"></div>
+        <!-- Rings with flowing arcs -->
         <div class="orbital-ring">
           <div class="orbital-dot"></div>
           <div class="orbital-dot sm"></div>
