@@ -30,7 +30,7 @@
   --max-width: 1200px;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   font-family: var(--font-sans);
@@ -597,6 +597,7 @@ body {
   text-align: center;
   padding: 100px 0 80px;
   position: relative;
+  overflow: hidden;
 }
 .footer-cta::before {
   content: '';
@@ -680,7 +681,7 @@ body {
 <nav class="nav">
   <a href="#" class="nav-logo">
     <span class="dot"></span>
-    <span>BGW Skill</span>
+    <span>Bitget Wallet</span>
   </a>
   <div class="lang-toggle">
     <button class="lang-btn active" data-set-lang="en" onclick="setLang('en')">EN</button>
