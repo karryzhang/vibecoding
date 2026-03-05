@@ -177,7 +177,14 @@ body {
   background: radial-gradient(circle, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
   pointer-events: none;
 }
-.hero-content { position: relative; z-index: 1; }
+.hero-content {
+  position: relative; z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+.hero-text { flex: 1 1 60%; min-width: 0; }
+.hero-visual { flex: 0 0 40%; display: flex; justify-content: center; align-items: center; }
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -216,6 +223,113 @@ body {
   line-height: 1.7;
 }
 .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 64px; }
+.hero-stats-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* ---- Orbital Ring System ---- */
+.orbital {
+  width: 380px; height: 380px;
+  position: relative;
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+.orbital-core {
+  width: 48px; height: 48px;
+  background: radial-gradient(circle, #00FFD1 0%, #00D4AA 40%, transparent 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(0,212,170,0.4), 0 0 120px rgba(0,212,170,0.15);
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.orbital-core::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,209,0.2) 0%, transparent 70%);
+  animation: corePulse 3s ease-in-out infinite;
+}
+@keyframes corePulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.4); opacity: 0.2; }
+}
+.orbital-ring {
+  position: absolute; inset: 0;
+  border: 1px solid rgba(0,212,170,0.15);
+  border-radius: 50%;
+  transform-style: preserve-3d;
+}
+.orbital-ring:nth-child(2) {
+  transform: rotateX(70deg) rotateZ(20deg);
+  border-color: rgba(0,212,170,0.12);
+  animation: orbitSpin 20s linear infinite;
+}
+.orbital-ring:nth-child(3) {
+  transform: rotateX(55deg) rotateZ(-40deg);
+  border-color: rgba(0,212,170,0.08);
+  animation: orbitSpin 25s linear infinite reverse;
+}
+.orbital-ring:nth-child(4) {
+  transform: rotateX(80deg) rotateZ(60deg);
+  border-color: rgba(0,212,170,0.1);
+  animation: orbitSpin 30s linear infinite;
+}
+@keyframes orbitSpin {
+  from { transform: rotateX(var(--rx, 70deg)) rotateZ(var(--rz, 20deg)) rotateY(0deg); }
+  to { transform: rotateX(var(--rx, 70deg)) rotateZ(var(--rz, 20deg)) rotateY(360deg); }
+}
+.orbital-ring:nth-child(2) { --rx: 70deg; --rz: 20deg; }
+.orbital-ring:nth-child(3) { --rx: 55deg; --rz: -40deg; }
+.orbital-ring:nth-child(4) { --rx: 80deg; --rz: 60deg; }
+
+/* Orbital moving dots */
+.orbital-dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--accent), 0 0 24px rgba(0,212,170,0.3);
+  position: absolute;
+}
+.orbital-ring:nth-child(2) .orbital-dot { animation: orbitDot1 8s linear infinite; }
+.orbital-ring:nth-child(3) .orbital-dot { animation: orbitDot2 10s linear infinite; }
+.orbital-ring:nth-child(4) .orbital-dot { animation: orbitDot3 12s linear infinite; }
+@keyframes orbitDot1 {
+  0% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  25% { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+  50% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+  75% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+  100% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+}
+@keyframes orbitDot2 {
+  0% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+  25% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  50% { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+  75% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+  100% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+}
+@keyframes orbitDot3 {
+  0% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+  25% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+  50% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  75% { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+  100% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+}
+/* Extra small orbiting dots */
+.orbital-dot.sm {
+  width: 3px; height: 3px;
+  opacity: 0.6;
+  box-shadow: 0 0 8px var(--accent);
+}
+.orbital-ring:nth-child(2) .orbital-dot.sm { animation: orbitDot1 8s linear infinite; animation-delay: -4s; }
+.orbital-ring:nth-child(3) .orbital-dot.sm { animation: orbitDot2 10s linear infinite; animation-delay: -5s; }
+.orbital-ring:nth-child(4) .orbital-dot.sm { animation: orbitDot3 12s linear infinite; animation-delay: -6s; }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -249,6 +363,11 @@ body {
   box-shadow: 0 0 24px var(--accent-glow);
 }
 .hero-stats {
+  padding-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+.hero-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
@@ -673,17 +792,28 @@ body {
 
 /* ---- Responsive ---- */
 @media (max-width: 900px) {
-  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .hero-content { flex-direction: column; text-align: center; }
+  .hero-text { flex: 1 1 100%; }
+  .hero-visual { flex: 0 0 auto; order: -1; }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-buttons { justify-content: center; }
+  .orbital { width: 200px; height: 200px; }
+  .orbital-core { width: 32px; height: 32px; box-shadow: 0 0 40px rgba(0,212,170,0.3), 0 0 80px rgba(0,212,170,0.1); }
+  .orbital-dot { width: 4px; height: 4px; }
+  .orbital-dot.sm { width: 2px; height: 2px; }
+  .hero-stats-grid { grid-template-columns: repeat(2, 1fr); }
   .core-grid { grid-template-columns: 1fr; }
   .adv-compare { grid-template-columns: 1fr; }
   .cost-compare { grid-template-columns: 1fr; }
   .section { padding: 64px 0; }
 }
 @media (max-width: 600px) {
-  .hero-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hero-stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .stat-card { padding: 16px; }
   .stat-number { font-size: 1.5rem; }
   .hero h1 { font-size: 2rem; }
+  .orbital { width: 160px; height: 160px; }
+  .orbital-core { width: 24px; height: 24px; }
   .cap-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .cap-item { padding: 14px; }
   .btn { padding: 12px 20px; font-size: 0.9rem; }
@@ -740,11 +870,14 @@ body {
   from { opacity: 0; transform: translateY(48px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.hero-content > .fade-in:first-child {
+.hero-text.fade-in {
   animation: heroSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-.hero-stats.fade-in {
-  animation: heroSlideUp 0.9s 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.hero-visual.fade-in {
+  animation: heroSlideUp 0.9s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-stats .fade-in {
+  animation: heroSlideUp 0.9s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* ---- Background Ambient Orbs ---- */
@@ -778,36 +911,6 @@ body {
   animation: floatOrb2 28s ease-in-out infinite;
 }
 
-/* ---- Hero Background Particles (CSS gradient dots) ---- */
-.hero-particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-.hero-particles span {
-  position: absolute;
-  width: 4px; height: 4px;
-  background: var(--accent);
-  border-radius: 50%;
-  opacity: 0;
-  animation: particleFloat 6s ease-in-out infinite;
-}
-@keyframes particleFloat {
-  0% { opacity: 0; transform: translateY(0); }
-  20% { opacity: 0.6; }
-  80% { opacity: 0.3; }
-  100% { opacity: 0; transform: translateY(-120px) translateX(20px); }
-}
-.hero-particles span:nth-child(1) { left: 10%; top: 80%; animation-delay: 0s; animation-duration: 5s; }
-.hero-particles span:nth-child(2) { left: 25%; top: 70%; animation-delay: 1.2s; animation-duration: 6s; }
-.hero-particles span:nth-child(3) { left: 45%; top: 85%; animation-delay: 2.5s; animation-duration: 7s; }
-.hero-particles span:nth-child(4) { left: 60%; top: 75%; animation-delay: 0.8s; animation-duration: 5.5s; }
-.hero-particles span:nth-child(5) { left: 78%; top: 80%; animation-delay: 3s; animation-duration: 6.5s; }
-.hero-particles span:nth-child(6) { left: 90%; top: 70%; animation-delay: 1.8s; animation-duration: 5.8s; }
-.hero-particles span:nth-child(7) { left: 35%; top: 90%; animation-delay: 4s; animation-duration: 6.2s; }
-.hero-particles span:nth-child(8) { left: 55%; top: 65%; animation-delay: 2s; animation-duration: 7.5s; }
 
 /* ---- Comparison Table Enhancements ---- */
 @keyframes columnGlow {
@@ -938,7 +1041,7 @@ body {
     transition-duration: 0.01ms !important;
     animation-delay: 0ms !important;
   }
-  .bg-orb, .hero-particles { display: none; }
+  .bg-orb, .orbital { display: none; }
   .fade-in, .slide-left, .slide-right {
     opacity: 1 !important;
     transform: none !important;
@@ -948,7 +1051,6 @@ body {
 /* ---- Mobile: reduce heavy animations ---- */
 @media (max-width: 600px) {
   .bg-orb { opacity: 0.5; }
-  .hero-particles span:nth-child(n+5) { display: none; }
 }
 </style>
 </head>
@@ -972,51 +1074,70 @@ body {
 
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-particles">
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-  </div>
   <div class="container hero-content">
-    <div class="fade-in">
+    <div class="hero-text fade-in">
       <div class="hero-badge">
         <span class="pulse"></span>
-        <span data-en="Open Source" data-zh="开源项目">Open Source</span>
+        <span data-en="For AI Agents" data-zh="为 AI Agent 而生">For AI Agents</span>
       </div>
+      <h1>
+        <span data-en="On-Chain Intelligence," data-zh="链上智能，">On-Chain Intelligence,</span><br>
+        <span class="gradient-text" data-en="One API Away." data-zh="一个 API 搞定。">One API Away.</span>
+      </h1>
+      <p class="hero-desc" data-en="The only skill that lets your AI agent swap, bridge, and transact across 7 chains — with zero gas, zero complexity." data-zh="唯一让你的 AI Agent 跨 7 条链 swap、bridge、交易的 Skill — 零 gas，零复杂度。">The only skill that lets your AI agent swap, bridge, and transact across 7 chains — with zero gas, zero complexity.</p>
       <!-- Quick deploy one-liner -->
       <div class="quick-deploy" onclick="copyInstall(this)">
         <code>$ npm install bitget-wallet-skill</code>
         <span class="copy-hint" data-en="Click to copy" data-zh="点击复制">Click to copy</span>
         <span class="copy-ok">✓ Copied!</span>
       </div>
-      <h1>
-        <span data-en="Bitget Wallet Skill" data-zh="Bitget Wallet Skill">Bitget Wallet Skill</span>
-      </h1>
-      <p class="hero-desc" data-en="Give your AI agent the power to swap, bridge, and transact across 7+ chains — gasless, in one API call." data-zh="赋予你的 AI Agent 跨 7+ 条链 swap、bridge 和交易的能力 — 零 gas，一个 API 调用搞定。">Give your AI agent the power to swap, bridge, and transact across 7+ chains — gasless, in one API call.</p>
       <div class="hero-buttons">
-        <a href="https://github.com/anthropics/claude-code" class="btn btn-primary" target="_blank" rel="noopener">
-          GitHub <span style="font-size:1.1em">→</span>
+        <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-primary" target="_blank" rel="noopener">
+          <span data-en="Star on GitHub ⭐" data-zh="GitHub ⭐">Star on GitHub ⭐</span>
         </a>
-        <a href="https://github.com/anthropics/claude-code" class="btn btn-outline" target="_blank" rel="noopener">
-          <span data-en="Documentation" data-zh="文档">Documentation</span> <span style="font-size:1.1em">→</span>
+        <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-outline" target="_blank" rel="noopener">
+          <span data-en="Get Started →" data-zh="快速开始 →">Get Started →</span>
         </a>
       </div>
     </div>
+    <div class="hero-visual fade-in">
+      <div class="orbital">
+        <div class="orbital-core"></div>
+        <div class="orbital-ring">
+          <div class="orbital-dot"></div>
+          <div class="orbital-dot sm"></div>
+        </div>
+        <div class="orbital-ring">
+          <div class="orbital-dot"></div>
+          <div class="orbital-dot sm"></div>
+        </div>
+        <div class="orbital-ring">
+          <div class="orbital-dot"></div>
+          <div class="orbital-dot sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
     <div class="hero-stats fade-in">
-      <div class="stat-card">
-        <div class="stat-number">500+</div>
-        <div class="stat-label" data-en="DEX Aggregated" data-zh="DEX 聚合">DEX Aggregated</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">7+</div>
-        <div class="stat-label" data-en="Chains Supported" data-zh="链支持">Chains Supported</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">0</div>
-        <div class="stat-label" data-en="Gas Required (Gasless)" data-zh="Gas 需求（Gasless）">Gas Required (Gasless)</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">1</div>
-        <div class="stat-label" data-en="API Call Cross-Chain Swap" data-zh="API 调用跨链 Swap">API Call Cross-Chain Swap</div>
+      <div class="hero-stats-label" data-en="Trusted by builders worldwide" data-zh="全球开发者信赖">Trusted by builders worldwide</div>
+      <div class="hero-stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">500+</div>
+          <div class="stat-label" data-en="DEX Liquidity Sources" data-zh="DEX 流动性源">DEX Liquidity Sources</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">7+</div>
+          <div class="stat-label" data-en="Chains, 1 API" data-zh="条链，1 个 API">Chains, 1 API</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label" data-en="Zero Gas Required" data-zh="零 Gas 需求">Zero Gas Required</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1</div>
+          <div class="stat-label" data-en="One-Click Cross-Chain" data-zh="一键跨链">One-Click Cross-Chain</div>
+        </div>
       </div>
     </div>
   </div>
