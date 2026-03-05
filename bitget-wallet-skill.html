@@ -1226,40 +1226,36 @@ a[target="_blank"]::after {
 
 /* ---- Quick Deploy Bar ---- */
 .quick-deploy {
-  display: inline-flex; align-items: center; gap: 12px;
-  background: rgba(0, 212, 170, 0.08);
-  border: 1px solid rgba(0, 212, 170, 0.25);
-  border-radius: 99px; padding: 10px 20px;
-  cursor: pointer; margin-bottom: 20px;
-  transition: background 0.2s, border-color 0.2s;
+  display: inline-flex; align-items: center; gap: 0;
+  background: rgba(0, 212, 170, 0.06);
+  border: 1px solid rgba(0, 212, 170, 0.2);
+  border-radius: 99px; padding: 6px 6px 6px 18px;
+  margin-bottom: 20px;
   position: relative;
 }
-.quick-deploy:hover {
-  background: rgba(0, 212, 170, 0.14);
-  border-color: rgba(0, 212, 170, 0.5);
-  box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
-}
-.quick-deploy .qd-label {
-  font-size: 0.72rem; color: var(--text-muted); font-weight: 600; white-space: nowrap;
-}
 .quick-deploy code {
-  font-family: var(--font-mono); font-size: 0.92rem;
+  font-family: var(--font-mono); font-size: 0.88rem;
   color: var(--accent); letter-spacing: 0.02em;
 }
-.quick-deploy .copy-hint {
-  font-size: 0.72rem; color: var(--text-muted);
-  transition: opacity 0.2s;
+.qd-copy {
+  margin-left: 12px; padding: 6px 16px;
+  background: rgba(0, 212, 170, 0.15); border: 1px solid rgba(0, 212, 170, 0.3);
+  border-radius: 99px; color: var(--accent); font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.15s; white-space: nowrap;
 }
+.qd-copy:hover { background: rgba(0, 212, 170, 0.25); }
+.qd-copy:active { transform: scale(0.95); }
 .quick-deploy .copy-ok {
-  font-size: 0.72rem; color: var(--accent); font-weight: 600;
-  opacity: 0; position: absolute; right: 20px;
-  transition: opacity 0.2s;
+  font-size: 0.75rem; color: var(--accent); font-weight: 700;
+  opacity: 0; position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  transition: opacity 0.2s; pointer-events: none;
 }
-.quick-deploy.copied .copy-hint { opacity: 0; }
+.quick-deploy.copied .qd-copy { opacity: 0; }
 .quick-deploy.copied .copy-ok { opacity: 1; }
 @media (max-width: 600px) {
-  .quick-deploy { padding: 8px 16px; gap: 8px; }
-  .quick-deploy code { font-size: 0.78rem; }
+  .quick-deploy { padding: 5px 5px 5px 14px; }
+  .quick-deploy code { font-size: 0.75rem; }
+  .qd-copy { margin-left: 8px; padding: 5px 12px; font-size: 0.7rem; }
 }
 
 /* ---- Hero Slide-Up Animation ---- */
@@ -1484,9 +1480,10 @@ a[target="_blank"]::after {
       </p>
       <p class="hero-desc" data-en="The only skill that lets your AI agent swap, bridge, and track markets across 7 chains — gasless, effortless." data-zh="唯一让你的 AI Agent 跨 7 条链 swap、bridge、追踪行情的 Skill — 无 gas，无负担。">The only skill that lets your AI agent swap, bridge, and track markets across 7 chains — gasless, effortless.</p>
       <!-- Quick deploy one-liner -->
-      <div class="quick-deploy" onclick="copyInstall(this)">
-        <code>$ npm install bitget-wallet-skill</code>
-        <span class="copy-ok">✓ Copied!</span>
+      <div class="quick-deploy">
+        <code>npm install bitget-wallet-skill</code>
+        <button class="qd-copy" onclick="copyInstall(this.parentElement)">Copy</button>
+        <span class="copy-ok">✓</span>
       </div>
       <div class="hero-buttons">
         <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-primary" target="_blank" rel="noopener">
