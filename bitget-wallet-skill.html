@@ -448,7 +448,7 @@ body {
 /* ---- Core Cards ---- */
 .core-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 .core-card {
@@ -853,7 +853,7 @@ body {
   .orbital-dot { width: 4px; height: 4px; }
   .orbital-dot.sm { width: 2px; height: 2px; }
   .hero-stats-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  .core-grid { grid-template-columns: 1fr; }
+  .core-grid { grid-template-columns: repeat(2, 1fr); }
   .adv-compare { grid-template-columns: 1fr; }
   .cost-compare { grid-template-columns: 1fr; }
   .section { padding: 64px 0; }
@@ -1222,9 +1222,14 @@ body {
         <p data-en="Bridge + swap in a single order. No manual bridging, no waiting for confirmations — one API call handles everything." data-zh="一个订单完成桥接 + swap。无需手动桥接，无需等待确认 — 一个 API 调用搞定一切。">Bridge + swap in a single order. No manual bridging, no waiting for confirmations — one API call handles everything.</p>
       </div>
       <div class="core-card fade-in stagger-3">
+        <span class="core-icon">📊</span>
+        <h3 data-en="On-Chain Market Data" data-zh="链上行情数据">On-Chain Market Data</h3>
+        <p data-en="Real-time token prices, K-line charts (1m to 1d), buy/sell volume, top gainers/losers, liquidity pools, and new token discovery — everything your agent needs to make informed decisions." data-zh="实时代币价格、K 线图（1分钟到日线）、买卖量统计、涨跌榜、流动性池、新币发现 — Agent 做出明智决策所需的全部数据。">Real-time token prices, K-line charts (1m to 1d), buy/sell volume, top gainers/losers, liquidity pools, and new token discovery — everything your agent needs to make informed decisions.</p>
+      </div>
+      <div class="core-card fade-in stagger-4">
         <span class="core-icon">🔒</span>
         <h3 data-en="Security Audit" data-zh="安全审计">Security Audit</h3>
-        <p data-en="Built-in token contract security detection. Protect your agent from malicious tokens and rug pulls before any transaction." data-zh="内置代币合约安全检测。在任何交易前，保护你的 Agent 免受恶意代币和 rug pull。">Built-in token contract security detection. Protect your agent from malicious tokens and rug pulls before any transaction.</p>
+        <p data-en="Built-in token contract security detection. Honeypot check, permission analysis, blacklist scan — protect your agent from rug pulls before any trade." data-zh="内置代币合约安全检测。蜜罐检查、权限分析、黑名单扫描 — 在任何交易前保护你的 Agent。">Built-in token contract security detection. Honeypot check, permission analysis, blacklist scan — protect your agent from rug pulls before any trade.</p>
       </div>
     </div>
   </div>
