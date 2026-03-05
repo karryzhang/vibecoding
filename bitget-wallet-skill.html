@@ -700,6 +700,41 @@ body {
   max-width: 800px;
 }
 
+/* ---- Quick Deploy Bar ---- */
+.quick-deploy {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: rgba(0, 212, 170, 0.08);
+  border: 1px solid rgba(0, 212, 170, 0.25);
+  border-radius: 99px; padding: 10px 20px;
+  cursor: pointer; margin-bottom: 20px;
+  transition: all 0.2s;
+  position: relative;
+}
+.quick-deploy:hover {
+  background: rgba(0, 212, 170, 0.14);
+  border-color: rgba(0, 212, 170, 0.5);
+  box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
+}
+.quick-deploy code {
+  font-family: var(--font-mono); font-size: 0.92rem;
+  color: var(--accent); letter-spacing: 0.02em;
+}
+.quick-deploy .copy-hint {
+  font-size: 0.72rem; color: var(--text-muted);
+  transition: opacity 0.2s;
+}
+.quick-deploy .copy-ok {
+  font-size: 0.72rem; color: var(--accent); font-weight: 600;
+  opacity: 0; position: absolute; right: 20px;
+  transition: opacity 0.2s;
+}
+.quick-deploy.copied .copy-hint { opacity: 0; }
+.quick-deploy.copied .copy-ok { opacity: 1; }
+@media (max-width: 600px) {
+  .quick-deploy { padding: 8px 16px; gap: 8px; }
+  .quick-deploy code { font-size: 0.78rem; }
+}
+
 /* ---- Hero Slide-Up Animation ---- */
 @keyframes heroSlideUp {
   from { opacity: 0; transform: translateY(48px); }
@@ -946,6 +981,12 @@ body {
       <div class="hero-badge">
         <span class="pulse"></span>
         <span data-en="Open Source" data-zh="开源项目">Open Source</span>
+      </div>
+      <!-- Quick deploy one-liner -->
+      <div class="quick-deploy" onclick="copyInstall(this)">
+        <code>$ npm install bitget-wallet-skill</code>
+        <span class="copy-hint" data-en="Click to copy" data-zh="点击复制">Click to copy</span>
+        <span class="copy-ok">✓ Copied!</span>
       </div>
       <h1>
         <span data-en="Bitget Wallet Skill" data-zh="Bitget Wallet Skill">Bitget Wallet Skill</span>
@@ -1447,6 +1488,13 @@ console.<span class="fn">log</span>(<span class="str">'Order:'</span>, status.or
 
 <script>
 // ---- Language Toggle ----
+function copyInstall(el) {
+  navigator.clipboard.writeText('npm install bitget-wallet-skill').then(function() {
+    el.classList.add('copied');
+    setTimeout(function() { el.classList.remove('copied'); }, 2000);
+  });
+}
+
 function setLang(lang) {
   document.documentElement.setAttribute('data-lang', lang);
 
