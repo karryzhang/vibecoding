@@ -56,7 +56,7 @@
   --accent-glow-strong: rgba(0, 212, 170, 0.3);
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-muted: #8896a8;
   --card-bg: rgba(255, 255, 255, 0.03);
   --card-border: rgba(255, 255, 255, 0.08);
   --card-hover-border: rgba(0, 212, 170, 0.25);
@@ -92,12 +92,12 @@ body {
 body::after {
   content: '';
   position: fixed;
-  inset: 0;
+  top:0;right:0;bottom:0;left:0;
   z-index: 9999;
   pointer-events: none;
   opacity: 0.018;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
+  background-repeat: repeat; background-size: 256px 256px;
   background-size: 256px 256px;
 }
 
@@ -186,6 +186,7 @@ body::after {
   justify-content: space-between;
   align-items: center;
   background: rgba(10, 14, 23, 0.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
   border-bottom: 1px solid var(--card-border);
@@ -205,11 +206,13 @@ body::after {
   gap: 8px;
 }
 .nav-logo .dot {
-  width: 8px; height: 8px;
+  width: 10px; height: 10px;
   background: var(--accent);
   border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent);
+  box-shadow: 0 0 12px var(--accent), 0 0 24px rgba(0, 212, 170, 0.3);
+  animation: dotPulse 3s ease-in-out infinite;
 }
+@keyframes dotPulse { 0%,100%{box-shadow:0 0 12px var(--accent),0 0 24px rgba(0,212,170,0.3)} 50%{box-shadow:0 0 16px var(--accent),0 0 32px rgba(0,212,170,0.4)} }
 .nav-links {
   display: flex; gap: 24px; margin-left: auto; margin-right: 24px;
 }
@@ -217,8 +220,21 @@ body::after {
   color: var(--text-muted); text-decoration: none; font-size: 0.82rem; font-weight: 500;
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--accent); }
-@media (max-width: 768px) { .nav-links { display: none; } }
+.nav-links a:hover, .nav-links a.active { color: var(--accent); }
+.nav-links a.active { border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .core-card, .cap-item, .adv-card, .cost-card, .stat-card {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .adv-compare { position: relative; }
+  .adv-compare::before {
+    content: 'VS';
+    display: block; text-align: center; padding: 8px 0;
+    font-size: 0.75rem; font-weight: 800; color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+}
 .lang-toggle {
   display: flex;
   background: var(--card-bg);
@@ -234,7 +250,7 @@ body::after {
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.25s;
+  transition: background 0.25s, color 0.25s;
   position: relative;
 }
 .lang-btn::after {
@@ -312,8 +328,8 @@ body::after {
   animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent-glow-strong); }
-  50% { opacity: 0.7; box-shadow: 0 0 0 8px transparent; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,212,170,0.2); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 6px transparent; }
 }
 .hero h1 {
   font-size: clamp(2.8rem, 7vw, 4.5rem);
@@ -378,10 +394,11 @@ body::after {
   50% { transform: scale(1.4); opacity: 0.2; }
 }
 .orbital-ring {
-  position: absolute; inset: 0;
+  position: absolute; top:0;right:0;bottom:0;left:0;
   border: 1px solid rgba(0,212,170,0.15);
   border-radius: 50%;
   transform-style: preserve-3d;
+  will-change: transform;
 }
 .orbital-ring:nth-child(2) {
   transform: rotateX(70deg) rotateZ(20deg);
@@ -456,7 +473,7 @@ body::after {
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s var(--ease-out-expo);
+  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo), background 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo);
   cursor: pointer;
   border: none;
 }
@@ -478,6 +495,7 @@ body::after {
   background: rgba(255,255,255,0.03);
   color: var(--text-primary);
   border: 1px solid var(--card-border);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -499,19 +517,20 @@ body::after {
 }
 .stat-card {
   background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid transparent;
   border-radius: 16px;
   padding: 24px;
   text-align: center;
-  transition: all 0.4s var(--ease-out-expo);
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
   position: relative;
 }
 .stat-card::before {
   content: '';
   position: absolute;
-  inset: 0;
+  top:0;right:0;bottom:0;left:0;
   border-radius: 16px;
   padding: 1px;
   background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
@@ -537,7 +556,10 @@ body::after {
 .stat-label {
   font-size: 0.85rem;
   color: var(--text-muted);
-  margin-top: 4px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 2px solid rgba(0, 212, 170, 0.2);
+  display: inline-block;
 }
 
 /* ---- Core Cards ---- */
@@ -548,12 +570,13 @@ body::after {
 }
 .core-card {
   background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid transparent;
   border-radius: 20px;
   padding: 36px 28px;
-  transition: all 0.4s var(--ease-out-expo);
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
   position: relative;
   overflow: hidden;
   box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
@@ -570,7 +593,7 @@ body::after {
 .core-card::after {
   content: '';
   position: absolute;
-  inset: 0;
+  top:0;right:0;bottom:0;left:0;
   border-radius: 20px;
   padding: 1px;
   background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
@@ -617,14 +640,25 @@ body::after {
   border-radius: 16px;
   border: 1px solid transparent;
   background: rgba(255,255,255,0.02);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   position: relative;
 }
+.table-wrap::after {
+  content: 'scroll →';
+  position: absolute; right: 8px; bottom: 8px;
+  font-size: 0.7rem; color: var(--text-muted); opacity: 0.6;
+  pointer-events: none; display: none;
+}
+@media (max-width: 768px) {
+  .table-wrap::after { display: block; }
+  .th-full { display: none; }
+}
+@media (min-width: 769px) { .th-short { display: none; } }
 .table-wrap::before {
   content: '';
   position: absolute;
-  inset: 0;
+  top:0;right:0;bottom:0;left:0;
   border-radius: 16px;
   padding: 1px;
   background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
@@ -704,6 +738,7 @@ body::after {
   border-radius: 16px;
   padding: 28px;
   border: 1px solid var(--card-border);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.1);
@@ -751,6 +786,7 @@ body::after {
 
 .adv-scenario {
   background: rgba(255,255,255,0.03);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
@@ -806,15 +842,17 @@ body::after {
 }
 .cap-item {
   background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
-  transition: all 0.4s var(--ease-out-expo);
-  cursor: default;
+  transition: transform 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
+  cursor: pointer;
 }
+.cap-item:active { transform: scale(0.97); }
 .cap-item:hover {
   border-color: var(--card-hover-border);
   box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2), 0 12px 32px rgba(0,0,0,0.15);
@@ -822,7 +860,7 @@ body::after {
 }
 .cap-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
 .cap-item h4 {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
   margin-bottom: 4px;
 }
@@ -842,6 +880,7 @@ body::after {
   border-radius: 20px;
   padding: 36px;
   border: 1px solid var(--card-border);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
@@ -912,7 +951,7 @@ body::after {
   border-bottom: none;
   border-radius: 10px 10px 0 0;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 .code-tab.active {
   color: var(--accent);
@@ -974,11 +1013,11 @@ body::after {
   content: '';
   position: absolute;
   top: -80px; left: 50%; transform: translateX(-50%);
-  width: 800px; height: 400px;
+  width: 1000px; height: 500px;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,212,170,0.12) 0%, transparent 60%),
-    radial-gradient(circle at 35% 40%, rgba(59,130,246,0.06) 0%, transparent 50%),
-    radial-gradient(circle at 65% 60%, rgba(0,212,170,0.06) 0%, transparent 50%);
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,212,170,0.18) 0%, transparent 60%),
+    radial-gradient(circle at 35% 40%, rgba(59,130,246,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 65% 60%, rgba(0,212,170,0.1) 0%, transparent 50%);
   pointer-events: none;
 }
 .footer-cta h2 {
@@ -1073,6 +1112,51 @@ body::after {
   .section-subtitle { padding-left: 14px; }
 }
 
+/* ---- Supported Chains ---- */
+.chain-grid {
+  display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+}
+.chain-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 12px; padding: 12px 20px;
+  font-size: 0.9rem; font-weight: 600; color: var(--text-primary);
+  transition: border-color 0.3s, transform 0.3s var(--ease-out-expo);
+}
+.chain-item:hover { border-color: var(--card-hover-border); transform: translateY(-2px); }
+.chain-logo { font-size: 1.2rem; }
+
+/* ---- Use Cases ---- */
+.usecase-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;
+}
+.usecase-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 28px;
+  transition: transform 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
+}
+.usecase-card:hover { border-color: var(--card-hover-border); transform: translateY(-4px); }
+.usecase-icon { font-size: 1.8rem; display: block; margin-bottom: 12px; }
+.usecase-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.usecase-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ---- Code block copy button ---- */
+.code-section { position: relative; }
+.code-copy-btn {
+  position: absolute; top: 44px; right: 12px; z-index: 2;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 4px 10px; font-size: 0.72rem; color: var(--text-muted);
+  cursor: pointer; transition: background 0.2s, color 0.2s;
+}
+.code-copy-btn:hover { background: rgba(0,212,170,0.1); color: var(--accent); }
+.code-copy-btn.copied { color: var(--accent); }
+
+/* ---- External link indicator ---- */
+a[target="_blank"]::after {
+  content: ' ↗'; font-size: 0.75em; opacity: 0.6;
+}
+.btn[target="_blank"]::after, .footer-links a::after, .nav-logo::after { content: none; }
+
 /* ---- Scroll-to-top ---- */
 .scroll-top {
   position: fixed; bottom: 32px; right: 32px; z-index: 100;
@@ -1094,6 +1178,14 @@ body::after {
   background: linear-gradient(90deg, transparent, var(--card-border), transparent);
   margin: 0 auto;
   max-width: 800px;
+  position: relative;
+}
+.section-divider::after {
+  content: '';
+  position: absolute; left: 50%; top: -2px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); transform: translateX(-50%);
+  box-shadow: 0 0 8px var(--accent);
 }
 
 /* ---- Quick Deploy Bar ---- */
@@ -1103,13 +1195,16 @@ body::after {
   border: 1px solid rgba(0, 212, 170, 0.25);
   border-radius: 99px; padding: 10px 20px;
   cursor: pointer; margin-bottom: 20px;
-  transition: all 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   position: relative;
 }
 .quick-deploy:hover {
   background: rgba(0, 212, 170, 0.14);
   border-color: rgba(0, 212, 170, 0.5);
   box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
+}
+.quick-deploy .qd-label {
+  font-size: 0.72rem; color: var(--text-muted); font-weight: 600; white-space: nowrap;
 }
 .quick-deploy code {
   font-family: var(--font-mono); font-size: 0.92rem;
@@ -1331,8 +1426,8 @@ body::after {
     <a href="#quickstart" data-en="Start" data-zh="开始">Start</a>
   </div>
   <div class="lang-toggle">
-    <button class="lang-btn active" data-set-lang="en" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" data-set-lang="zh" onclick="setLang('zh')">🌐 中文</button>
+    <button class="lang-btn active" data-set-lang="en" onclick="setLang('en')" aria-label="Switch to English">EN</button>
+    <button class="lang-btn" data-set-lang="zh" onclick="setLang('zh')" aria-label="切换中文">🌐 中文</button>
   </div>
 </nav>
 
@@ -1351,16 +1446,17 @@ body::after {
         <span data-en="On-Chain Intelligence," data-zh="链上智能，">On-Chain Intelligence,</span>
         <span class="gradient-text" data-en="Unlimited Chains. One API." data-zh="无限链。一个 API。">Unlimited Chains. One API.</span>
       </p>
-      <p class="hero-desc" data-en="The only skill that lets your AI agent swap, bridge, and transact across 7 chains — with zero gas, zero complexity." data-zh="唯一让你的 AI Agent 跨 7 条链 swap、bridge、交易的 Skill — 零 gas，零复杂度。">The only skill that lets your AI agent swap, bridge, and transact across 7 chains — with zero gas, zero complexity.</p>
+      <p class="hero-desc" data-en="The only skill that lets your AI agent swap, bridge, and transact across 7 chains — with gasless, effortless." data-zh="唯一让你的 AI Agent 跨 7 条链 swap、bridge、交易的 Skill — 无 gas，无负担。">The only skill that lets your AI agent swap, bridge, and transact across 7 chains — with gasless, effortless.</p>
       <!-- Quick deploy one-liner -->
       <div class="quick-deploy" onclick="copyInstall(this)">
-        <code>$ npm install bitget-wallet-skill</code>
+        <span class="qd-label">⚡ One-line install:</span>
+        <code>npm install bitget-wallet-skill</code>
         <span class="copy-hint" data-en="Click to copy" data-zh="点击复制">Click to copy</span>
         <span class="copy-ok">✓ Copied!</span>
       </div>
       <div class="hero-buttons">
         <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-primary" target="_blank" rel="noopener">
-          <span data-en="Star on GitHub ⭐" data-zh="GitHub ⭐">Star on GitHub ⭐</span>
+          GitHub ⭐
         </a>
         <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-outline" target="_blank" rel="noopener">
           <span data-en="Get Started →" data-zh="快速开始 →">Get Started →</span>
@@ -1418,22 +1514,22 @@ body::after {
     </div>
     <div class="core-grid">
       <div class="core-card fade-in stagger-1">
-        <span class="core-icon">⛽</span>
+        <span class="core-icon" aria-hidden="true">⛽</span>
         <h3 data-en="Gasless Transactions" data-zh="Gasless 交易">Gasless Transactions</h3>
         <p data-en="No native tokens needed. EIP-7702 deducts gas from input token automatically." data-zh="无需原生代币。EIP-7702 自动从输入代币扣除 gas。">No native tokens needed. EIP-7702 deducts gas from input token automatically.</p>
       </div>
       <div class="core-card fade-in stagger-2">
-        <span class="core-icon">🌉</span>
+        <span class="core-icon" aria-hidden="true">🌉</span>
         <h3 data-en="One-Step Cross-Chain" data-zh="一步跨链">One-Step Cross-Chain</h3>
         <p data-en="Bridge + swap in one order, one signature. No manual bridging steps." data-zh="一个订单，一次签名，自动桥接 + swap。">Bridge + swap in one order, one signature. No manual bridging steps.</p>
       </div>
       <div class="core-card fade-in stagger-3">
-        <span class="core-icon">📊</span>
+        <span class="core-icon" aria-hidden="true">📊</span>
         <h3 data-en="On-Chain Market Data" data-zh="链上行情数据">On-Chain Market Data</h3>
         <p data-en="Prices, K-lines, volume, rankings, liquidity pools, new token alerts. Full market intelligence." data-zh="价格、K线、交易量、排行榜、流动性池、新币预警。完整市场情报。">Prices, K-lines, volume, rankings, liquidity pools, new token alerts. Full market intelligence.</p>
       </div>
       <div class="core-card fade-in stagger-4">
-        <span class="core-icon">🔒</span>
+        <span class="core-icon" aria-hidden="true">🔒</span>
         <h3 data-en="Security Audit" data-zh="安全审计">Security Audit</h3>
         <p data-en="Honeypot, permissions, blacklist — auto-scan before every trade." data-zh="蜜罐、权限、黑名单 — 每笔交易前自动扫描。">Honeypot, permissions, blacklist — auto-scan before every trade.</p>
       </div>
@@ -1451,11 +1547,11 @@ body::after {
       <p class="section-subtitle" data-en="Side-by-side comparison with leading on-chain AI infrastructure." data-zh="与领先链上 AI 基础设施的并排对比。">Side-by-side comparison with leading on-chain AI infrastructure.</p>
     </div>
     <div class="table-wrap fade-in">
-      <table class="compare-table">
+      <table class="compare-table" aria-label="Feature comparison between Bitget Wallet Skill, OKX OnchainOS, and Binance Skills Hub">
         <thead>
           <tr>
             <th data-en="Capability" data-zh="能力">Capability</th>
-            <th>Bitget Wallet Skill ✅</th>
+            <th><span class="th-full">Bitget Wallet Skill</span><span class="th-short">Bitget</span> ✅</th>
             <th>OKX OnchainOS</th>
             <th>Binance Skills Hub</th>
           </tr>
@@ -1627,6 +1723,61 @@ body::after {
 
 <div class="section-divider"></div>
 
+<!-- Supported Chains -->
+<section class="section" id="chains">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Supported Chains" data-zh="支持的链">Supported Chains</h2>
+      <p class="section-subtitle" data-en="One SDK, multiple chains. More coming soon." data-zh="一个 SDK，多条链。更多即将上线。">One SDK, multiple chains. More coming soon.</p>
+    </div>
+    <div class="chain-grid fade-in">
+      <div class="chain-item" title="Ethereum"><span class="chain-logo">Ξ</span><span>Ethereum</span></div>
+      <div class="chain-item" title="Base"><span class="chain-logo">🔵</span><span>Base</span></div>
+      <div class="chain-item" title="BNB Chain"><span class="chain-logo">🟡</span><span>BNB Chain</span></div>
+      <div class="chain-item" title="Arbitrum"><span class="chain-logo">🔷</span><span>Arbitrum</span></div>
+      <div class="chain-item" title="Polygon"><span class="chain-logo">🟣</span><span>Polygon</span></div>
+      <div class="chain-item" title="Solana"><span class="chain-logo">◎</span><span>Solana</span></div>
+      <div class="chain-item" title="Morph"><span class="chain-logo">🌀</span><span>Morph</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Use Cases -->
+<section class="section" id="usecases">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Use Cases" data-zh="应用场景">Use Cases</h2>
+      <p class="section-subtitle" data-en="Real-world scenarios where Bitget Wallet Skill shines." data-zh="Bitget Wallet Skill 大显身手的真实场景。">Real-world scenarios where Bitget Wallet Skill shines.</p>
+    </div>
+    <div class="usecase-grid fade-in">
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">💼</span>
+        <h3 data-en="Portfolio Agent" data-zh="投资组合 Agent">Portfolio Agent</h3>
+        <p data-en="Auto-rebalance across chains. Buy low on Base, sell high on Ethereum — gasless, one order." data-zh="跨链自动再平衡。在 Base 低买，在 Ethereum 高卖 — 零 gas，一个订单。">Auto-rebalance across chains. Buy low on Base, sell high on Ethereum — gasless, one order.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">🤖</span>
+        <h3 data-en="Trading Bot" data-zh="交易机器人">Trading Bot</h3>
+        <p data-en="24/7 automated trading with security checks before every swap. Never trade a honeypot." data-zh="7×24 自动交易，每笔 swap 前安全检测。永不踩蜜罐。">24/7 automated trading with security checks before every swap. Never trade a honeypot.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">📡</span>
+        <h3 data-en="Market Scanner" data-zh="行情扫描器">Market Scanner</h3>
+        <p data-en="Real-time monitoring of prices, volumes, new tokens, and liquidity changes across all chains." data-zh="实时监控所有链上的价格、交易量、新币和流动性变化。">Real-time monitoring of prices, volumes, new tokens, and liquidity changes across all chains.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">👥</span>
+        <h3 data-en="Community Bot" data-zh="社区机器人">Community Bot</h3>
+        <p data-en="Telegram/Discord bot that lets community members swap tokens via chat commands." data-zh="Telegram/Discord 机器人，社区成员通过聊天命令即可 swap 代币。">Telegram/Discord bot that lets community members swap tokens via chat commands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
 <!-- Capabilities Grid -->
 <section class="section" id="capabilities">
   <div class="container">
@@ -1636,77 +1787,77 @@ body::after {
     </div>
     <div class="cap-grid fade-in">
       <div class="cap-item">
-        <span class="cap-icon">🪙</span>
+        <span class="cap-icon" aria-hidden="true">🪙</span>
         <h4>Token Info</h4>
         <p data-en="Token metadata & details" data-zh="代币元数据 & 详情">Token metadata & details</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">💰</span>
+        <span class="cap-icon" aria-hidden="true">💰</span>
         <h4>Batch Price</h4>
         <p data-en="Batch token price queries" data-zh="批量代币价格查询">Batch token price queries</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">📈</span>
+        <span class="cap-icon" aria-hidden="true">📈</span>
         <h4>K-Line</h4>
         <p data-en="Candlestick chart data" data-zh="K线图数据">Candlestick chart data</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">📊</span>
+        <span class="cap-icon" aria-hidden="true">📊</span>
         <h4 data-en="Tx Stats" data-zh="交易统计">Tx Stats</h4>
         <p data-en="Transaction statistics" data-zh="交易统计数据">Transaction statistics</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">🏆</span>
+        <span class="cap-icon" aria-hidden="true">🏆</span>
         <h4 data-en="Rankings" data-zh="排行榜">Rankings</h4>
         <p data-en="Token rankings by metrics" data-zh="按指标的代币排行">Token rankings by metrics</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">🌊</span>
+        <span class="cap-icon" aria-hidden="true">🌊</span>
         <h4 data-en="Liquidity Pools" data-zh="流动性池">Liquidity Pools</h4>
         <p data-en="Pool info & analytics" data-zh="池信息 & 分析">Pool info & analytics</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">🔒</span>
+        <span class="cap-icon" aria-hidden="true">🔒</span>
         <h4 data-en="Security Audit" data-zh="安全审计">Security Audit</h4>
         <p data-en="Contract security check" data-zh="合约安全检测">Contract security check</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">💱</span>
+        <span class="cap-icon" aria-hidden="true">💱</span>
         <h4>Swap Quote</h4>
         <p data-en="Get best swap quotes" data-zh="获取最优 swap 报价">Get best swap quotes</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">🔄</span>
+        <span class="cap-icon" aria-hidden="true">🔄</span>
         <h4>Swap Send</h4>
         <p data-en="Execute token swaps" data-zh="执行代币 swap">Execute token swaps</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">📋</span>
+        <span class="cap-icon" aria-hidden="true">📋</span>
         <h4>Order Quote</h4>
         <p data-en="Cross-chain order quotes" data-zh="跨链订单报价">Cross-chain order quotes</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">📝</span>
+        <span class="cap-icon" aria-hidden="true">📝</span>
         <h4>Order Create</h4>
         <p data-en="Create cross-chain orders" data-zh="创建跨链订单">Create cross-chain orders</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">📤</span>
+        <span class="cap-icon" aria-hidden="true">📤</span>
         <h4>Order Submit</h4>
         <p data-en="Submit signed orders" data-zh="提交已签名订单">Submit signed orders</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">🔍</span>
+        <span class="cap-icon" aria-hidden="true">🔍</span>
         <h4>Order Status</h4>
         <p data-en="Track order progress" data-zh="追踪订单进度">Track order progress</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">⛓️</span>
+        <span class="cap-icon" aria-hidden="true">⛓️</span>
         <h4 data-en="Chain List" data-zh="链列表">Chain List</h4>
         <p data-en="Supported chains info" data-zh="支持链信息">Supported chains info</p>
       </div>
       <div class="cap-item">
-        <span class="cap-icon">💎</span>
+        <span class="cap-icon" aria-hidden="true">💎</span>
         <h4 data-en="Token List" data-zh="代币列表">Token List</h4>
         <p data-en="Tradeable token catalog" data-zh="可交易代币目录">Tradeable token catalog</p>
       </div>
@@ -1792,7 +1943,7 @@ body::after {
         <button class="code-tab active" data-en="Install" data-zh="安装">Install</button>
       </div>
       <div class="code-block">
-<code><span class="cmt"># Install the package</span>
+<code><span class="cmt"># Just one line to get started</span>
 npm install bitget-wallet-skill</code>
       </div>
     </div>
@@ -1803,12 +1954,12 @@ npm install bitget-wallet-skill</code>
       <div class="code-block">
 <code><span class="kw">import</span> { <span class="obj">BitgetWalletSkill</span> } <span class="kw">from</span> <span class="str">'bitget-wallet-skill'</span>;
 
-<span class="cmt">// Initialize</span>
+<span class="cmt">// Set up your skill (takes 2 seconds)</span>
 <span class="kw">const</span> skill = <span class="kw">new</span> <span class="fn">BitgetWalletSkill</span>({
-  apiKey: process.env.<span class="obj">BITGET_WALLET_API_KEY</span>,
+  apiKey: process.env.<span class="obj">BITGET_WALLET_API_KEY</span>, <span class="cmt">// or your API key</span>
 });
 
-<span class="cmt">// Get a swap quote (ETH → USDC on Ethereum)</span>
+<span class="cmt">// Get the best price for your swap</span>
 <span class="kw">const</span> quote = <span class="kw">await</span> skill.<span class="fn">swapQuote</span>({
   chainId: <span class="str">'1'</span>,
   fromToken: <span class="str">'0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'</span>,
@@ -1817,7 +1968,7 @@ npm install bitget-wallet-skill</code>
   slippage: <span class="str">'0.5'</span>,
 });
 
-<span class="cmt">// Execute the swap</span>
+<span class="cmt">// One call to execute</span>
 <span class="kw">const</span> result = <span class="kw">await</span> skill.<span class="fn">swapSend</span>({
   ...quote,
   userAddress: <span class="str">'0xYourAddress'</span>,
@@ -1828,10 +1979,10 @@ console.<span class="fn">log</span>(<span class="str">'Tx Hash:'</span>, result.
     </div>
     <div class="code-section fade-in" style="margin-top:24px">
       <div class="code-tabs">
-        <button class="code-tab active" data-en="Gasless Cross-Chain Order" data-zh="Gasless 跨链订单">Gasless Cross-Chain Order</button>
+        <button class="code-tab active" data-en="Gasless Cross-Chain in 5 Lines" data-zh="5 行代码 Gasless 跨链">Gasless Cross-Chain in 5 Lines</button>
       </div>
       <div class="code-block">
-<code><span class="cmt">// Cross-chain: USDC on Base → USDT on BNB Chain (Gasless!)</span>
+<code><span class="cmt">// Magic: USDC (Base) → USDT (BNB Chain), zero gas needed</span>
 <span class="kw">const</span> orderQuote = <span class="kw">await</span> skill.<span class="fn">orderQuote</span>({
   fromChainId: <span class="str">'8453'</span>,     <span class="cmt">// Base</span>
   toChainId: <span class="str">'56'</span>,         <span class="cmt">// BNB Chain</span>
@@ -1841,7 +1992,7 @@ console.<span class="fn">log</span>(<span class="str">'Tx Hash:'</span>, result.
   gasless: <span class="num">true</span>,           <span class="cmt">// Zero gas required!</span>
 });
 
-<span class="cmt">// Create and submit the order</span>
+<span class="cmt">// Sign and submit — that's it!</span>
 <span class="kw">const</span> order = <span class="kw">await</span> skill.<span class="fn">orderCreate</span>(orderQuote);
 <span class="kw">const</span> signed = <span class="kw">await</span> signer.<span class="fn">signTransaction</span>(order.txData);
 <span class="kw">const</span> status = <span class="kw">await</span> skill.<span class="fn">orderSubmit</span>({ orderId: order.id, signature: signed });
@@ -1881,10 +2032,14 @@ console.<span class="fn">log</span>(<span class="str">'Order:'</span>, status.or
 <script>
 // ---- Language Toggle ----
 function copyInstall(el) {
-  navigator.clipboard.writeText('npm install bitget-wallet-skill').then(function() {
-    el.classList.add('copied');
-    setTimeout(function() { el.classList.remove('copied'); }, 2000);
-  });
+  var text = 'npm install bitget-wallet-skill';
+  function done(){ el.classList.add('copied'); setTimeout(function(){ el.classList.remove('copied'); }, 2000); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done);
+  } else {
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done();
+  }
 }
 
 function setLang(lang) {
@@ -1915,12 +2070,50 @@ function setLang(lang) {
   }
 })();
 
+// ---- Nav active state ----
+(function(){
+  var links = document.querySelectorAll('.nav-links a');
+  var sections = Array.from(links).map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  var navObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); });
+      }
+    });
+  }, {rootMargin: '-40% 0px -50% 0px'});
+  sections.forEach(function(s){ navObs.observe(s); });
+})();
+
+// ---- Auto-stagger grid children ----
+document.querySelectorAll('.cap-grid .cap-item, .compare-table tbody tr').forEach(function(el, i) {
+  el.classList.add('fade-in');
+  el.style.transitionDelay = (i * 50) + 'ms';
+});
+
+// ---- Code block copy buttons ----
+document.querySelectorAll('.code-section .code-block').forEach(function(block) {
+  var btn = document.createElement('button');
+  btn.className = 'code-copy-btn';
+  btn.textContent = 'Copy';
+  btn.onclick = function() {
+    var text = block.querySelector('code').textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok);
+    } else {
+      var ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); ok();
+    }
+    function ok(){ btn.textContent = '✓ Copied'; btn.classList.add('copied'); setTimeout(function(){ btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000); }
+  };
+  block.parentElement.appendChild(btn);
+});
+
 // ---- Scroll Fade-In (IntersectionObserver) ----
 (function() {
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+        requestAnimationFrame(function(){ entry.target.classList.add('visible'); });
       }
     });
   }, {
