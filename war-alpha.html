@@ -1532,55 +1532,6 @@ function drawSparkline(canvas, data, colorVar) {
 }
 
 // ============================================================
-// RENDER — Asset Tabs
-// ============================================================
-var ASSET_TABS = [
-  { key: 'crypto', en: '₿ Crypto', zh: '₿ 加密', color: 'var(--crypto)', items: ['btc'] },
-  { key: 'oil', en: '🛢️ Oil', zh: '🛢️ 原油', color: 'var(--oil)', items: ['oil'] },
-  { key: 'gold', en: '🥇 Gold', zh: '🥇 黄金', color: 'var(--gold)', items: ['gold'] },
-  { key: 'stocks', en: '📊 S&P 500', zh: '📊 标普500', color: 'var(--stocks)', items: ['stocks'] },
-];
-var activeAssetTab = 'crypto';
-
-function renderAssetTabs() {
-  var tabBar = document.getElementById('assetTabs');
-  var html = '';
-  ASSET_TABS.forEach(function(t) {
-    html += '<div class="tab' + (activeAssetTab === t.key ? ' active' : '') + '" ' +
-      'style="' + (activeAssetTab === t.key ? 'background:' + t.color : '') + '" ' +
-      'onclick="activeAssetTab=\'' + t.key + '\';renderAssetTabs()">' +
-      (LANG === 'zh' ? t.zh : t.en) + '</div>';
-  });
-  tabBar.innerHTML = html;
-
-  var tab = ASSET_TABS.find(function(t) { return t.key === activeAssetTab; });
-  var content = document.getElementById('assetTabContent');
-  var cards = '';
-  tab.items.forEach(function(k) {
-    var a = ASSETS[k];
-    var up = a.chg >= 0;
-    cards += '<div class="asset-card">' +
-      '<div class="head"><div><div class="sym">' + a.sym + '</div><div class="name">' + (LANG === 'zh' ? a.nameZh : a.nameEn) + '</div></div></div>' +
-      '<div class="sparkline"><canvas id="spark-' + k + '"></canvas></div>' +
-      '<div class="foot"><span class="price-big" style="color:' + a.color + '">$' + fmtPrice(a.price) + '</span>' +
-      '<span class="chg-big ' + (up ? 'up' : 'down') + '" style="color:' + (up ? 'var(--success)' : 'var(--danger)') + '">' + fmtPct(a.chg) + '</span></div>' +
-      '<div class="actions">' +
-        '<button class="act-btn futures-btn">' + (LANG === 'zh' ? '合约交易' : 'Futures') + '</button>' +
-        '<button class="act-btn spot-btn">' + (LANG === 'zh' ? '现货交易' : 'Spot') + '</button>' +
-      '</div></div>';
-  });
-  content.innerHTML = '<div class="tab-content active">' + cards + '</div>';
-
-  // Draw sparklines after DOM update
-  requestAnimationFrame(function() {
-    tab.items.forEach(function(k) {
-      var canvas = document.getElementById('spark-' + k);
-      drawSparkline(canvas, ASSETS[k].history, ASSETS[k].color);
-    });
-  });
-}
-
-// ============================================================
 // RENDER — AI Market Intelligence
 // ============================================================
 var AI_FACTORS = [
@@ -1949,7 +1900,6 @@ function renderAll() {
   renderAssetStrip();
   renderHeadline();
   renderTimeline();
-  renderAssetTabs();
   renderMilestones();
   renderAiAgg();
   renderMemes();
@@ -2030,15 +1980,13 @@ function priceTick() {
     if (a.history.length > 60) a.history.shift();
   });
   renderAssetStrip();
-  // Re-draw sparklines for active tab
-  var tab = ASSET_TABS.find(function(t) { return t.key === activeAssetTab; });
-  if (tab) {
-    tab.items.forEach(function(k) {
-      var canvas = document.getElementById('spark-' + k);
-      var a = ASSETS[k];
-      drawSparkline(canvas, a.history, a.color);
-    });
-  }
+  // Re-draw AI module sparklines
+  AI_ASSET_SIGNALS.forEach(function(s) {
+    var a = ASSETS[s.key];
+    if (!a) return;
+    var canvas = document.getElementById('ai-spark-' + s.key);
+    drawSparkline(canvas, a.history, a.color);
+  });
 }
 
 // ============================================================
