@@ -283,15 +283,38 @@ body {
    ============================================================ */
 .timeline { display: flex; flex-direction: column; gap: 10px; max-height: 700px; overflow-y: auto; }
 .event-card {
-  padding: 14px; border-radius: var(--r-md);
+  padding: 14px; padding-left: 18px; border-radius: var(--r-md);
   background: var(--card); border: 1px solid var(--border);
   cursor: pointer; transition: all 0.2s;
+  position: relative; overflow: hidden;
 }
 .event-card:hover { border-color: var(--border-hover); background: var(--card-hover); }
 .event-card.new-event { animation: flash-border 0.8s ease-out; }
+.event-card.fade-out { opacity: 0.35; transform: scale(0.97); }
 .event-head { display: flex; align-items: flex-start; gap: 10px; }
+.event-time {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
+  min-width: 46px; padding: 4px 0;
+}
+.event-time .clock {
+  font-size: 15px; font-weight: 800; font-family: var(--mono);
+  color: var(--text); line-height: 1;
+}
+.event-time .ago {
+  font-size: 9px; color: var(--text3); margin-top: 3px; white-space: nowrap;
+}
+.event-time .date-label {
+  font-size: 9px; color: var(--text3); margin-top: 1px; font-family: var(--mono);
+}
+.event-sev-line {
+  position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 2px;
+}
+.event-sev-line.critical, .event-sev-line.high { background: var(--danger); }
+.event-sev-line.medium { background: var(--warning); }
+.event-sev-line.low { background: var(--success); }
 .event-dot {
   width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0;
+  display: none;
 }
 .event-dot.critical, .event-dot.high { background: var(--danger); }
 .event-dot.medium { background: var(--warning); }
@@ -458,6 +481,37 @@ body {
   color: var(--text2); transition: all 0.15s;
 }
 .meme-filter.active { background: var(--meme); color: white; border-color: var(--meme); }
+.meme-ai-summary {
+  padding: 14px 16px; border-radius: var(--r-md); margin-bottom: 14px;
+  background: linear-gradient(135deg, rgba(155,89,182,0.06), rgba(0,212,170,0.04));
+  border: 1px solid rgba(155,89,182,0.15);
+  position: relative; overflow: hidden;
+}
+.meme-ai-summary::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--meme), var(--accent));
+}
+.meme-ai-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--meme); margin-bottom: 8px;
+}
+.meme-ai-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--meme); animation: pulse 2s infinite;
+}
+.meme-ai-text {
+  font-size: 13px; line-height: 1.7; color: var(--text);
+}
+.meme-ai-text strong { color: var(--meme); }
+.meme-ai-text .accent { color: var(--accent); font-weight: 700; }
+.meme-ai-stats {
+  display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap;
+}
+.meme-ai-stat {
+  font-size: 11px; color: var(--text3);
+}
+.meme-ai-stat span { color: var(--text); font-weight: 700; font-family: var(--mono); }
 .meme-row {
   display: flex; align-items: center; gap: 12px;
   padding: 12px; border-radius: var(--r-md);
@@ -1098,6 +1152,7 @@ body {
   <div class="section fade-in">
     <div class="section-title" data-en="🐸 War Narrative Memes" data-zh="🐸 战争叙事 Meme">🐸 War Narrative Memes</div>
     <div class="meme-filters" id="memeFilters"></div>
+    <div id="memeSummary"></div>
     <div id="memeList"></div>
     <div style="text-align:center;margin-top:16px">
       <button class="meme-more-btn" onclick="window.open('#','_blank')" data-en="Explore More Memes in Bitget Wallet →" data-zh="在 Bitget Wallet 发现更多 Meme →">Explore More Memes in Bitget Wallet →</button>
@@ -1256,6 +1311,11 @@ var MEMES = [
   { sym: 'NUKEINU', name: 'Nuke Inu', chain: 'Ethereum', price: 0.0000001, chg: -89.0, mcap: 12000, holders: 420, kolHolders: 0, age: 48, safety: 'danger', lifecycle: 'declining', honeypot: true },
   { sym: 'SHIELDGOLD', name: 'Shield Gold', chain: 'Solana', price: 0.00152, chg: 45.2, mcap: 3200000, holders: 14600, kolHolders: 9, age: 52, safety: 'safe', lifecycle: 'pumping', honeypot: false },
 ];
+
+var MEME_AI_SUMMARY = {
+  en: 'War narrative memes are <strong>surging</strong> as geopolitical tensions escalate. <strong>$WARPEPE</strong> leads the pack with +342% driven by Middle East conflict headlines. Safe-haven themed tokens (<span class="accent">SHIELDGOLD</span>, <span class="accent">GOLDOGE</span>) are gaining traction as gold hits new highs. Solana dominates with 4 of 7 tracked tokens. <strong>Caution:</strong> 2 tokens flagged as high-risk — $NUKEINU confirmed honeypot. KOL participation concentrated in top 3 tokens, suggesting smart money rotation into war-narrative plays.',
+  zh: '随着地缘政治紧张局势升级，战争叙事 Meme <strong>正在爆发</strong>。<strong>$WARPEPE</strong> 以 +342% 领涨，受中东冲突新闻驱动。避险类代币（<span class="accent">SHIELDGOLD</span>、<span class="accent">GOLDOGE</span>）随黄金创新高而走强。Solana 链占据 7 个追踪代币中的 4 个。<strong>注意：</strong>2 个代币被标记为高风险 — $NUKEINU 已确认蜜罐。KOL 持仓集中在前 3 个代币，表明聪明钱正在轮动进入战争叙事标的。'
+};
 
 // ============================================================
 // DATA — KOL Opinions
@@ -1427,8 +1487,23 @@ function renderHeadline() {
 // ============================================================
 // RENDER — Event Timeline
 // ============================================================
+function fmtEventTime(ev) {
+  // Generate a mock timestamp based on "hours ago"
+  var now = new Date();
+  var t = new Date(now.getTime() - ev.time * 3600000);
+  var hh = String(t.getHours()).padStart(2, '0');
+  var mm = String(t.getMinutes()).padStart(2, '0');
+  var mon = String(t.getMonth() + 1).padStart(2, '0');
+  var dd = String(t.getDate()).padStart(2, '0');
+  return { clock: hh + ':' + mm, date: mon + '/' + dd, ago: timeAgo(ev.time) };
+}
+
 function renderTimeline() {
   var tl = document.getElementById('timeline');
+  // Preserve scroll: record height before update
+  var prevHeight = tl.scrollHeight;
+  var prevScroll = tl.scrollTop;
+
   var html = '';
   activeEvents.forEach(function(ev, i) {
     var impactHtml = '<div class="event-impact">';
@@ -1446,12 +1521,21 @@ function renderTimeline() {
     });
     impactHtml += '</div>';
 
-    html += '<div class="event-card' + (i === 0 ? ' new-event' : '') + '" onclick="this.classList.toggle(\'expanded\')">' +
+    var ts = fmtEventTime(ev);
+    var cardClass = 'event-card';
+    if (i === 0) cardClass += ' new-event';
+    if (i === activeEvents.length - 1 && activeEvents.length >= 5) cardClass += ' fade-out';
+    html += '<div class="' + cardClass + '" onclick="this.classList.toggle(\'expanded\')">' +
+      '<div class="event-sev-line ' + ev.sev + '"></div>' +
       '<div class="event-head">' +
-        '<div class="event-dot ' + ev.sev + '"></div>' +
+        '<div class="event-time">' +
+          '<div class="clock">' + ts.clock + '</div>' +
+          '<div class="date-label">' + ts.date + '</div>' +
+          '<div class="ago">' + ts.ago + '</div>' +
+        '</div>' +
         '<div class="event-body">' +
           '<div class="event-title">' + (LANG === 'zh' ? ev.zh : ev.en) + '</div>' +
-          '<div class="event-meta">' + ev.src + ' · ' + timeAgo(ev.time) + '</div>' +
+          '<div class="event-meta">' + ev.src + ' · ' + (LANG === 'zh' ? ev.region === 'middle_east' ? '中东' : ev.region === 'europe' ? '欧洲' : '美洲' : ev.region.replace('_', ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); })) + '</div>' +
         '</div>' +
       '</div>' +
       impactHtml +
@@ -1462,6 +1546,13 @@ function renderTimeline() {
       (LANG === 'zh' ? '等待事件中...' : 'Waiting for events...') + '</div>';
   }
   tl.innerHTML = html;
+
+  // Restore scroll: compensate for new content pushed from top
+  var newHeight = tl.scrollHeight;
+  var delta = newHeight - prevHeight;
+  if (prevScroll > 0 && delta > 0) {
+    tl.scrollTop = prevScroll + delta;
+  }
 }
 
 // ============================================================
@@ -1697,6 +1788,24 @@ function renderMemes() {
   });
   document.getElementById('memeFilters').innerHTML = fhtml;
 
+  // AI Summary
+  var safeCnt = MEMES.filter(function(m) { return m.safety === 'safe' && !m.honeypot; }).length;
+  var totalMcap = 0;
+  MEMES.forEach(function(m) { totalMcap += m.mcap; });
+  var totalKol = 0;
+  MEMES.forEach(function(m) { totalKol += m.kolHolders; });
+  var shtml = '<div class="meme-ai-summary">' +
+    '<div class="meme-ai-tag">AI Narrative Summary</div>' +
+    '<div class="meme-ai-text">' + (LANG === 'zh' ? MEME_AI_SUMMARY.zh : MEME_AI_SUMMARY.en) + '</div>' +
+    '<div class="meme-ai-stats">' +
+      '<div class="meme-ai-stat">' + (LANG === 'zh' ? '追踪代币 ' : 'Tracked ') + '<span>' + MEMES.length + '</span></div>' +
+      '<div class="meme-ai-stat">' + (LANG === 'zh' ? '安全标记 ' : 'Safe ') + '<span>' + safeCnt + '/' + MEMES.length + '</span></div>' +
+      '<div class="meme-ai-stat">' + (LANG === 'zh' ? '总市值 ' : 'Total MCap ') + '<span>' + fmtVol(totalMcap) + '</span></div>' +
+      '<div class="meme-ai-stat">' + (LANG === 'zh' ? 'KOL 参与 ' : 'KOL Holders ') + '<span>' + totalKol + '</span></div>' +
+    '</div>' +
+  '</div>';
+  document.getElementById('memeSummary').innerHTML = shtml;
+
   var filtered = MEMES.filter(function(m) {
     if (memeFilter === 'new') return m.age < 24;
     if (memeFilter === 'hot') return m.lifecycle === 'pumping' || m.chg > 100;
@@ -1918,7 +2027,7 @@ function fireNextEvent() {
   }
   var ev = pendingEvents.shift();
   activeEvents.unshift(ev);
-  if (activeEvents.length > 10) activeEvents.pop();
+  if (activeEvents.length > 5) activeEvents.pop();
 
   // Apply impact to prices
   ev.impact.forEach(function(imp) {
