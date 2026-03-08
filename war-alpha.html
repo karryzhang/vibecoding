@@ -1108,6 +1108,7 @@ body {
   <div class="section fade-in">
     <div class="section-title" data-en="🐸 War Narrative Memes" data-zh="🐸 战争叙事 Meme">🐸 War Narrative Memes</div>
     <div class="meme-filters" id="memeFilters"></div>
+    <div id="memeSummary"></div>
     <div id="memeList"></div>
     <div style="text-align:center;margin-top:16px">
       <button class="meme-more-btn" onclick="window.open('#','_blank')" data-en="Explore More Memes in Bitget Wallet →" data-zh="在 Bitget Wallet 发现更多 Meme →">Explore More Memes in Bitget Wallet →</button>
@@ -1752,6 +1753,54 @@ function renderMemes() {
       'onclick="memeFilter=\'' + f.key + '\';renderMemes()">' + (LANG === 'zh' ? f.zh : f.en) + '</div>';
   });
   document.getElementById('memeFilters').innerHTML = fhtml;
+
+  // Meme market summary
+  var safeMemes = MEMES.filter(function(m) { return !m.honeypot; });
+  var pumpCount = safeMemes.filter(function(m) { return m.lifecycle === 'pumping'; }).length;
+  var declineCount = safeMemes.filter(function(m) { return m.lifecycle === 'declining'; }).length;
+  var avgChg = safeMemes.reduce(function(s, m) { return s + m.chg; }, 0) / (safeMemes.length || 1);
+  var newCount = safeMemes.filter(function(m) { return m.age < 24; }).length;
+  var kolTotal = safeMemes.reduce(function(s, m) { return s + m.kolHolders; }, 0);
+  var hotNarrative = pumpCount >= 2;
+
+  var s1en, s1zh, s2en, s2zh, s3en, s3zh;
+
+  if (avgChg > 80 && pumpCount >= 2) {
+    s1en = 'War-narrative memes are in <b style="color:var(--success)">full FOMO mode</b> — ' + pumpCount + ' tokens pumping hard with avg ' + fmtPct(avgChg) + ' gains.';
+    s1zh = '战争叙事 Meme 进入<b style="color:var(--success)">全面 FOMO 模式</b> — ' + pumpCount + ' 个代币强势拉升，平均涨幅 ' + fmtPct(avgChg) + '。';
+    s2en = 'Smart money is active: ' + kolTotal + ' KOL wallet entries detected across the board. ' + newCount + ' new token(s) appeared in the last 24h — capital rotation is fast.';
+    s2zh = '聪明钱活跃：全场检测到 ' + kolTotal + ' 个 KOL 钱包入场。过去24h新增 ' + newCount + ' 个代币——资金轮动极快。';
+    s3en = '⚡ <b>Direction:</b> Peak euphoria zone. Early entries are taking profit — watch for lifecycle flips from "Pumping" to "Peak". Consider trimming positions on parabolic moves.';
+    s3zh = '⚡ <b>方向：</b>狂热高点区间。早期参与者正在获利了结——关注生命周期从"拉升"转为"见顶"的信号。抛物线走势建议逐步减仓。';
+  } else if (avgChg > 20) {
+    s1en = 'Meme sector shows <b style="color:var(--warning)">selective momentum</b> — narratives tied to war/defense are outperforming, avg change ' + fmtPct(avgChg) + '.';
+    s1zh = 'Meme 赛道呈现<b style="color:var(--warning)">结构性行情</b>——战争/防务叙事跑赢大盘，平均涨跌幅 ' + fmtPct(avgChg) + '。';
+    s2en = kolTotal + ' KOL wallets are positioned. New coins (' + newCount + ') launching suggests narrative has legs, but ' + declineCount + ' token(s) fading signals thinning attention.';
+    s2zh = kolTotal + ' 个 KOL 钱包已布局。新币（' + newCount + ' 个）持续上线说明叙事仍有生命力，但 ' + declineCount + ' 个代币走弱暗示注意力正在分散。';
+    s3en = '📈 <b>Direction:</b> Mid-cycle with divergence. Focus on tokens with strong holder growth and KOL accumulation. Avoid low-safety tokens — rug risk rises as hype fades.';
+    s3zh = '📈 <b>方向：</b>中期行情，分化加剧。关注持币地址增长强劲且 KOL 加仓的代币。远离低安全评级代币——热度退潮时跑路风险上升。';
+  } else {
+    s1en = 'Meme sector <b style="color:var(--danger)">cooling rapidly</b> — most war-narrative tokens losing momentum, avg ' + fmtPct(avgChg) + '.';
+    s1zh = 'Meme 赛道<b style="color:var(--danger)">迅速降温</b>——多数战争叙事代币失去动能，平均涨跌幅 ' + fmtPct(avgChg) + '。';
+    s2en = 'KOL exits accelerating with only ' + kolTotal + ' wallet entries remaining. ' + declineCount + ' of ' + safeMemes.length + ' tokens in decline phase. Liquidity is drying up.';
+    s2zh = 'KOL 加速撤离，仅剩 ' + kolTotal + ' 个钱包入场。' + declineCount + '/' + safeMemes.length + ' 个代币处于下跌阶段，流动性正在枯竭。';
+    s3en = '🔻 <b>Direction:</b> Narrative exhaustion. Wait for new catalyst or fresh narrative rotation before re-entering. Capital preservation > chasing dead cats.';
+    s3zh = '🔻 <b>方向：</b>叙事衰竭。等待新催化剂或叙事轮动再入场。保全资金 > 追逐反弹。';
+  }
+
+  var sumEl = document.getElementById('memeSummary');
+  if (sumEl) {
+    sumEl.innerHTML =
+      '<div style="padding:14px 16px;border-radius:var(--r-md);background:var(--bg3);border:1px solid var(--border);margin-bottom:14px;font-size:12px;line-height:1.7;color:var(--text2)">' +
+        '<div style="font-size:11px;font-weight:700;color:var(--text1);margin-bottom:6px;display:flex;align-items:center;gap:6px">' +
+          '<span style="font-size:14px">🧠</span>' +
+          '<span data-en="AI Meme Market Insight" data-zh="AI Meme 市场洞察">' + (LANG === 'zh' ? 'AI Meme 市场洞察' : 'AI Meme Market Insight') + '</span>' +
+        '</div>' +
+        '<div style="margin-bottom:4px">' + (LANG === 'zh' ? s1zh : s1en) + '</div>' +
+        '<div style="margin-bottom:4px">' + (LANG === 'zh' ? s2zh : s2en) + '</div>' +
+        '<div>' + (LANG === 'zh' ? s3zh : s3en) + '</div>' +
+      '</div>';
+  }
 
   var filtered = MEMES.filter(function(m) {
     if (memeFilter === 'new') return m.age < 24;
