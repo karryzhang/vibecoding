@@ -448,6 +448,120 @@ body {
 }
 
 /* ============================================================
+   AI SUMMARY
+   ============================================================ */
+.ai-summary {
+  padding: 24px; border-radius: var(--r-lg);
+  background: var(--card); border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.ai-summary::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(135deg, rgba(0,212,170,0.04) 0%, rgba(28,105,255,0.03) 50%, transparent 100%);
+}
+.ai-summary-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  position: relative;
+}
+.ai-avatar {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, #00d4aa, #1C69FF);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(0,212,170,0.2);
+}
+.ai-label {
+  font-size: 14px; font-weight: 700;
+}
+.ai-label-sub {
+  font-size: 11px; color: var(--text3); font-weight: 500;
+}
+.ai-tag {
+  margin-left: auto;
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 5px;
+}
+.ai-tag.bearish { background: rgba(255,71,87,0.12); color: var(--danger); }
+.ai-tag.bullish { background: rgba(46,213,115,0.12); color: var(--success); }
+.ai-tag.neutral { background: rgba(255,165,2,0.12); color: var(--warning); }
+
+.ai-verdict {
+  font-size: 18px; font-weight: 800; line-height: 1.4;
+  margin-bottom: 14px; position: relative;
+}
+.ai-verdict .highlight {
+  background: linear-gradient(90deg, rgba(0,212,170,0.15), rgba(28,105,255,0.1));
+  padding: 1px 6px; border-radius: 4px;
+}
+.ai-body {
+  font-size: 13px; line-height: 1.7; color: var(--text2);
+  margin-bottom: 18px; position: relative;
+}
+.ai-signals {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px; margin-bottom: 18px; position: relative;
+}
+.ai-signal {
+  padding: 12px 14px; border-radius: var(--r-md);
+  background: var(--bg3); border: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ai-signal-icon { font-size: 20px; flex-shrink: 0; line-height: 1; }
+.ai-signal-label { font-weight: 700; margin-bottom: 2px; font-size: 12px; }
+.ai-signal-detail { color: var(--text2); font-size: 11px; }
+.ai-directions {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px; margin-bottom: 16px; position: relative;
+}
+.ai-dir-card {
+  padding: 12px 14px; border-radius: var(--r-md);
+  border: 1px solid var(--border); background: var(--bg2);
+}
+.ai-dir-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.ai-dir-arrow { font-size: 14px; font-weight: 800; font-family: var(--mono); }
+.ai-dir-arrow.up { color: var(--success); }
+.ai-dir-arrow.down { color: var(--danger); }
+.ai-dir-arrow.flat { color: var(--warning); }
+.ai-dir-asset { font-size: 13px; font-weight: 700; }
+.ai-dir-reason { font-size: 11px; color: var(--text2); line-height: 1.4; }
+.ai-dir-conf { margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+.ai-dir-conf-bar { flex: 1; height: 4px; border-radius: 2px; background: var(--bg3); overflow: hidden; }
+.ai-dir-conf-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+.ai-dir-conf-pct {
+  font-size: 10px; font-weight: 700; font-family: var(--mono); color: var(--text3);
+  min-width: 32px; text-align: right;
+}
+.ai-footer {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding-top: 14px; border-top: 1px solid var(--border); position: relative;
+}
+.ai-timestamp {
+  font-size: 10px; color: var(--text3); font-family: var(--mono);
+  display: flex; align-items: center; gap: 4px;
+}
+.ai-timestamp::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); animation: pulse-dot 1.5s ease-in-out infinite;
+}
+.ai-disclaimer { font-size: 10px; color: var(--text3); margin-left: auto; }
+.ai-cursor {
+  display: inline-block; width: 2px; height: 1em; vertical-align: text-bottom;
+  background: var(--accent); margin-left: 2px;
+  animation: blink-cursor 0.8s step-end infinite;
+}
+@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+@media (max-width: 600px) {
+  .ai-summary { padding: 16px; }
+  .ai-verdict { font-size: 15px; }
+  .ai-signals { grid-template-columns: 1fr; }
+  .ai-directions { grid-template-columns: 1fr; }
+  .ai-avatar { width: 30px; height: 30px; font-size: 15px; }
+  .ai-footer { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .ai-disclaimer { margin-left: 0; }
+}
+
+/* ============================================================
    MEME RADAR
    ============================================================ */
 .meme-filters { display: flex; gap: 6px; margin-bottom: 12px; }
@@ -984,6 +1098,12 @@ body {
     </div>
   </div>
 
+  <!-- AI Summary -->
+  <div class="section fade-in">
+    <div class="section-title" data-en="🤖 AI Market Summary" data-zh="🤖 AI 市场总结">🤖 AI Market Summary</div>
+    <div class="ai-summary" id="aiSummary"></div>
+  </div>
+
   <!-- Meme Radar -->
   <div class="section fade-in">
     <div class="section-title" data-en="🐸 War Narrative Memes" data-zh="🐸 战争叙事 Meme">🐸 War Narrative Memes</div>
@@ -1471,6 +1591,150 @@ function renderAssetTabs() {
 }
 
 // ============================================================
+// RENDER — AI Summary
+// ============================================================
+function getAiSummary() {
+  // Derive market state from live data
+  var bullPct = SENTIMENT.bull;
+  var eventCount = activeEvents.length;
+  var critEvents = activeEvents.filter(function(e) { return e.sev === 'critical'; }).length;
+  var oilUp = ASSETS.oil.chg > 0;
+  var goldUp = ASSETS.gold.chg > 0;
+  var stocksDown = ASSETS.stocks.chg < 0;
+  var btcDown = ASSETS.btc.chg < 0;
+
+  // Determine overall stance
+  var stance, verdictEn, verdictZh, bodyEn, bodyZh;
+
+  if (bullPct >= 65) {
+    stance = 'bullish';
+    verdictEn = 'Risk appetite recovering — <span class="highlight">cautious optimism</span> emerging';
+    verdictZh = '风险偏好回暖 — 市场出现<span class="highlight">谨慎乐观</span>信号';
+    bodyEn = 'Despite ongoing geopolitical tensions, the market is showing signs of de-escalation pricing. Sentiment has shifted bullish as traders rotate back into risk assets. Oil and gold remain elevated but momentum is fading. This could be an early signal of "sell the rumor, buy the fact" — the worst may be priced in.';
+    bodyZh = '尽管地缘政治紧张局势持续，市场正在定价缓和预期。情绪转向看多，交易者开始回流风险资产。油价和金价仍处高位但动能减弱。这可能是"卖预期、买事实"的早期信号——最坏的情况或已被市场消化。';
+  } else if (bullPct <= 35) {
+    stance = 'bearish';
+    verdictEn = 'Escalation risk dominant — <span class="highlight">further downside likely</span>';
+    verdictZh = '冲突升级风险主导 — <span class="highlight">进一步下探概率较大</span>';
+    bodyEn = 'Multiple high-severity events are compounding fear across all asset classes. The bear-dominated sentiment indicates the market has not yet found a bottom. Oil supply disruption risks remain acute, safe-haven flows into gold are accelerating, and equities face continued pressure. Recommend defensive positioning and capital preservation.';
+    bodyZh = '多起高严重性事件叠加，恐慌情绪蔓延至所有资产类别。空方主导的情绪表明市场尚未见底。原油供应中断风险仍然严峻，避险资金加速流入黄金，股市面临持续压力。建议防御性仓位，以保全资金为优先。';
+  } else {
+    stance = 'neutral';
+    verdictEn = 'Conflicting signals — <span class="highlight">wait and observe</span>, key inflection point ahead';
+    verdictZh = '信号矛盾交织 — 建议<span class="highlight">观望等待</span>，关键拐点临近';
+    bodyEn = 'The market is at a crossroads. Geopolitical risk premiums remain elevated but haven\'t triggered full panic. Bull and bear forces are nearly balanced. Oil is pricing in supply disruption, gold is bid as a hedge, but equities are holding key support levels. The next 48-72 hours are critical — a de-escalation signal could trigger a sharp relief rally, while further escalation would break support and accelerate selling.';
+    bodyZh = '市场正处于十字路口。地缘风险溢价仍处高位但尚未引发全面恐慌。多空力量接近均衡。原油已定价供应中断预期，黄金作为对冲工具持续受买盘追捧，但股市仍守住关键支撑位。未来48-72小时至关重要——一旦出现缓和信号，可能触发急剧的空头回补反弹；若冲突进一步升级，将跌破支撑并加速抛售。';
+  }
+
+  // Signals derived from data
+  var signals = [];
+  signals.push({
+    icon: '📊', labelEn: 'Sentiment', labelZh: '市场情绪',
+    detailEn: 'Bull ' + SENTIMENT.bull + '% / Bear ' + SENTIMENT.bear + '% — ' + (bullPct > 55 ? 'leaning optimistic' : bullPct < 45 ? 'fear dominates' : 'balanced tension'),
+    detailZh: '多方 ' + SENTIMENT.bull + '% / 空方 ' + SENTIMENT.bear + '% — ' + (bullPct > 55 ? '偏向乐观' : bullPct < 45 ? '恐慌主导' : '多空拉锯')
+  });
+  signals.push({
+    icon: '🚨', labelEn: 'Event Risk', labelZh: '事件风险',
+    detailEn: eventCount + ' events tracked, ' + critEvents + ' critical — ' + (critEvents >= 2 ? 'high alert' : critEvents === 1 ? 'elevated risk' : 'moderate'),
+    detailZh: '追踪 ' + eventCount + ' 起事件，' + critEvents + ' 起严重 — ' + (critEvents >= 2 ? '高度警戒' : critEvents === 1 ? '风险偏高' : '中等风险')
+  });
+  signals.push({
+    icon: '🛢️', labelEn: 'Oil Signal', labelZh: '原油信号',
+    detailEn: '$' + fmtPrice(ASSETS.oil.price) + ' (' + fmtPct(ASSETS.oil.chg) + ') — ' + (ASSETS.oil.chg > 3 ? 'supply shock mode' : oilUp ? 'risk premium rising' : 'easing pressure'),
+    detailZh: '$' + fmtPrice(ASSETS.oil.price) + ' (' + fmtPct(ASSETS.oil.chg) + ') — ' + (ASSETS.oil.chg > 3 ? '供应冲击模式' : oilUp ? '风险溢价上升' : '压力缓解')
+  });
+  signals.push({
+    icon: '🥇', labelEn: 'Safe Haven', labelZh: '避险资产',
+    detailEn: 'Gold $' + fmtPrice(ASSETS.gold.price) + ' (' + fmtPct(ASSETS.gold.chg) + ') — ' + (goldUp ? 'hedge demand strong' : 'profit-taking visible'),
+    detailZh: '黄金 $' + fmtPrice(ASSETS.gold.price) + ' (' + fmtPct(ASSETS.gold.chg) + ') — ' + (goldUp ? '对冲需求强劲' : '获利盘出现')
+  });
+
+  // Direction calls
+  var directions = [
+    { asset: ASSETS.oil, key: 'oil', dir: oilUp ? 'up' : 'down',
+      confPct: oilUp ? 78 : 45,
+      enReason: oilUp ? 'Supply disruption risk persists. Geopolitical premium intact.' : 'De-escalation hopes capping upside.',
+      zhReason: oilUp ? '供应中断风险持续，地缘溢价未消退。' : '缓和预期抑制上行空间。' },
+    { asset: ASSETS.gold, key: 'gold', dir: goldUp ? 'up' : 'flat',
+      confPct: goldUp ? 82 : 55,
+      enReason: goldUp ? 'Central bank buying + war hedge. Strong structural bid.' : 'Consolidating at highs. Waiting for next catalyst.',
+      zhReason: goldUp ? '央行持续买入 + 战争对冲，结构性买盘强劲。' : '高位整理，等待下一个催化剂。' },
+    { asset: ASSETS.stocks, key: 'stocks', dir: stocksDown ? 'down' : 'flat',
+      confPct: stocksDown ? 68 : 50,
+      enReason: stocksDown ? 'Risk premium expanding. Earnings not enough to offset macro fear.' : 'Holding support but vulnerable to escalation.',
+      zhReason: stocksDown ? '风险溢价扩大，盈利不足以对冲宏观恐慌。' : '守住支撑位但对升级事件脆弱。' },
+    { asset: ASSETS.btc, key: 'btc', dir: btcDown ? 'down' : 'up',
+      confPct: btcDown ? 55 : 62,
+      enReason: btcDown ? 'Correlating with risk assets. Liquidity tightening pressure.' : 'Digital gold narrative gaining traction in geopolitical crisis.',
+      zhReason: btcDown ? '与风险资产共振，流动性收紧施压。' : '"数字黄金"叙事在地缘危机中升温。' }
+  ];
+
+  return { stance: stance, verdictEn: verdictEn, verdictZh: verdictZh, bodyEn: bodyEn, bodyZh: bodyZh, signals: signals, directions: directions };
+}
+
+function renderAiSummary() {
+  var s = getAiSummary();
+  var el = document.getElementById('aiSummary');
+
+  var stanceLabel = s.stance === 'bullish' ? (LANG === 'zh' ? '偏多' : 'BULLISH') :
+    s.stance === 'bearish' ? (LANG === 'zh' ? '偏空' : 'BEARISH') : (LANG === 'zh' ? '观望' : 'NEUTRAL');
+  var stanceIcon = s.stance === 'bullish' ? '▲' : s.stance === 'bearish' ? '▼' : '◆';
+
+  var html = '<div class="ai-summary-header">' +
+    '<div class="ai-avatar">🧠</div>' +
+    '<div><div class="ai-label" data-en="AI Market Intelligence" data-zh="AI 市场研判">' + (LANG === 'zh' ? 'AI 市场研判' : 'AI Market Intelligence') + '</div>' +
+    '<div class="ai-label-sub" data-en="Synthesized from events, sentiment, prices & KOL signals" data-zh="综合事件、情绪、价格与 KOL 信号">' +
+    (LANG === 'zh' ? '综合事件、情绪、价格与 KOL 信号' : 'Synthesized from events, sentiment, prices & KOL signals') + '</div></div>' +
+    '<span class="ai-tag ' + s.stance + '">' + stanceIcon + ' ' + stanceLabel + '</span></div>';
+
+  html += '<div class="ai-verdict">' + (LANG === 'zh' ? s.verdictZh : s.verdictEn) + '<span class="ai-cursor"></span></div>';
+  html += '<div class="ai-body">' + (LANG === 'zh' ? s.bodyZh : s.bodyEn) + '</div>';
+
+  // Signals
+  html += '<div class="ai-signals">';
+  s.signals.forEach(function(sig) {
+    html += '<div class="ai-signal">' +
+      '<div class="ai-signal-icon">' + sig.icon + '</div>' +
+      '<div><div class="ai-signal-label">' + (LANG === 'zh' ? sig.labelZh : sig.labelEn) + '</div>' +
+      '<div class="ai-signal-detail">' + (LANG === 'zh' ? sig.detailZh : sig.detailEn) + '</div></div></div>';
+  });
+  html += '</div>';
+
+  // Direction cards
+  html += '<div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em">' +
+    (LANG === 'zh' ? '📈 各资产方向研判' : '📈 Asset Direction Outlook') + '</div>';
+  html += '<div class="ai-directions">';
+  s.directions.forEach(function(d) {
+    var arrowSym = d.dir === 'up' ? '▲' : d.dir === 'down' ? '▼' : '►';
+    var dirLabel = d.dir === 'up' ? (LANG === 'zh' ? '看涨' : 'BULLISH') :
+      d.dir === 'down' ? (LANG === 'zh' ? '看跌' : 'BEARISH') : (LANG === 'zh' ? '震荡' : 'SIDEWAYS');
+    var confColor = d.confPct >= 70 ? 'var(--success)' : d.confPct >= 50 ? 'var(--warning)' : 'var(--danger)';
+
+    html += '<div class="ai-dir-card">' +
+      '<div class="ai-dir-head">' +
+        '<span class="ai-dir-arrow ' + d.dir + '">' + arrowSym + '</span>' +
+        '<span class="ai-dir-asset" style="color:' + d.asset.color + '">' + d.asset.icon + ' ' + (LANG === 'zh' ? d.asset.nameZh : d.asset.nameEn) + '</span>' +
+        '<span style="margin-left:auto;font-size:10px;font-weight:700;color:' + confColor + '">' + dirLabel + '</span>' +
+      '</div>' +
+      '<div class="ai-dir-reason">' + (LANG === 'zh' ? d.zhReason : d.enReason) + '</div>' +
+      '<div class="ai-dir-conf">' +
+        '<div class="ai-dir-conf-bar"><div class="ai-dir-conf-fill" style="width:' + d.confPct + '%;background:' + confColor + '"></div></div>' +
+        '<span class="ai-dir-conf-pct">' + d.confPct + '%</span>' +
+      '</div></div>';
+  });
+  html += '</div>';
+
+  // Footer
+  var now = new Date();
+  var timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
+  html += '<div class="ai-footer">' +
+    '<span class="ai-timestamp">' + (LANG === 'zh' ? '实时更新 · ' : 'Live · ') + timeStr + '</span>' +
+    '<span class="ai-disclaimer">' + (LANG === 'zh' ? 'AI 生成，仅供参考，不构成投资建议' : 'AI-generated. Not financial advice.') + '</span></div>';
+
+  el.innerHTML = html;
+}
+
+// ============================================================
 // RENDER — Meme Radar
 // ============================================================
 var memeFilter = 'all';
@@ -1694,6 +1958,7 @@ function renderAll() {
   renderTimeline();
   renderAssetTabs();
   renderMilestones();
+  renderAiSummary();
   renderMemes();
   renderKols();
   renderPredictions();
