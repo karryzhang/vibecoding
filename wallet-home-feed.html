@@ -109,8 +109,19 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .kol-metric{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
 .kol-metric i{font-style:normal;font-size:13px}
 .kol-card .card-foot{padding:12px 16px 16px}
-.kol-card .kol-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:var(--radius)}
-.kol-card .kol-bg::after{content:'💬';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:120px;opacity:.04}
+.kol-card .kol-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:var(--radius);
+  background:radial-gradient(ellipse at 85% 45%,rgba(245,197,66,.08),transparent 30%),radial-gradient(ellipse at 75% 60%,rgba(83,224,143,.04),transparent 20%)}
+.kol-card .kol-bg::before{content:'';position:absolute;right:10px;top:30%;width:100px;height:80px;
+  background:
+    linear-gradient(150deg,transparent 0 58%,rgba(245,197,66,.1) 58.5%,transparent 59.5%),
+    linear-gradient(145deg,transparent 0 40%,rgba(245,197,66,.07) 40.5%,transparent 41.5%),
+    linear-gradient(45deg,transparent 0 68%,rgba(83,224,143,.12) 68.5%,transparent 70%),
+    linear-gradient(315deg,transparent 0 68%,rgba(83,224,143,.12) 68.5%,transparent 70%)}
+.kol-card .kol-bg::after{content:'';position:absolute;right:20px;top:50%;transform:translateY(-50%);width:64px;height:64px;
+  background:
+    linear-gradient(135deg,transparent 36%,rgba(245,197,66,.25) 36.5%,rgba(245,197,66,.1) 50%,rgba(245,197,66,.25) 63.5%,transparent 64%),
+    linear-gradient(225deg,transparent 36%,rgba(255,159,67,.18) 36.5%,rgba(255,159,67,.07) 50%,rgba(255,159,67,.18) 63.5%,transparent 64%);
+  filter:drop-shadow(0 0 14px rgba(245,197,66,.18))}
 
 /* ── Bottom Nav ── */
 .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);padding:10px 16px calc(env(safe-area-inset-bottom,10px) + 12px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 94%, transparent),transparent)}
@@ -132,9 +143,25 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
     linear-gradient(180deg,transparent 0 58%,rgba(255,100,103,.18) 58.5%,rgba(255,100,103,.05) 59%,transparent 60%),
     linear-gradient(170deg,transparent 0 38%,rgba(255,100,103,.14) 38.5%,rgba(255,100,103,.04) 39%,transparent 40%),
     linear-gradient(160deg,transparent 0 22%,rgba(255,100,103,.2) 22.5%,rgba(255,100,103,.06) 23%,transparent 24%),
+    radial-gradient(circle at 60% 95%,rgba(255,100,103,.12),transparent 50%),
     radial-gradient(circle at 30% 80%,rgba(255,100,103,.06),transparent 60%);
   opacity:.7}
-.breaking-card .breaking-bg::after{content:'📉';position:absolute;right:20px;top:60px;font-size:52px;opacity:.08}
+.breaking-card .breaking-bg::after{content:'';position:absolute;right:14px;top:42px;width:110px;height:100px;opacity:.7;
+  background:
+    /* Candle 4 (rightmost) — tall red bearish candle with wick */
+    linear-gradient(180deg,rgba(255,100,103,.35),rgba(255,100,103,.5) 30%,rgba(255,100,103,.12)) no-repeat 90px 8px/14px 70px,
+    linear-gradient(180deg,rgba(255,100,103,.2) 0 1px,transparent 1px) no-repeat 96px 0/2px 86px,
+    /* Candle 3 — medium red */
+    linear-gradient(180deg,rgba(255,100,103,.28),rgba(255,100,103,.4) 40%,rgba(255,100,103,.08)) no-repeat 64px 22px/14px 50px,
+    linear-gradient(180deg,rgba(255,100,103,.15) 0 1px,transparent 1px) no-repeat 70px 16px/2px 62px,
+    /* Candle 2 — small green (recovery) */
+    linear-gradient(180deg,rgba(83,224,143,.1),rgba(83,224,143,.3) 50%,rgba(83,224,143,.08)) no-repeat 38px 38px/14px 30px,
+    linear-gradient(180deg,rgba(83,224,143,.12) 0 1px,transparent 1px) no-repeat 44px 32px/2px 42px,
+    /* Candle 1 (leftmost) — medium red */
+    linear-gradient(180deg,rgba(255,100,103,.22),rgba(255,100,103,.35) 35%,rgba(255,100,103,.06)) no-repeat 12px 28px/14px 44px,
+    linear-gradient(180deg,rgba(255,100,103,.12) 0 1px,transparent 1px) no-repeat 18px 20px/2px 58px,
+    /* Downtrend line */
+    linear-gradient(155deg,transparent 0 30%,rgba(255,100,103,.18) 30.5%,transparent 31.5%)}
 .breaking-banner{display:flex;align-items:center;gap:8px;padding:12px 16px;background:linear-gradient(90deg,#e63946,#ff4d6d);font-size:12px;font-weight:900;color:#fff;letter-spacing:.06em;text-transform:uppercase;position:relative;z-index:1}
 .breaking-flash{width:8px;height:8px;border-radius:999px;background:#fff;animation:breakingFlash 1s ease-in-out infinite}
 @keyframes breakingFlash{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
@@ -172,15 +199,22 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 .data-value.strong{color:var(--cyan)}
 .signal-viz{margin-top:var(--space-3);height:72px;border-radius:var(--radius-sm);background:linear-gradient(180deg,rgba(7,14,28,.9),rgba(8,31,63,.6));border:1px solid rgba(52,215,255,.08);position:relative;overflow:hidden}
 .signal-viz::before{content:'';position:absolute;inset:0;background:
+  /* Horizontal scan lines */
+  repeating-linear-gradient(180deg,rgba(52,215,255,.03) 0 1px,transparent 1px transparent 4px),
+  /* Whale fin silhouette hint */
+  radial-gradient(ellipse 18px 12px at 22% 42%,rgba(52,215,255,.08),transparent),
+  radial-gradient(ellipse 10px 16px at 26% 36%,rgba(52,215,255,.06),transparent),
+  /* Grid */
   linear-gradient(90deg,rgba(52,215,255,.06) 1px,transparent 1px),
   linear-gradient(rgba(52,215,255,.04) 1px,transparent 1px),
+  /* Data points */
   radial-gradient(circle at 14% 50%,rgba(52,215,255,.15) 0 2px,transparent 2.5px),
   radial-gradient(circle at 30% 30%,rgba(52,215,255,.12) 0 2px,transparent 2.5px),
   radial-gradient(circle at 46% 65%,rgba(52,215,255,.18) 0 2px,transparent 2.5px),
   radial-gradient(circle at 62% 35%,rgba(83,224,143,.2) 0 3px,transparent 3.5px),
   radial-gradient(circle at 78% 55%,rgba(52,215,255,.15) 0 2px,transparent 2.5px),
   radial-gradient(circle at 90% 40%,rgba(83,224,143,.12) 0 2px,transparent 2.5px);
-  background-size:20px 20px,20px 20px,auto,auto,auto,auto,auto,auto}
+  background-size:auto,auto,auto,20px 20px,20px 20px,auto,auto,auto,auto,auto,auto}
 /* ETH diamond shape */
 .signal-eth{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:36px;height:36px}
 .signal-eth::before{content:'';position:absolute;inset:0;background:
@@ -199,11 +233,22 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 .narrative-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(255,159,67,.08),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,159,67,.16);position:relative;overflow:hidden}
 .narrative-card>.narrative-bg{position:absolute;inset:0;pointer-events:none;
   background:
-    radial-gradient(ellipse at 90% 10%,rgba(255,159,67,.12),transparent 32%),
-    radial-gradient(ellipse at 95% 40%,rgba(255,100,103,.06),transparent 24%)}
-.narrative-card>.narrative-bg::before{content:'🔥';position:absolute;right:8px;top:4px;font-size:48px;opacity:.06}
-.narrative-card>.narrative-bg::after{content:'';position:absolute;right:0;top:0;width:100px;height:100px;
-  background:radial-gradient(circle at 80% 20%,rgba(255,159,67,.08),transparent 50%)}
+    radial-gradient(ellipse at 92% 8%,rgba(255,100,103,.14),transparent 28%),
+    radial-gradient(ellipse at 88% 40%,rgba(255,159,67,.1),transparent 22%),
+    radial-gradient(ellipse at 95% 70%,rgba(255,209,102,.06),transparent 20%)}
+.narrative-card>.narrative-bg::before{content:'';position:absolute;right:12px;top:8px;width:100px;height:100px;
+  background:
+    linear-gradient(180deg,rgba(255,100,103,.22),rgba(255,159,67,.28) 40%,rgba(255,159,67,.04)) no-repeat 78px 10px/16px 80px,
+    linear-gradient(180deg,rgba(255,159,67,.18),rgba(255,159,67,.22) 50%,rgba(255,159,67,.03)) no-repeat 54px 28px/16px 62px,
+    linear-gradient(180deg,rgba(255,159,67,.12),rgba(255,159,67,.16) 60%,rgba(255,159,67,.02)) no-repeat 30px 48px/16px 42px,
+    linear-gradient(135deg,transparent 0 44%,rgba(255,159,67,.1) 44.5%,transparent 46%) no-repeat 18px 8px/82px 60px;
+  border-radius:8px;opacity:.7;animation:flameFlicker 2.5s ease-in-out infinite}
+.narrative-card>.narrative-bg::after{content:'';position:absolute;right:-10px;top:-10px;width:140px;height:140px;
+  background:
+    radial-gradient(circle at 70% 30%,rgba(255,100,103,.1),transparent 40%),
+    radial-gradient(circle at 50% 50%,rgba(255,159,67,.12),transparent 50%),
+    radial-gradient(circle at 80% 60%,rgba(255,209,102,.06),transparent 30%)}
+@keyframes flameFlicker{0%,100%{opacity:.6;transform:translateY(0)}50%{opacity:.85;transform:translateY(-2px)}}
 .narrative-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tag.narrative{background:rgba(255,159,67,.12);border-color:rgba(255,159,67,.18);color:#ffc078}
 .narrative-list{display:flex;flex-direction:column;gap:12px;margin-top:var(--meta-gap)}
@@ -224,11 +269,20 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
    ║  CARD 4: PREDICT 预测市场                         ║
    ╚══════════════════════════════════════════════════╝ */
 .predict-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(91,33,182,.14),rgba(18,24,38,.95));border-color:rgba(139,92,246,.16);position:relative;overflow:hidden}
-.predict-card>.predict-bg{position:absolute;inset:0;pointer-events:none}
-.predict-card>.predict-bg::before{content:'🏀';position:absolute;right:-6px;top:-6px;font-size:72px;opacity:.06}
-.predict-card>.predict-bg::after{content:'';position:absolute;left:0;top:0;right:0;bottom:0;
-  background:radial-gradient(circle at 15% 85%,rgba(85,228,183,.06),transparent 22%),
-  radial-gradient(circle at 85% 85%,rgba(255,141,151,.06),transparent 22%)}
+.predict-card>.predict-bg{position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,transparent 0,transparent 2%,rgba(255,180,80,.05) 2.5%,transparent 3%) no-repeat calc(100% - 49px) 12px/1px 68px,
+    linear-gradient(90deg,transparent 0,transparent 48%,rgba(255,180,80,.05) 48.5%,transparent 49%) no-repeat calc(100% - 16px) 45px/68px 1px}
+.predict-card>.predict-bg::before{content:'';position:absolute;right:16px;top:12px;width:68px;height:68px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(255,159,67,.3),rgba(230,100,40,.2) 50%,rgba(180,60,20,.12));
+  box-shadow:inset 0 0 0 1.5px rgba(255,159,67,.15),0 0 20px rgba(255,120,50,.08);opacity:.5}
+.predict-card>.predict-bg::after{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 88% 22%,transparent 28px,rgba(255,255,255,.04) 28.5px,rgba(255,255,255,.04) 30px,transparent 30.5px),
+    linear-gradient(90deg,transparent 78%,rgba(255,255,255,.03) 78.5%,rgba(255,255,255,.03) 79%,transparent 79.5%),
+    linear-gradient(180deg,transparent 85%,rgba(255,255,255,.025) 85.5%,rgba(255,255,255,.025) 86%,transparent 86.5%),
+    radial-gradient(circle at 15% 85%,rgba(85,228,183,.08),transparent 22%),
+    radial-gradient(circle at 85% 85%,rgba(255,141,151,.08),transparent 22%)}
 .predict-head{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
 .tag.predict{background:rgba(155,107,255,.12);border-color:rgba(155,107,255,.18);color:#c4b5fd}
 .predict-live{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;color:#c9d4ff;padding:4px 10px;border-radius:999px;background:rgba(255,100,103,.08)}
@@ -263,16 +317,33 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
     linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px),
     linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
   background-size:auto,auto,auto,28px 28px,28px 28px}
-/* Chip core on TSMC default cover */
-.editorial-cover:not(.wallet-card):not(.travel-pay) .editorial-art::before{content:'';position:absolute;right:48px;top:26px;width:56px;height:56px;
-  border:2px solid rgba(255,255,255,.12);border-radius:8px;
-  box-shadow:inset 0 0 18px rgba(88,166,255,.12)}
-.editorial-cover:not(.wallet-card):not(.travel-pay) .editorial-art::after{content:'';position:absolute;right:40px;top:18px;width:72px;height:72px;
+/* Chip core on TSMC cover — enhanced with micro-grid + processor glow */
+.editorial-cover.tsmc .editorial-art::before{content:'';position:absolute;right:48px;top:26px;width:56px;height:56px;
+  border:2px solid rgba(255,255,255,.14);border-radius:8px;
   background:
-    linear-gradient(0deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat center top/2px 10px,
-    linear-gradient(0deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat center bottom/2px 10px,
-    linear-gradient(90deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat left center/10px 2px,
-    linear-gradient(90deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat right center/10px 2px,
+    /* Center processor bright spot */
+    radial-gradient(circle at 50% 50%,rgba(88,166,255,.2) 0 4px,transparent 5px),
+    radial-gradient(circle at 50% 50%,rgba(88,166,255,.06) 0 12px,transparent 13px),
+    /* Cross division lines */
+    linear-gradient(90deg,transparent 48%,rgba(255,255,255,.08) 49%,rgba(255,255,255,.08) 51%,transparent 52%),
+    linear-gradient(180deg,transparent 48%,rgba(255,255,255,.08) 49%,rgba(255,255,255,.08) 51%,transparent 52%),
+    /* Micro grid 8px */
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:auto,auto,auto,auto,8px 8px,8px 8px;
+  box-shadow:inset 0 0 18px rgba(88,166,255,.15),0 0 12px rgba(88,166,255,.06)}
+.editorial-cover.tsmc .editorial-art::after{content:'';position:absolute;right:40px;top:18px;width:72px;height:72px;
+  background:
+    /* Data flow particles along traces */
+    radial-gradient(circle at 50% -2px,rgba(88,166,255,.4) 0 1.5px,transparent 2px),
+    radial-gradient(circle at 50% calc(100% + 2px),rgba(88,166,255,.35) 0 1.5px,transparent 2px),
+    radial-gradient(circle at -2px 50%,rgba(52,215,255,.3) 0 1.5px,transparent 2px),
+    radial-gradient(circle at calc(100% + 2px) 50%,rgba(52,215,255,.35) 0 1.5px,transparent 2px),
+    /* Trace lines — center + sides */
+    linear-gradient(0deg,rgba(255,255,255,.12) 0 2px,transparent 2px) no-repeat center top/2px 10px,
+    linear-gradient(0deg,rgba(255,255,255,.12) 0 2px,transparent 2px) no-repeat center bottom/2px 10px,
+    linear-gradient(90deg,rgba(255,255,255,.12) 0 2px,transparent 2px) no-repeat left center/10px 2px,
+    linear-gradient(90deg,rgba(255,255,255,.12) 0 2px,transparent 2px) no-repeat right center/10px 2px,
     linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 25% top/2px 8px,
     linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 75% top/2px 8px,
     linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 25% bottom/2px 8px,
@@ -293,7 +364,12 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 /* ╔══════════════════════════════════════════════════╗
    ║  CARD 6: EARN 理财                                ║
    ╚══════════════════════════════════════════════════╝ */
-.earn-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(0,212,170,.06),color-mix(in srgb,var(--panel) 97%,transparent));border-color:rgba(0,212,170,.12)}
+.earn-card{padding:var(--card-pad);background:
+  radial-gradient(circle at 92% 22%,rgba(83,224,143,.12) 0 1.5px,transparent 2px),
+  radial-gradient(circle at 88% 42%,rgba(0,212,170,.1) 0 1.2px,transparent 1.8px),
+  radial-gradient(circle at 94% 62%,rgba(83,224,143,.08) 0 1px,transparent 1.5px),
+  radial-gradient(circle at 86% 78%,rgba(0,212,170,.06) 0 1px,transparent 1.5px),
+  linear-gradient(180deg,rgba(0,212,170,.06),color-mix(in srgb,var(--panel) 97%,transparent));border-color:rgba(0,212,170,.12)}
 .earn-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tag.earn{background:rgba(0,212,170,.1);border-color:rgba(0,212,170,.16);color:#b8ffef}
 .earn-hero{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;margin-top:var(--meta-gap)}
@@ -303,8 +379,10 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 .apy-value{font-size:34px;font-weight:900;letter-spacing:-.05em;color:var(--teal)}
 .apy-trend{font-size:12px;font-weight:800;color:var(--green)}
 .earn-desc{margin-top:var(--space-2);font-size:12px;line-height:1.5;color:var(--muted)}
-.earn-visual{width:80px;height:80px;border-radius:999px;border:6px solid rgba(0,212,170,.15);border-top-color:var(--teal);border-right-color:rgba(0,212,170,.5);position:relative;transform:rotate(-45deg)}
-.earn-visual::after{content:'SOL';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--teal);transform:rotate(45deg)}
+.earn-visual{width:80px;height:80px;border-radius:999px;border:6px solid rgba(0,212,170,.15);border-top-color:var(--teal);border-right-color:rgba(0,212,170,.5);position:relative;transform:rotate(-45deg);
+  background:conic-gradient(from 0deg,rgba(0,212,170,.06) 0 25%,rgba(83,224,143,.04) 25% 50%,rgba(0,212,170,.08) 50% 75%,rgba(83,224,143,.03) 75% 100%);
+  box-shadow:0 0 0 3px rgba(0,212,170,.06),0 0 0 7px rgba(0,212,170,.03),0 0 20px rgba(0,212,170,.1),inset 0 0 16px rgba(0,212,170,.06)}
+.earn-visual::after{content:'SOL';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--teal);transform:rotate(45deg);text-shadow:0 0 10px rgba(0,212,170,.4),0 0 20px rgba(0,212,170,.15)}
 .earn-comparison{display:flex;flex-direction:column;gap:8px;margin-top:var(--space-3)}
 .earn-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid var(--line);min-height:44px}
 .earn-protocol{font-size:12px;font-weight:800;color:var(--muted);min-width:62px}
@@ -318,16 +396,26 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 .activity-card{padding:0;background:linear-gradient(135deg,#1a0a2e 0%,#2d1b69 36%,#ff6b35 100%);border-color:rgba(255,107,53,.2)}
 .activity-card::after{content:'';position:absolute;inset:0;
   background:
+    /* Main gold coin — large, with $ center dot */
+    radial-gradient(circle at 88% 14%,rgba(255,255,255,.22) 0 1.5px,transparent 2px),
+    radial-gradient(circle at 88% 14%,rgba(255,209,102,.55) 0 7px,rgba(255,209,102,.2) 8px,transparent 9px),
+    radial-gradient(circle at 88% 14%,rgba(255,209,102,.08) 0 13px,transparent 14px),
+    /* Secondary coins */
+    radial-gradient(circle at 92% 30%,rgba(255,209,102,.35) 0 5px,rgba(255,209,102,.12) 5.5px,transparent 6.5px),
+    radial-gradient(circle at 82% 8%,rgba(255,159,67,.28) 0 4px,rgba(255,159,67,.1) 4.5px,transparent 5.5px),
+    radial-gradient(circle at 96% 22%,rgba(255,159,67,.2) 0 3.5px,rgba(255,159,67,.08) 4px,transparent 5px),
+    radial-gradient(circle at 78% 24%,rgba(255,209,102,.15) 0 2.5px,transparent 3px),
+    /* White sparkle particles */
+    radial-gradient(circle at 94% 10%,rgba(255,255,255,.35) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 84% 4%,rgba(255,255,255,.25) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 98% 28%,rgba(255,255,255,.2) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 76% 16%,rgba(255,255,255,.18) 0 .8px,transparent 1.2px),
+    radial-gradient(circle at 90% 36%,rgba(255,255,255,.15) 0 .8px,transparent 1.2px),
+    /* Trophy glow zone */
+    radial-gradient(circle at 88% 16%,rgba(255,209,102,.14),transparent 22%),
+    /* Ambient glows */
     radial-gradient(circle at 90% 20%,rgba(255,209,102,.18),transparent 28%),
-    radial-gradient(circle at 10% 80%,rgba(155,107,255,.2),transparent 24%),
-    /* Floating coins */
-    radial-gradient(circle at 88% 14%,rgba(255,209,102,.4) 0 6px,transparent 6.5px),
-    radial-gradient(circle at 88% 14%,rgba(255,209,102,.1) 0 10px,transparent 11px),
-    radial-gradient(circle at 92% 30%,rgba(255,209,102,.25) 0 4px,transparent 4.5px),
-    radial-gradient(circle at 82% 8%,rgba(255,159,67,.2) 0 3px,transparent 3.5px),
-    radial-gradient(circle at 96% 22%,rgba(255,159,67,.15) 0 3px,transparent 3.5px),
-    /* Trophy sparkle */
-    radial-gradient(circle at 85% 18%,rgba(255,255,255,.06),transparent 16%);
+    radial-gradient(circle at 10% 80%,rgba(155,107,255,.2),transparent 24%);
   pointer-events:none;border-radius:var(--radius)}
 .activity-inner{position:relative;z-index:1;padding:var(--card-pad)}
 .activity-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -349,49 +437,76 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 /* ── Editorial cover variants ── */
 .editorial-cover.wallet-card{background:linear-gradient(135deg,#0a0a1a 0%,#1a1a3e 36%,#4f46e5 100%)}
 .editorial-cover.wallet-card .editorial-art{background:
-  radial-gradient(circle at 72% 36%,rgba(99,102,241,.5) 0 6px,transparent 6.5px),
+  /* AI neural network nodes */
+  radial-gradient(circle at 30% 24%,rgba(99,102,241,.35) 0 2.5px,transparent 3px),
+  radial-gradient(circle at 18% 52%,rgba(139,92,246,.3) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 38% 68%,rgba(99,102,241,.25) 0 2px,transparent 2.5px),
+  /* Connection lines between nodes */
+  linear-gradient(152deg,transparent 0 28%,rgba(99,102,241,.1) 28.5%,transparent 29.5%),
+  linear-gradient(195deg,transparent 0 20%,rgba(139,92,246,.08) 20.5%,transparent 21.5%),
+  /* Main pulse center */
+  radial-gradient(circle at 72% 36%,rgba(99,102,241,.55) 0 6px,transparent 6.5px),
   radial-gradient(circle at 72% 36%,transparent 0 18%,rgba(99,102,241,.14) 18.5%,transparent 20%),
   radial-gradient(circle at 72% 36%,transparent 0 32%,rgba(99,102,241,.08) 32.5%,transparent 34%),
   linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
   linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
-  background-size:auto,auto,auto,24px 24px,24px 24px}
-/* Credit card shape */
+  background-size:auto,auto,auto,auto,auto,auto,auto,auto,24px 24px,24px 24px}
+/* Credit card shape — premium with chip, holo strip, card dots */
 .editorial-cover.wallet-card .editorial-art::before{content:'';position:absolute;right:28px;top:28px;width:92px;height:58px;
-  border-radius:10px;border:1.5px solid rgba(255,255,255,.16);
-  background:linear-gradient(145deg,rgba(99,102,241,.25),rgba(79,70,229,.15));
-  backdrop-filter:blur(4px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+  border-radius:10px;border:1.5px solid rgba(255,255,255,.18);
+  background:
+    /* Chip block — gold rectangle */
+    linear-gradient(135deg,rgba(255,209,102,.3),rgba(255,179,71,.2)) no-repeat 8px 14px/14px 10px,
+    /* Holographic strip */
+    linear-gradient(90deg,rgba(255,100,103,.08),rgba(255,209,102,.1),rgba(83,224,143,.08),rgba(88,166,255,.1),rgba(155,107,255,.08)) no-repeat 0 36px/100% 4px,
+    /* Card number dots (4 groups) */
+    radial-gradient(circle,rgba(255,255,255,.15) 0 1px,transparent 1.5px) no-repeat 10px 48px/2px 2px,
+    radial-gradient(circle,rgba(255,255,255,.15) 0 1px,transparent 1.5px) no-repeat 16px 48px/2px 2px,
+    radial-gradient(circle,rgba(255,255,255,.15) 0 1px,transparent 1.5px) no-repeat 22px 48px/2px 2px,
+    radial-gradient(circle,rgba(255,255,255,.15) 0 1px,transparent 1.5px) no-repeat 28px 48px/2px 2px,
+    /* Base card gradient */
+    linear-gradient(145deg,rgba(99,102,241,.28),rgba(79,70,229,.18));
+  backdrop-filter:blur(4px);box-shadow:0 8px 24px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08)}
 /* Cashback % sparkle */
 .editorial-cover.wallet-card .editorial-art::after{content:'50%';position:absolute;right:42px;top:42px;
   font-size:18px;font-weight:900;color:rgba(255,255,255,.5);letter-spacing:-.02em}
 .editorial-cover.travel-pay{background:linear-gradient(135deg,#071a12 0%,#0d6d3f 42%,#34d399 100%)}
 .editorial-cover.travel-pay .editorial-art{background:
-  /* Map pin dots representing Asian countries */
-  radial-gradient(circle at 58% 28%,rgba(52,211,153,.8) 0 3px,transparent 3.5px),
-  radial-gradient(circle at 58% 28%,rgba(52,211,153,.15) 0 8px,transparent 9px),
-  radial-gradient(circle at 72% 36%,rgba(52,211,153,.6) 0 2.5px,transparent 3px),
-  radial-gradient(circle at 65% 50%,rgba(52,211,153,.5) 0 2px,transparent 2.5px),
-  radial-gradient(circle at 80% 44%,rgba(52,211,153,.4) 0 2px,transparent 2.5px),
-  radial-gradient(circle at 52% 42%,rgba(52,211,153,.5) 0 2px,transparent 2.5px),
-  radial-gradient(circle at 75% 56%,rgba(52,211,153,.4) 0 2px,transparent 2.5px),
-  radial-gradient(circle at 62% 62%,rgba(52,211,153,.35) 0 2px,transparent 2.5px),
-  radial-gradient(circle at 48% 55%,rgba(52,211,153,.3) 0 1.5px,transparent 2px),
-  radial-gradient(circle at 85% 52%,rgba(52,211,153,.3) 0 1.5px,transparent 2px),
+  /* Main pin with pulse rings */
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.9) 0 3.5px,transparent 4px),
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.2) 0 9px,transparent 10px),
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.08) 0 16px,transparent 17px),
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.04) 0 24px,transparent 25px),
+  /* Secondary pins — enlarged */
+  radial-gradient(circle at 72% 36%,rgba(52,211,153,.7) 0 3px,transparent 3.5px),
+  radial-gradient(circle at 65% 50%,rgba(52,211,153,.6) 0 2.5px,transparent 3px),
+  radial-gradient(circle at 80% 44%,rgba(52,211,153,.5) 0 2.5px,transparent 3px),
+  radial-gradient(circle at 52% 42%,rgba(52,211,153,.55) 0 2.5px,transparent 3px),
+  radial-gradient(circle at 75% 56%,rgba(52,211,153,.45) 0 2.5px,transparent 3px),
+  radial-gradient(circle at 62% 62%,rgba(52,211,153,.4) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 48% 55%,rgba(52,211,153,.35) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 85% 52%,rgba(52,211,153,.35) 0 2px,transparent 2.5px),
+  /* Globe arc line */
+  radial-gradient(ellipse 180px 220px at 65% 45%,transparent 48%,rgba(255,255,255,.06) 48.5%,rgba(255,255,255,.06) 49%,transparent 49.5%),
+  /* Ambient glow */
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.1),transparent 18%),
   radial-gradient(circle at 30% 60%,rgba(255,255,255,.04),transparent 12%),
   linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
   linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
-  background-size:auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,26px 26px,26px 26px}
-/* Connecting lines between map pins */
-.editorial-cover.travel-pay .editorial-art::before{content:'';position:absolute;right:30px;top:30px;width:120px;height:80px;
+  background-size:auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,26px 26px,26px 26px}
+/* Flight path arcs between map pins */
+.editorial-cover.travel-pay .editorial-art::before{content:'';position:absolute;right:20px;top:22px;width:140px;height:100px;
   background:
-    linear-gradient(135deg,transparent 0 40%,rgba(52,211,153,.12) 40.5%,transparent 41%),
-    linear-gradient(165deg,transparent 0 30%,rgba(52,211,153,.08) 30.5%,transparent 31%),
-    linear-gradient(110deg,transparent 0 55%,rgba(52,211,153,.1) 55.5%,transparent 56%)}
-/* USDT coin icon */
-.editorial-cover.travel-pay .editorial-art::after{content:'₮';position:absolute;right:36px;top:32px;
-  width:28px;height:28px;border-radius:999px;
-  background:rgba(0,166,126,.3);border:1.5px solid rgba(52,211,153,.4);
+    radial-gradient(ellipse 100px 60px at 40% 45%,transparent 42%,rgba(52,211,153,.14) 42.5%,transparent 43.5%),
+    radial-gradient(ellipse 80px 50px at 60% 55%,transparent 40%,rgba(52,211,153,.1) 40.5%,transparent 41.5%),
+    radial-gradient(ellipse 60px 40px at 50% 35%,transparent 38%,rgba(52,211,153,.08) 38.5%,transparent 39.5%)}
+/* USDT coin icon — enlarged with glow */
+.editorial-cover.travel-pay .editorial-art::after{content:'₮';position:absolute;right:28px;top:24px;
+  width:36px;height:36px;border-radius:999px;
+  background:rgba(0,166,126,.35);border:2px solid rgba(52,211,153,.5);
   display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:900;color:rgba(52,211,153,.8)}
+  font-size:18px;font-weight:900;color:rgba(52,211,153,.9);
+  box-shadow:0 0 16px rgba(52,211,153,.2),0 0 32px rgba(52,211,153,.08)}
 
 /* ── Light theme overrides ── */
 [data-theme='light'] .tag{background:rgba(15,23,42,.78);border-color:rgba(15,23,42,.14);color:#fff;box-shadow:0 4px 12px rgba(15,23,42,.08)}
@@ -406,6 +521,10 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 [data-theme='light'] .narrative-card{border-color:rgba(255,159,67,.12)}
 [data-theme='light'] .predict-card{border-color:rgba(139,92,246,.12);background:linear-gradient(180deg,rgba(91,33,182,.06),var(--panel))}
 [data-theme='light'] .earn-card{border-color:rgba(0,212,170,.1)}
+[data-theme='light'] .predict-card>.predict-bg::before{opacity:.35}
+[data-theme='light'] .breaking-card .breaking-bg::after{opacity:.5}
+[data-theme='light'] .kol-card .kol-bg::after{opacity:.7}
+[data-theme='light'] .narrative-card>.narrative-bg::before{opacity:.5}
 
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -615,7 +734,7 @@ button:active,.cta:active,.quick:active,.icon-btn:active,.nav-item:active{transf
 
       <!-- ── Card 5: Editorial 编辑推荐 — 15 分钟前 ── -->
       <article class="card editorial-card">
-        <div class="editorial-cover">
+        <div class="editorial-cover tsmc">
           <div class="editorial-art"></div>
           <div class="editorial-badge" data-i18n="editorialBadge">编辑推荐</div>
           <div class="editorial-chip">TSMC · 2330.TW</div>
