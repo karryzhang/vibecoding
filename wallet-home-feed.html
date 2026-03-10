@@ -61,6 +61,11 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .quick{min-height:58px;border-radius:16px;background:color-mix(in srgb,var(--panel-2) 90%, transparent);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:none}
 .quick i{font-style:normal;font-size:16px}.quick span{font-size:10px;font-weight:700;color:var(--muted)}
 
+/* ── Banner ── */
+.banner-slot{height:300px;border-radius:20px;background:var(--panel);border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.banner-slot .banner-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:13px;font-weight:600}
+.banner-slot .banner-placeholder i{font-style:normal;font-size:32px;opacity:.5}
+
 /* ── Section Head ── */
 .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 2px 0}
 .section-head h2{font-size:15px;font-weight:800;letter-spacing:-.01em}
@@ -84,6 +89,28 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:var(--space-4)}.source{flex:1;min-width:0;font-size:12px;color:var(--muted);line-height:1.4;padding-right:8px}
 .cta{min-height:38px;padding:0 14px;border-radius:12px;font-size:12px;font-weight:800;border:1px solid var(--line);background:rgba(255,255,255,.04);white-space:nowrap;display:inline-flex;align-items:center}
 .cta.primary{background:linear-gradient(135deg,#4f8fff,#18c7b0);color:#fff;border:none}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD: KOL 观点                                   ║
+   ╚══════════════════════════════════════════════════╝ */
+.kol-card{background:linear-gradient(170deg,rgba(255,215,0,.06),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,215,0,.18)}
+.kol-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0}
+.kol-tag{background:rgba(255,215,0,.12);color:#f5c542;border-color:rgba(255,215,0,.2)}
+.kol-profile{display:flex;align-items:center;gap:12px;padding:8px 16px 0}
+.kol-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#f5c542,#ff9f43);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex:none;box-shadow:0 2px 8px rgba(245,197,66,.3)}
+.kol-info{flex:1;min-width:0}
+.kol-name{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px}
+.kol-name .verified{width:14px;height:14px;border-radius:50%;background:#58a6ff;display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:#fff;flex:none}
+.kol-handle{font-size:11px;color:var(--muted);margin-top:1px}
+.kol-quote{padding:12px 16px 0;position:relative}
+.kol-quote blockquote{font-size:16px;font-weight:700;line-height:1.55;position:relative;padding-left:14px;border-left:3px solid rgba(245,197,66,.4)}
+.kol-quote .kol-highlight{color:#f5c542;font-weight:900}
+.kol-metrics{display:flex;gap:16px;padding:12px 16px 0}
+.kol-metric{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);font-weight:600}
+.kol-metric i{font-style:normal;font-size:13px}
+.kol-card .card-foot{padding:12px 16px 14px}
+.kol-card .kol-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:24px}
+.kol-card .kol-bg::after{content:'💬';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:120px;opacity:.04}
 
 /* ── Bottom Nav ── */
 .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);padding:10px 16px calc(env(safe-area-inset-bottom,10px) + 12px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 94%, transparent),transparent)}
@@ -411,10 +438,15 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
       </div>
     </section>
 
+    <!-- ── Banner ── -->
+    <div class="banner-slot">
+      <div class="banner-placeholder"><i>🖼</i><span data-i18n="bannerPlaceholder">Banner 广告位 · 300×auto</span></div>
+    </div>
+
     <!-- ── Section Header ── -->
     <div class="section-head">
       <h2><span class="live-title"><span class="live-dot" aria-hidden="true"></span> <span data-i18n="sectionTitle">正在发生</span></span></h2>
-      <p data-i18n="sectionSub">热点资讯 × 钱包功能</p>
+      <p data-i18n="sectionSub">链上热点 × 一站金融</p>
     </div>
 
     <!-- ══════════════════════════════════════════════ -->
@@ -483,6 +515,34 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
             <div class="source" data-i18n="ed2Source">Wallet Card · 虚拟卡</div>
             <button class="cta primary" data-i18n="ed2Cta">申请 Wallet Card →</button>
           </div>
+        </div>
+      </article>
+
+      <!-- ── Card: KOL 观点 ── -->
+      <article class="card kol-card">
+        <div class="kol-bg"></div>
+        <div class="kol-head">
+          <span class="tag kol-tag" data-i18n="kolTag">🎙 KOL 观点</span>
+          <span class="time" data-i18n="kolTime">20 分钟前</span>
+        </div>
+        <div class="kol-profile">
+          <div class="kol-avatar">J</div>
+          <div class="kol-info">
+            <div class="kol-name">JackYi <span class="verified">✓</span></div>
+            <div class="kol-handle">@JackYi · KOL</div>
+          </div>
+        </div>
+        <div class="kol-quote">
+          <blockquote data-i18n="kolQuote" data-i18n-html><span class="kol-highlight">$2000 以下</span>，ETH 短线长线都是机会</blockquote>
+        </div>
+        <div class="kol-metrics">
+          <span class="kol-metric"><i>👁</i> <span data-i18n="kolViews">12.8K</span></span>
+          <span class="kol-metric"><i>🔁</i> <span data-i18n="kolRetweets">1.2K</span></span>
+          <span class="kol-metric"><i>❤️</i> <span data-i18n="kolLikes">3.4K</span></span>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="kolSource">KOL · 链上观点</div>
+          <button class="cta primary" data-i18n="kolCta">查看 ETH 交易 →</button>
         </div>
       </article>
 
@@ -768,11 +828,17 @@ var T = {
     portfolioLabel:'总资产', portfolioChange:'+2.84% 今日',
     marketPulse:'Risk-on · 偏多',
     swap:'兑换', buy:'买币', earn:'赚币', discover:'发现',
-    sectionTitle:'正在发生', sectionSub:'热点资讯 × 钱包功能',
+    bannerPlaceholder:'Banner 广告位 · 300×auto',
+    sectionTitle:'正在发生', sectionSub:'链上热点 × 一站金融',
     /* Breaking */
     breakingLabel:'突发', breakingTitle:'特朗普发布声明伊朗战争很快结束，国际油价迅速跌破 $80',
     breakingTime:'2 分钟前', breakingSource:'Reuters · 地缘政治快讯', breakingCta:'原油合约交易 →',
     /* Signal */
+    /* KOL */
+    kolTag:'🎙 KOL 观点', kolTime:'20 分钟前',
+    kolQuote:'<span class="kol-highlight">$2000 以下</span>，ETH 短线长线都是机会',
+    kolViews:'12.8K', kolRetweets:'1.2K', kolLikes:'3.4K',
+    kolSource:'KOL · 链上观点', kolCta:'查看 ETH 交易 →',
     signalTag:'⚡ AI 信号', signalTime:'5 分钟前',
     signalBullish:'看多', signalTitle:'巨鲸集中买入 ETH',
     signalDesc:'过去 1 小时内，12 个巨鲸地址累计增持 $48M ETH，链上资金持续流入，短线看多信号明确。',
@@ -824,11 +890,17 @@ var T = {
     portfolioLabel:'Portfolio value', portfolioChange:'+2.84% today',
     marketPulse:'Risk-on · Bullish',
     swap:'Swap', buy:'Buy', earn:'Earn', discover:'Discover',
-    sectionTitle:'Happening Now', sectionSub:'Hot info × Wallet features',
+    bannerPlaceholder:'Banner Ad · 300×auto',
+    sectionTitle:'Happening Now', sectionSub:'On-chain Trends × All-in-one Finance',
     /* Breaking */
     breakingLabel:'BREAKING', breakingTitle:'Trump announces Iran war ending soon — oil drops below $80',
     breakingTime:'2 min ago', breakingSource:'Reuters · Geopolitics', breakingCta:'Trade Oil Futures →',
     /* Signal */
+    /* KOL */
+    kolTag:'🎙 KOL Take', kolTime:'20 min ago',
+    kolQuote:'<span class="kol-highlight">Below $2000</span>, ETH is an opportunity for both short & long term',
+    kolViews:'12.8K', kolRetweets:'1.2K', kolLikes:'3.4K',
+    kolSource:'KOL · On-chain Take', kolCta:'Trade ETH →',
     signalTag:'⚡ AI Signal', signalTime:'5m ago',
     signalBullish:'Bullish', signalTitle:'Whale Accumulation on ETH',
     signalDesc:'12 whale addresses accumulated $48M ETH in the past hour. On-chain inflow surging, short-term bullish signal confirmed.',
@@ -883,7 +955,7 @@ function applyI18n(lang) {
   var dict = T[lang] || T.zh;
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
     var key = el.getAttribute('data-i18n');
-    if (dict[key] != null) el.textContent = dict[key];
+    if (dict[key] != null) { if (el.hasAttribute('data-i18n-html')) el.innerHTML = dict[key]; else el.textContent = dict[key]; }
   });
   var btn = document.getElementById('langToggle');
   if (btn) btn.textContent = lang === 'zh' ? '中' : 'EN';
