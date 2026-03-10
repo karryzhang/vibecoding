@@ -93,11 +93,20 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 /* ╔══════════════════════════════════════════════════╗
    ║  CARD 1: BREAKING 突发                            ║
    ╚══════════════════════════════════════════════════╝ */
-.breaking-card{background:linear-gradient(180deg,rgba(255,100,103,.1),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,100,103,.2)}
-.breaking-banner{display:flex;align-items:center;gap:8px;padding:10px 14px;background:linear-gradient(90deg,#e63946,#ff4d6d);font-size:12px;font-weight:900;color:#fff;letter-spacing:.06em;text-transform:uppercase}
+.breaking-card{background:linear-gradient(180deg,rgba(255,100,103,.1),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,100,103,.2);position:relative}
+.breaking-card .breaking-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:24px}
+.breaking-card .breaking-bg::before{content:'';position:absolute;right:-8px;top:50px;width:140px;height:120px;
+  background:
+    linear-gradient(180deg,transparent 0 58%,rgba(255,100,103,.18) 58.5%,rgba(255,100,103,.05) 59%,transparent 60%),
+    linear-gradient(170deg,transparent 0 38%,rgba(255,100,103,.14) 38.5%,rgba(255,100,103,.04) 39%,transparent 40%),
+    linear-gradient(160deg,transparent 0 22%,rgba(255,100,103,.2) 22.5%,rgba(255,100,103,.06) 23%,transparent 24%),
+    radial-gradient(circle at 30% 80%,rgba(255,100,103,.06),transparent 60%);
+  opacity:.7}
+.breaking-card .breaking-bg::after{content:'📉';position:absolute;right:20px;top:60px;font-size:52px;opacity:.08}
+.breaking-banner{display:flex;align-items:center;gap:8px;padding:10px 14px;background:linear-gradient(90deg,#e63946,#ff4d6d);font-size:12px;font-weight:900;color:#fff;letter-spacing:.06em;text-transform:uppercase;position:relative;z-index:1}
 .breaking-flash{width:8px;height:8px;border-radius:999px;background:#fff;animation:breakingFlash 1s ease-in-out infinite}
 @keyframes breakingFlash{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
-.breaking-body{padding:var(--card-pad)}
+.breaking-body{padding:var(--card-pad);position:relative;z-index:1}
 .breaking-title{font-size:18px;line-height:1.28;font-weight:900;letter-spacing:-.03em}
 .breaking-time{display:inline-flex;align-items:center;gap:7px;margin-top:var(--space-2);font-size:11px;font-weight:700;color:var(--red)}
 .breaking-impacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:var(--space-3)}
@@ -129,23 +138,40 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .data-label{font-size:10px;font-weight:700;color:var(--soft);display:block}
 .data-value{font-size:15px;font-weight:860;margin-top:4px;display:block}
 .data-value.strong{color:var(--cyan)}
-.signal-viz{margin-top:var(--space-3);height:64px;border-radius:14px;background:linear-gradient(180deg,rgba(7,14,28,.9),rgba(8,31,63,.6));border:1px solid rgba(52,215,255,.08);position:relative;overflow:hidden}
+.signal-viz{margin-top:var(--space-3);height:72px;border-radius:14px;background:linear-gradient(180deg,rgba(7,14,28,.9),rgba(8,31,63,.6));border:1px solid rgba(52,215,255,.08);position:relative;overflow:hidden}
 .signal-viz::before{content:'';position:absolute;inset:0;background:
-  radial-gradient(circle at 20% 50%,rgba(52,215,255,.2) 0 3px,transparent 3.5px),
-  radial-gradient(circle at 40% 30%,rgba(52,215,255,.15) 0 2px,transparent 2.5px),
-  radial-gradient(circle at 60% 60%,rgba(52,215,255,.25) 0 4px,transparent 4.5px),
-  radial-gradient(circle at 80% 40%,rgba(52,215,255,.18) 0 3px,transparent 3.5px),
-  radial-gradient(circle at 50% 50%,rgba(52,215,255,.3) 0 5px,transparent 5.5px),
   linear-gradient(90deg,rgba(52,215,255,.06) 1px,transparent 1px),
-  linear-gradient(rgba(52,215,255,.04) 1px,transparent 1px);
-  background-size:auto,auto,auto,auto,auto,20px 20px,20px 20px}
-.signal-viz::after{content:'';position:absolute;left:18%;top:48%;width:64%;height:2px;background:linear-gradient(90deg,transparent,rgba(52,215,255,.6),rgba(83,224,143,.8),rgba(52,215,255,.4),transparent);filter:blur(1px);animation:signalScan 3s ease-in-out infinite}
-@keyframes signalScan{0%{opacity:.3;transform:translateY(-12px)}50%{opacity:1;transform:translateY(12px)}100%{opacity:.3;transform:translateY(-12px)}}
+  linear-gradient(rgba(52,215,255,.04) 1px,transparent 1px),
+  radial-gradient(circle at 14% 50%,rgba(52,215,255,.15) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 30% 30%,rgba(52,215,255,.12) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 46% 65%,rgba(52,215,255,.18) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 62% 35%,rgba(83,224,143,.2) 0 3px,transparent 3.5px),
+  radial-gradient(circle at 78% 55%,rgba(52,215,255,.15) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 90% 40%,rgba(83,224,143,.12) 0 2px,transparent 2.5px);
+  background-size:20px 20px,20px 20px,auto,auto,auto,auto,auto,auto}
+/* ETH diamond shape */
+.signal-eth{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:36px;height:36px}
+.signal-eth::before{content:'';position:absolute;inset:0;background:
+  linear-gradient(135deg,transparent 38%,rgba(52,215,255,.3) 38.5%,rgba(52,215,255,.15) 50%,rgba(52,215,255,.3) 61.5%,transparent 62%),
+  linear-gradient(225deg,transparent 38%,rgba(83,224,143,.2) 38.5%,rgba(83,224,143,.1) 50%,rgba(83,224,143,.2) 61.5%,transparent 62%);
+  filter:drop-shadow(0 0 8px rgba(52,215,255,.3))}
+/* Whale flow line */
+.signal-viz::after{content:'';position:absolute;left:8%;top:50%;width:76%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(52,215,255,.3) 10%,rgba(52,215,255,.6) 30%,rgba(83,224,143,.8) 55%,rgba(52,215,255,.5) 75%,rgba(83,224,143,.6) 90%,transparent);
+  filter:blur(1px);animation:signalScan 3s ease-in-out infinite}
+@keyframes signalScan{0%{opacity:.3;transform:translateY(-10px)}50%{opacity:1;transform:translateY(10px)}100%{opacity:.3;transform:translateY(-10px)}}
 
 /* ╔══════════════════════════════════════════════════╗
    ║  CARD 3: NARRATIVE 今日热门叙事                    ║
    ╚══════════════════════════════════════════════════╝ */
-.narrative-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(255,159,67,.08),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,159,67,.16)}
+.narrative-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(255,159,67,.08),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,159,67,.16);position:relative;overflow:hidden}
+.narrative-card>.narrative-bg{position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 90% 10%,rgba(255,159,67,.12),transparent 32%),
+    radial-gradient(ellipse at 95% 40%,rgba(255,100,103,.06),transparent 24%)}
+.narrative-card>.narrative-bg::before{content:'🔥';position:absolute;right:8px;top:4px;font-size:48px;opacity:.06}
+.narrative-card>.narrative-bg::after{content:'';position:absolute;right:0;top:0;width:100px;height:100px;
+  background:radial-gradient(circle at 80% 20%,rgba(255,159,67,.08),transparent 50%)}
 .narrative-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tag.narrative{background:rgba(255,159,67,.12);border-color:rgba(255,159,67,.18);color:#ffc078}
 .narrative-list{display:flex;flex-direction:column;gap:10px;margin-top:var(--meta-gap)}
@@ -165,8 +191,13 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 /* ╔══════════════════════════════════════════════════╗
    ║  CARD 4: PREDICT 预测市场                         ║
    ╚══════════════════════════════════════════════════╝ */
-.predict-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(91,33,182,.14),rgba(18,24,38,.95));border-color:rgba(139,92,246,.16)}
-.predict-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.predict-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(91,33,182,.14),rgba(18,24,38,.95));border-color:rgba(139,92,246,.16);position:relative;overflow:hidden}
+.predict-card>.predict-bg{position:absolute;inset:0;pointer-events:none}
+.predict-card>.predict-bg::before{content:'🏀';position:absolute;right:-6px;top:-6px;font-size:72px;opacity:.06}
+.predict-card>.predict-bg::after{content:'';position:absolute;left:0;top:0;right:0;bottom:0;
+  background:radial-gradient(circle at 15% 85%,rgba(85,228,183,.06),transparent 22%),
+  radial-gradient(circle at 85% 85%,rgba(255,141,151,.06),transparent 22%)}
+.predict-head{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
 .tag.predict{background:rgba(155,107,255,.12);border-color:rgba(155,107,255,.18);color:#c4b5fd}
 .predict-live{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:800;color:#c9d4ff;padding:4px 10px;border-radius:999px;background:rgba(255,100,103,.08)}
 .predict-live .live-dot{width:6px;height:6px}
@@ -191,6 +222,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .editorial-cover{height:192px;position:relative;overflow:hidden;background:linear-gradient(135deg,#071524 0%,#1a3a6d 46%,#4f8fff 100%)}
 .editorial-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 16% 18%,rgba(255,255,255,.1),transparent 18%),radial-gradient(circle at 84% 24%,rgba(52,215,255,.12),transparent 16%),linear-gradient(120deg,rgba(255,255,255,.04),transparent 32%)}
 .editorial-cover::after{content:'';position:absolute;left:0;right:0;bottom:0;height:100px;background:linear-gradient(180deg,transparent,rgba(3,8,20,.28) 42%,rgba(3,8,20,.84));z-index:1}
+/* TSMC chip/circuit art */
 .editorial-art{position:absolute;inset:0;pointer-events:none;z-index:1;
   background:
     radial-gradient(circle at 76% 30%,rgba(255,255,255,.8) 0 3px,transparent 3.5px),
@@ -199,6 +231,20 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px),
     linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
   background-size:auto,auto,auto,28px 28px,28px 28px}
+/* Chip core on TSMC default cover */
+.editorial-cover:not(.wallet-card):not(.travel-pay) .editorial-art::before{content:'';position:absolute;right:48px;top:26px;width:56px;height:56px;
+  border:2px solid rgba(255,255,255,.12);border-radius:8px;
+  box-shadow:inset 0 0 18px rgba(88,166,255,.12)}
+.editorial-cover:not(.wallet-card):not(.travel-pay) .editorial-art::after{content:'';position:absolute;right:40px;top:18px;width:72px;height:72px;
+  background:
+    linear-gradient(0deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat center top/2px 10px,
+    linear-gradient(0deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat center bottom/2px 10px,
+    linear-gradient(90deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat left center/10px 2px,
+    linear-gradient(90deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat right center/10px 2px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 25% top/2px 8px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 75% top/2px 8px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 25% bottom/2px 8px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 75% bottom/2px 8px}
 .editorial-badge{position:absolute;top:13px;left:13px;padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;background:rgba(255,255,255,.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);color:#f8fbff;z-index:2}
 .editorial-chip{position:absolute;top:13px;right:13px;padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;background:rgba(6,12,24,.24);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);color:#f8fbff;z-index:2}
 .editorial-copy{position:absolute;left:15px;right:15px;bottom:14px;z-index:2;color:#f8fbff}
@@ -238,7 +284,19 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
    ║  CARD 7: ACTIVITY 热点活动                        ║
    ╚══════════════════════════════════════════════════╝ */
 .activity-card{padding:0;background:linear-gradient(135deg,#1a0a2e 0%,#2d1b69 36%,#ff6b35 100%);border-color:rgba(255,107,53,.2)}
-.activity-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 90% 20%,rgba(255,209,102,.18),transparent 28%),radial-gradient(circle at 10% 80%,rgba(155,107,255,.2),transparent 24%);pointer-events:none;border-radius:24px}
+.activity-card::after{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 90% 20%,rgba(255,209,102,.18),transparent 28%),
+    radial-gradient(circle at 10% 80%,rgba(155,107,255,.2),transparent 24%),
+    /* Floating coins */
+    radial-gradient(circle at 88% 14%,rgba(255,209,102,.4) 0 6px,transparent 6.5px),
+    radial-gradient(circle at 88% 14%,rgba(255,209,102,.1) 0 10px,transparent 11px),
+    radial-gradient(circle at 92% 30%,rgba(255,209,102,.25) 0 4px,transparent 4.5px),
+    radial-gradient(circle at 82% 8%,rgba(255,159,67,.2) 0 3px,transparent 3.5px),
+    radial-gradient(circle at 96% 22%,rgba(255,159,67,.15) 0 3px,transparent 3.5px),
+    /* Trophy sparkle */
+    radial-gradient(circle at 85% 18%,rgba(255,255,255,.06),transparent 16%);
+  pointer-events:none;border-radius:24px}
 .activity-inner{position:relative;z-index:1;padding:var(--card-pad)}
 .activity-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tag.activity{background:rgba(255,209,102,.16);border-color:rgba(255,209,102,.24);color:var(--yellow)}
@@ -265,15 +323,43 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
   linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
   background-size:auto,auto,auto,24px 24px,24px 24px}
+/* Credit card shape */
+.editorial-cover.wallet-card .editorial-art::before{content:'';position:absolute;right:28px;top:28px;width:92px;height:58px;
+  border-radius:10px;border:1.5px solid rgba(255,255,255,.16);
+  background:linear-gradient(145deg,rgba(99,102,241,.25),rgba(79,70,229,.15));
+  backdrop-filter:blur(4px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+/* Cashback % sparkle */
+.editorial-cover.wallet-card .editorial-art::after{content:'50%';position:absolute;right:42px;top:42px;
+  font-size:18px;font-weight:900;color:rgba(255,255,255,.5);letter-spacing:-.02em}
 .editorial-cover.travel-pay{background:linear-gradient(135deg,#071a12 0%,#0d6d3f 42%,#34d399 100%)}
 .editorial-cover.travel-pay .editorial-art{background:
-  radial-gradient(circle at 68% 40%,rgba(52,211,153,.6) 0 4px,transparent 4.5px),
-  radial-gradient(circle at 68% 40%,transparent 0 16%,rgba(52,211,153,.12) 16.5%,transparent 18%),
-  radial-gradient(circle at 68% 40%,transparent 0 28%,rgba(52,211,153,.06) 28.5%,transparent 30%),
+  /* Map pin dots representing Asian countries */
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.8) 0 3px,transparent 3.5px),
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.15) 0 8px,transparent 9px),
+  radial-gradient(circle at 72% 36%,rgba(52,211,153,.6) 0 2.5px,transparent 3px),
+  radial-gradient(circle at 65% 50%,rgba(52,211,153,.5) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 80% 44%,rgba(52,211,153,.4) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 52% 42%,rgba(52,211,153,.5) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 75% 56%,rgba(52,211,153,.4) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 62% 62%,rgba(52,211,153,.35) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 48% 55%,rgba(52,211,153,.3) 0 1.5px,transparent 2px),
+  radial-gradient(circle at 85% 52%,rgba(52,211,153,.3) 0 1.5px,transparent 2px),
   radial-gradient(circle at 30% 60%,rgba(255,255,255,.04),transparent 12%),
-  linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px),
-  linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
-  background-size:auto,auto,auto,auto,26px 26px,26px 26px}
+  linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
+  linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,26px 26px,26px 26px}
+/* Connecting lines between map pins */
+.editorial-cover.travel-pay .editorial-art::before{content:'';position:absolute;right:30px;top:30px;width:120px;height:80px;
+  background:
+    linear-gradient(135deg,transparent 0 40%,rgba(52,211,153,.12) 40.5%,transparent 41%),
+    linear-gradient(165deg,transparent 0 30%,rgba(52,211,153,.08) 30.5%,transparent 31%),
+    linear-gradient(110deg,transparent 0 55%,rgba(52,211,153,.1) 55.5%,transparent 56%)}
+/* USDT coin icon */
+.editorial-cover.travel-pay .editorial-art::after{content:'₮';position:absolute;right:36px;top:32px;
+  width:28px;height:28px;border-radius:999px;
+  background:rgba(0,166,126,.3);border:1.5px solid rgba(52,211,153,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:rgba(52,211,153,.8)}
 
 /* ── Light theme overrides ── */
 [data-theme='light'] .tag{background:rgba(15,23,42,.78);border-color:rgba(15,23,42,.14);color:#fff;box-shadow:0 4px 12px rgba(15,23,42,.08)}
@@ -338,6 +424,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
       <!-- ── Card 1: Breaking 突发 ── -->
       <article class="card breaking-card live-node">
+        <div class="breaking-bg"></div>
         <div class="breaking-banner">
           <span class="breaking-flash"></span>
           <span data-i18n="breakingLabel">突发</span>
@@ -431,7 +518,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
             <span class="data-value strong" data-i18n="signalStrengthVal">强</span>
           </div>
         </div>
-        <div class="signal-viz"></div>
+        <div class="signal-viz"><div class="signal-eth"></div></div>
         <div class="card-foot">
           <div class="source" data-i18n="signalSource">AI 链上分析引擎</div>
           <button class="cta primary" data-i18n="signalCta">查看 ETH 交易 →</button>
@@ -440,7 +527,8 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
       <!-- ── Card 3: Narrative 今日热门叙事 ── -->
       <article class="card narrative-card">
-        <div class="narrative-head">
+        <div class="narrative-bg"></div>
+        <div class="narrative-head" style="position:relative;z-index:1">
           <span class="tag narrative" data-i18n="narrativeTag">🔥 今日热门叙事</span>
           <span class="time" data-i18n="narrativeTime">刚刚更新</span>
         </div>
@@ -524,6 +612,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
       <!-- ── Card 4: Predict 预测市场 ── -->
       <article class="card predict-card">
+        <div class="predict-bg"></div>
         <div class="predict-head">
           <span class="tag predict" data-i18n="predictTag">🎯 预测市场</span>
           <span class="predict-live"><span class="live-dot" aria-hidden="true"></span> LIVE</span>
