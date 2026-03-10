@@ -17,10 +17,10 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#07111f;--bg-2:#0b1629;--panel:#0f1c33;--panel-2:#12243f;--panel-3:#182b49;--line:rgba(203,213,225,.12);
-  --text:#f8fbff;--muted:#9cb0c9;--soft:#6f84a0;--blue:#58a6ff;--cyan:#34d7ff;--teal:#00d4aa;--green:#53e08f;
-  --purple:#9b6bff;--orange:#ff9f43;--red:#ff6467;--yellow:#ffd166;--shadow:0 18px 50px rgba(0,0,0,.28);
-  --radius:26px;--radius-md:20px;--radius-sm:16px;
+  --bg:#07111f;--bg-2:#0b1629;--panel:#0f1c33;--panel-2:#12243f;--panel-3:#182b49;--line:rgba(203,213,225,.1);
+  --text:#f8fbff;--muted:#9cb0c9;--soft:#7286a1;--blue:#58a6ff;--cyan:#34d7ff;--teal:#00d4aa;--green:#53e08f;
+  --purple:#9b6bff;--orange:#ff9f43;--red:#ff6467;--yellow:#ffd166;--shadow:0 14px 34px rgba(0,0,0,.24);
+  --radius:24px;--radius-md:18px;--radius-sm:14px;
 }
 [data-theme='light']{
   --bg:#edf3fb;--bg-2:#f7faff;--panel:#ffffff;--panel-2:#f7faff;--panel-3:#eef4fd;--line:rgba(15,23,42,.08);
@@ -30,81 +30,95 @@ html,body{min-height:100%}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC",sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(88,166,255,.14), transparent 26%),
-    radial-gradient(circle at top right, rgba(155,107,255,.12), transparent 24%),
+    radial-gradient(circle at top left, rgba(88,166,255,.1), transparent 26%),
+    radial-gradient(circle at top right, rgba(155,107,255,.08), transparent 22%),
     linear-gradient(180deg,var(--bg),var(--bg-2));
   color:var(--text);-webkit-font-smoothing:antialiased;
 }
 button{font:inherit;color:inherit;background:none;border:none}
-.app{max-width:430px;margin:0 auto;min-height:100vh;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px calc(env(safe-area-inset-bottom,20px) + 110px)}
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding:calc(env(safe-area-inset-top,0px) + 12px) 15px calc(env(safe-area-inset-bottom,20px) + 112px)}
 .stack{display:flex;flex-direction:column;gap:14px}
-.topbar{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.brand{width:42px;height:42px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:var(--shadow)}
-.brand-meta{flex:1;min-width:0}.eyebrow{font-size:12px;color:var(--muted)}.title{margin-top:2px;font-size:17px;font-weight:900;letter-spacing:-.02em}
-.tools{display:flex;gap:8px}.icon-btn{width:40px;height:40px;border-radius:14px;background:color-mix(in srgb,var(--panel) 88%, transparent);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
-.shell{border:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 92%, transparent),color-mix(in srgb,var(--panel-2) 96%, transparent));box-shadow:var(--shadow);backdrop-filter:blur(16px)}
-.hero{padding:16px;border-radius:30px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 12%,rgba(255,255,255,.12),transparent 20%),radial-gradient(circle at 82% 18%,rgba(52,215,255,.16),transparent 22%),linear-gradient(135deg,rgba(255,255,255,.06),transparent 36%);pointer-events:none}
-.portfolio-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:relative;z-index:1}
-.balance-label{font-size:12px;color:var(--muted)}.balance-value{margin-top:4px;font-size:34px;font-weight:950;letter-spacing:-.05em}.balance-change{margin-top:6px;font-size:12px;font-weight:800;color:var(--green)}
-.live-pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:11px;font-weight:800;color:var(--muted)}
-.hero-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:12px;margin-top:14px;position:relative;z-index:1}
-.hero-panel{padding:14px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line)}
-.hero-panel h3{font-size:12px;color:var(--muted);font-weight:800}.hero-panel .big{margin-top:8px;font-size:20px;font-weight:900;line-height:1.15}.hero-panel .sub{margin-top:8px;font-size:12px;line-height:1.45;color:var(--muted)}
-.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;position:relative;z-index:1}
-.quick{min-height:64px;border-radius:20px;background:color-mix(in srgb,var(--panel-2) 88%, transparent);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:var(--shadow)}
-.quick i{font-style:normal;font-size:18px}.quick span{font-size:11px;font-weight:800;color:var(--muted)}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;padding:2px 2px 0}.section-head h2{font-size:15px;font-weight:900}.section-head p{font-size:12px;color:var(--muted);text-align:right}
-.feed{display:flex;flex-direction:column;gap:14px}
-.card{border-radius:28px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;position:relative}
-.signal-card{padding:14px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 95%, transparent),color-mix(in srgb,var(--panel-2) 98%, transparent))}
+.topbar{display:flex;align-items:center;gap:11px;margin-bottom:4px}
+.brand{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.brand-meta{flex:1;min-width:0}.eyebrow{font-size:10px;color:var(--soft);letter-spacing:.015em}.title{margin-top:2px;font-size:16px;font-weight:840;letter-spacing:-.02em}
+.tools{display:flex;gap:7px}.icon-btn{width:36px;height:36px;border-radius:12px;background:color-mix(in srgb,var(--panel) 90%, transparent);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.shell{border:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 95%, transparent),color-mix(in srgb,var(--panel-2) 98%, transparent));box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.hero{padding:17px;border-radius:28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 14% 10%,rgba(255,255,255,.08),transparent 18%),radial-gradient(circle at 84% 16%,rgba(52,215,255,.1),transparent 20%),linear-gradient(135deg,rgba(255,255,255,.035),transparent 36%);pointer-events:none}
+.hero::after{content:'';position:absolute;inset:auto -12% -32% 42%;height:180px;background:radial-gradient(circle,rgba(88,166,255,.18),transparent 58%);filter:blur(14px);pointer-events:none}
+.portfolio-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:relative;z-index:1}
+.balance-label{font-size:12px;color:var(--soft)}.balance-value{margin-top:4px;font-size:36px;font-weight:920;letter-spacing:-.055em}.balance-change{margin-top:8px;font-size:12px;font-weight:720;color:var(--green)}
+.live-pill{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-size:11px;font-weight:700;color:var(--muted)}
+.shell-soft{border:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015))}
+.hero-summary{margin-top:15px;padding:14px 15px;border-radius:20px;position:relative;z-index:1}
+.hero-summary-title{max-width:250px;font-size:16px;line-height:1.3;font-weight:860;letter-spacing:-.025em}
+.hero-summary-sub{margin-top:6px;max-width:250px;font-size:12px;line-height:1.48;color:var(--muted)}
+.hero-grid{display:grid;grid-template-columns:1.24fr .76fr;gap:11px;margin-top:12px;position:relative;z-index:1}
+.hero-panel{padding:15px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid var(--line)}
+.hero-panel h3{font-size:11px;color:var(--soft);font-weight:700}.hero-panel .big{margin-top:8px;font-size:18px;font-weight:850;line-height:1.18;letter-spacing:-.028em}.hero-panel .sub{margin-top:7px;font-size:11px;line-height:1.5;color:var(--muted)}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:13px;position:relative;z-index:1}
+.quick{min-height:58px;border-radius:16px;background:color-mix(in srgb,var(--panel-2) 90%, transparent);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:none}
+.quick i{font-style:normal;font-size:16px}.quick span{font-size:10px;font-weight:700;color:var(--muted)}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 2px 0}.section-head h2{font-size:15px;font-weight:800;letter-spacing:-.01em}.section-head p{font-size:12px;color:var(--muted);text-align:right;line-height:1.45;max-width:210px}
+.feed{display:flex;flex-direction:column;gap:14px;position:relative;padding-left:16px}
+.feed::before{content:'';position:absolute;left:6px;top:10px;bottom:10px;width:1px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border-radius:999px}
+.card{border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;position:relative}
+.card::before{content:'';position:absolute;left:-13px;top:24px;width:7px;height:7px;border-radius:999px;background:#89c0ff;box-shadow:0 0 0 4px rgba(137,192,255,.06)}
+.card.live-node::before{background:#ff8e7f;box-shadow:0 0 0 4px rgba(255,142,127,.08)}
+.signal-card{padding:15px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 96%, transparent),color-mix(in srgb,var(--panel-2) 99%, transparent))}
 .signal-head,.story-meta,.action-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.03em;border:1px solid transparent}
-.tag.signal{background:rgba(88,166,255,.14);border-color:rgba(88,166,255,.24);color:#9fd0ff}
-.tag.story{background:rgba(255,159,67,.14);border-color:rgba(255,159,67,.24);color:#ffd7ad}
-.tag.action{background:rgba(0,212,170,.14);border-color:rgba(0,212,170,.24);color:#b8ffef}
-.time{font-size:12px;font-weight:800;color:var(--soft)}
-.signal-body{display:grid;grid-template-columns:1fr 112px;gap:12px;margin-top:12px;align-items:center}
-.signal-title{font-size:19px;line-height:1.18;font-weight:950;letter-spacing:-.03em}.signal-desc{margin-top:8px;font-size:13px;line-height:1.5;color:var(--muted)}
-.signal-kpis{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-size:11px;font-weight:800;color:var(--muted)}
-.mini-chart{height:112px;border-radius:22px;background:linear-gradient(180deg,rgba(7,14,28,.92),rgba(8,31,63,.68));border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.04em;border:1px solid transparent}
+.tag.signal{background:rgba(88,166,255,.08);border-color:rgba(88,166,255,.14);color:#a9d1ff}
+.tag.story{background:rgba(255,159,67,.08);border-color:rgba(255,159,67,.14);color:#ffd7ad}
+.tag.action{background:rgba(0,212,170,.08);border-color:rgba(0,212,170,.14);color:#b8ffef}
+.time{font-size:11px;font-weight:700;color:var(--soft)}
+.signal-body{display:grid;grid-template-columns:1fr 102px;gap:13px;margin-top:13px;align-items:center}
+.signal-title{font-size:17px;line-height:1.24;font-weight:850;letter-spacing:-.03em}.signal-desc{margin-top:8px;font-size:12px;line-height:1.58;color:var(--muted)}
+.signal-kpis{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.pill{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid var(--line);font-size:10px;font-weight:700;color:var(--muted)}
+.mini-chart{height:102px;border-radius:18px;background:linear-gradient(180deg,rgba(7,14,28,.92),rgba(8,31,63,.68));border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
 .mini-chart::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(148,163,184,.12) 1px,transparent 1px),linear-gradient(rgba(148,163,184,.1) 1px,transparent 1px);background-size:22px 22px}
 .mini-chart::after{content:'';position:absolute;left:10px;right:10px;bottom:18px;height:46px;background:linear-gradient(120deg,transparent 0 8%,rgba(83,224,143,.3) 12%,transparent 13%,transparent 18%,rgba(83,224,143,.45) 22%,transparent 23%,transparent 31%,rgba(88,166,255,.42) 38%,transparent 39%,transparent 48%,rgba(52,215,255,.52) 56%,transparent 57%,transparent 68%,rgba(83,224,143,.72) 78%,transparent 79%);filter:drop-shadow(0 0 10px rgba(83,224,143,.24))}
-.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}.source{font-size:12px;color:var(--muted)}.cta{min-height:40px;padding:0 14px;border-radius:14px;font-size:12px;font-weight:900;border:1px solid var(--line);background:rgba(255,255,255,.05)}.cta.primary{background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;border:none}
-.story-card{background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 96%, transparent),color-mix(in srgb,var(--panel-3) 96%, transparent))}
-.story-cover{height:208px;position:relative;overflow:hidden;background:linear-gradient(135deg,#140f2e 0%,#233d84 42%,#00c3a0 100%)}
-.story-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 16% 18%,rgba(255,255,255,.16),transparent 18%),radial-gradient(circle at 84% 24%,rgba(255,209,102,.18),transparent 16%),linear-gradient(120deg,rgba(255,255,255,.08),transparent 32%)}
-.story-cover.macro{background:linear-gradient(135deg,#1c0610 0%,#8e1735 40%,#ff8c42 100%)}
-.story-cover.narrative{background:linear-gradient(135deg,#220052 0%,#7f3bff 44%,#ff6d2f 100%)}
-.story-cover.feature{background:linear-gradient(135deg,#051525 0%,#0060c9 34%,#00cfa7 100%)}
-.cover-badge,.cover-chip{position:absolute;top:14px;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900;z-index:2;border:1px solid rgba(255,255,255,.16)}
-.cover-badge{left:14px;background:rgba(255,255,255,.14);backdrop-filter:blur(12px)}.cover-chip{right:14px;background:rgba(6,12,24,.34);backdrop-filter:blur(12px)}
+.mini-chart.wire{background:linear-gradient(180deg,#21070b,#3a0d14 42%,#111827)}
+.mini-chart.wire::before{background:linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:20px 20px}
+.mini-chart.wire::after{left:12px;right:12px;bottom:20px;height:42px;background:linear-gradient(100deg,transparent 0 10%,rgba(255,98,98,.78) 16%,transparent 17%,transparent 26%,rgba(255,255,255,.4) 30%,transparent 31%,transparent 42%,rgba(255,98,98,.9) 52%,transparent 53%,transparent 64%,rgba(255,171,64,.86) 73%,transparent 74%);filter:drop-shadow(0 0 10px rgba(255,98,98,.24))}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}.source{flex:1;min-width:0;font-size:12px;color:var(--muted);line-height:1.4;padding-right:8px}.cta{min-height:38px;padding:0 14px;border-radius:12px;font-size:12px;font-weight:800;border:1px solid var(--line);background:rgba(255,255,255,.04);white-space:nowrap}.cta.primary{background:linear-gradient(135deg,#4f8fff,#18c7b0);color:#fff;border:none}
+.story-card{background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 97%, transparent),color-mix(in srgb,var(--panel-3) 97%, transparent))}
+.story-cover{height:184px;position:relative;overflow:hidden;background:linear-gradient(135deg,#140f2e 0%,#233d84 42%,#00c3a0 100%)}
+.story-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 16% 18%,rgba(255,255,255,.1),transparent 18%),radial-gradient(circle at 84% 24%,rgba(255,209,102,.12),transparent 16%),linear-gradient(120deg,rgba(255,255,255,.04),transparent 32%)}
+.story-cover::after{content:'';position:absolute;left:0;right:0;bottom:0;height:82px;background:linear-gradient(180deg,transparent,rgba(3,8,20,.24) 48%,rgba(3,8,20,.7));z-index:1}
+.story-cover.macro{background:linear-gradient(135deg,#17070e 0%,#6f1730 42%,#d97745 100%)}
+.story-cover.narrative{background:linear-gradient(135deg,#180845 0%,#6139ea 46%,#f07a4a 100%)}
+.story-cover.feature{background:linear-gradient(135deg,#071624 0%,#0a57ab 36%,#00b893 100%)}
+.story-cover.gold{background:linear-gradient(135deg,#171004 0%,#6a4a0f 36%,#d9a94b 100%)}
+.cover-badge,.cover-chip{position:absolute;top:13px;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800;z-index:2;border:1px solid rgba(255,255,255,.1)}
+.cover-badge{left:13px;background:rgba(255,255,255,.1);backdrop-filter:blur(12px)}.cover-chip{right:13px;background:rgba(6,12,24,.24);backdrop-filter:blur(12px)}
 .cover-art,.cover-art::before,.cover-art::after{position:absolute;pointer-events:none;z-index:1}
 .cover-art{inset:0}
 .story-cover.macro .cover-art{background:radial-gradient(circle at 72% 34%,rgba(255,236,210,.92) 0 4px,transparent 4.5px),radial-gradient(circle at 72% 34%,transparent 0 15%,rgba(255,236,210,.18) 15.5%,transparent 17%),radial-gradient(circle at 72% 34%,transparent 0 28%,rgba(255,236,210,.12) 28.5%,transparent 30%),linear-gradient(108deg,transparent 0 36%,rgba(255,236,210,.18) 38%,rgba(255,97,72,.68) 40%,rgba(255,236,210,.16) 42%,transparent 45%),linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:auto,auto,auto,auto,30px 30px,30px 30px}
 .story-cover.narrative .cover-art{background:radial-gradient(circle at 28% 44%,transparent 0 16%,rgba(255,255,255,.12) 16.5%,transparent 18%),radial-gradient(circle at 28% 44%,transparent 0 28%,rgba(255,255,255,.08) 28.5%,transparent 30%),radial-gradient(circle at 52% 32%,rgba(255,255,255,.8) 0 4px,transparent 4.5px),radial-gradient(circle at 74% 20%,rgba(255,255,255,.9) 0 4px,transparent 4.5px),linear-gradient(32deg,transparent 0 30%,rgba(255,255,255,.12) 31%,transparent 32%),linear-gradient(152deg,transparent 0 52%,rgba(255,255,255,.12) 53%,transparent 54%)}
 .story-cover.feature .cover-art{background:radial-gradient(circle at 80% 24%,rgba(52,215,255,.3),transparent 18%),radial-gradient(circle at 76% 34%,transparent 0 16%,rgba(255,255,255,.1) 16.5%,transparent 18%),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:auto,auto,26px 26px,26px 26px}
-.story-copy{position:absolute;left:16px;right:16px;bottom:16px;z-index:2}.story-kicker{font-size:11px;letter-spacing:.11em;text-transform:uppercase;font-weight:900;color:rgba(255,255,255,.8)}.story-headline{margin-top:8px;font-size:26px;line-height:1.05;font-weight:950;letter-spacing:-.05em;text-shadow:0 8px 22px rgba(0,0,0,.28)}
-.story-body{padding:14px 14px 16px}.story-title{font-size:16px;line-height:1.35;font-weight:900}.story-desc{margin-top:8px;font-size:13px;line-height:1.55;color:var(--muted)}
-.story-highlights{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.action-card{padding:14px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 92%, transparent),color-mix(in srgb,var(--panel-3) 92%, transparent))}
-.action-hero{margin-top:12px;border-radius:24px;padding:16px;background:linear-gradient(145deg,#07192e 0%,#0056bd 34%,#00b98a 100%);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.story-cover.gold .cover-art{background:radial-gradient(circle at 78% 28%,rgba(255,235,166,.92) 0 5px,transparent 5.5px),radial-gradient(circle at 78% 28%,transparent 0 16%,rgba(255,235,166,.18) 16.5%,transparent 18%),radial-gradient(circle at 78% 28%,transparent 0 30%,rgba(255,235,166,.1) 30.5%,transparent 32%),linear-gradient(180deg,rgba(255,214,102,.18),transparent 26%),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:auto,auto,auto,auto,28px 28px,28px 28px}
+.story-copy{position:absolute;left:15px;right:15px;bottom:14px;z-index:2}.story-kicker{font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:rgba(255,255,255,.7)}.story-headline{max-width:250px;margin-top:7px;font-size:21px;line-height:1.08;font-weight:900;letter-spacing:-.055em;text-shadow:0 8px 18px rgba(0,0,0,.14)}
+.story-body{padding:15px 15px 17px}.story-title{font-size:15px;line-height:1.38;font-weight:850;letter-spacing:-.015em}.story-desc{margin-top:7px;font-size:12px;line-height:1.56;color:var(--muted)}
+.story-highlights{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.action-card{padding:15px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 94%, transparent),color-mix(in srgb,var(--panel-3) 95%, transparent))}
+.action-hero{margin-top:12px;border-radius:20px;padding:15px;background:linear-gradient(145deg,#07192e 0%,#0056bd 34%,#00b98a 100%);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
 .action-hero.buy{background:linear-gradient(145deg,#041426 0%,#0f66ff 36%,#22d3ee 100%)}
 .action-hero.earn{background:linear-gradient(145deg,#062317 0%,#12b76a 38%,#d6ff70 100%)}
-.action-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 18%,rgba(255,255,255,.18),transparent 18%),linear-gradient(135deg,rgba(255,255,255,.12),transparent 28%)}
-.action-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;gap:14px;align-items:center}
-.action-copy h3{font-size:13px;font-weight:800;color:rgba(255,255,255,.82)}.action-copy .value{margin-top:8px;font-size:30px;line-height:1.02;font-weight:950;letter-spacing:-.05em}.action-copy .sub{margin-top:8px;font-size:13px;line-height:1.45;color:rgba(255,255,255,.84)}
-.action-visual{height:144px;border-radius:22px;background:rgba(4,12,24,.22);border:1px solid rgba(255,255,255,.14);position:relative;overflow:hidden;backdrop-filter:blur(10px)}
+.action-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 18%,rgba(255,255,255,.14),transparent 18%),linear-gradient(135deg,rgba(255,255,255,.08),transparent 28%)}
+.action-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;gap:13px;align-items:center}
+.action-copy h3{font-size:11px;font-weight:700;color:rgba(255,255,255,.76)}.action-copy .value{margin-top:7px;font-size:26px;line-height:1.04;font-weight:880;letter-spacing:-.05em}.action-copy .sub{margin-top:8px;font-size:12px;line-height:1.52;color:rgba(255,255,255,.8)}
+.action-visual{height:132px;border-radius:18px;background:rgba(4,12,24,.18);border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;backdrop-filter:blur(10px)}
 .action-visual.buy::before,.action-visual.buy::after,.action-visual.earn::before,.action-visual.earn::after{content:'';position:absolute}
 .action-visual.buy::before{left:18px;top:18px;width:78px;height:108px;border-radius:22px;background:linear-gradient(160deg,rgba(7,14,28,.96),rgba(7,31,58,.82));border:1px solid rgba(255,255,255,.14)}
 .action-visual.buy::after{right:18px;top:26px;width:72px;height:72px;border-radius:999px;background:radial-gradient(circle at 38% 34%,#fff,#7bf0d0 38%,#18b97b 74%,#0b7e59 100%);box-shadow:0 16px 30px rgba(0,0,0,.24)}
 .action-visual.earn::before{left:16px;bottom:16px;width:90px;height:56px;border-radius:18px;background:linear-gradient(180deg,rgba(7,26,18,.56),rgba(7,26,18,.2));border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 28px rgba(0,0,0,.16)}
 .action-visual.earn::after{right:14px;top:16px;width:82px;height:82px;border-radius:999px;border:8px solid rgba(255,255,255,.18);border-top-color:rgba(255,255,255,.84);border-right-color:rgba(16,185,129,.92);transform:rotate(20deg)}
-.action-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{padding:12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)}.stat b{display:block;font-size:14px;font-weight:900}.stat span{display:block;margin-top:4px;font-size:11px;color:var(--muted);font-weight:800}
-.follow-panel{padding:14px 14px 16px;border-radius:28px}.follow-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.follow-item{padding:14px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid var(--line)}.follow-item h3{font-size:13px;font-weight:900}.follow-item p{margin-top:6px;font-size:12px;line-height:1.45;color:var(--muted)}.follow-item .mini{margin-top:10px;display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-size:11px;font-weight:900;color:var(--muted)}
-.bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);padding:10px 14px calc(env(safe-area-inset-bottom,10px) + 12px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 92%, transparent),transparent)}
-.bottom-shell{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:10px;border-radius:26px;background:color-mix(in srgb,var(--panel) 92%, transparent);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(16px)}
-.nav-item{min-height:56px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:11px;font-weight:800;color:var(--muted)}.nav-item.active{background:linear-gradient(180deg,rgba(88,166,255,.14),rgba(0,212,170,.12));color:var(--text)}
+.action-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.stat{padding:11px;border-radius:15px;background:rgba(255,255,255,.032);border:1px solid var(--line)}.stat b{display:block;font-size:13px;font-weight:840}.stat span{display:block;margin-top:4px;font-size:10px;color:var(--muted);font-weight:700}
+.follow-panel{padding:15px;border-radius:24px}.follow-list{display:flex;flex-direction:column;gap:9px;margin-top:12px}.follow-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:13px;border-radius:17px;background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.014));border:1px solid var(--line)}.follow-copy{flex:1;min-width:0}.follow-copy h3{font-size:13px;font-weight:800;line-height:1.35}.follow-copy p{margin-top:5px;font-size:12px;line-height:1.5;color:var(--muted)}.follow-action{white-space:nowrap;min-height:34px;padding:0 12px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:11px;font-weight:800;display:flex;align-items:center}.follow-live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#ffb3aa}.follow-live::before{content:'';width:7px;height:7px;border-radius:999px;background:#ff6467;box-shadow:0 0 8px rgba(255,100,103,.26)}
+.bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);padding:10px 16px calc(env(safe-area-inset-bottom,10px) + 12px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 94%, transparent),transparent)}
+.bottom-shell{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:9px;border-radius:22px;background:color-mix(in srgb,var(--panel) 94%, transparent);border:1px solid var(--line);box-shadow:0 10px 26px rgba(0,0,0,.2);backdrop-filter:blur(16px)}
+.nav-item{min-height:54px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:11px;font-weight:700;color:var(--muted)}.nav-item.active{background:linear-gradient(180deg,rgba(88,166,255,.1),rgba(0,212,170,.08));color:var(--text)}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -133,6 +147,10 @@ button{font:inherit;color:inherit;background:none;border:none}
         </div>
         <div class="live-pill" data-i18n="marketPulse">Market pulse · Risk-on</div>
       </div>
+      <div class="hero-summary shell-soft">
+        <div class="hero-summary-title" data-i18n="heroSummaryTitle">先看真正影响你决策的变化，再决定要不要动作。</div>
+        <div class="hero-summary-sub" data-i18n="heroSummarySub">把噪音留在外面，把现在最重要的东西放在前面。</div>
+      </div>
       <div class="hero-grid">
         <div class="hero-panel">
           <h3 data-i18n="heroPanel1Label">Today’s judgment</h3>
@@ -154,15 +172,15 @@ button{font:inherit;color:inherit;background:none;border:none}
     </section>
 
     <div class="section-head">
-      <h2 data-i18n="sectionTitle">Adaptive feed</h2>
-      <p data-i18n="sectionSub">Wallet-native shell · editorial curation · action-ready cards</p>
+      <h2 data-i18n="sectionTitle">正在发生</h2>
+      <p data-i18n="sectionSub">此刻最影响你交易、投资与理财决策的信息</p>
     </div>
 
     <section class="feed">
       <article class="card signal-card">
         <div class="signal-head">
           <span class="tag signal" data-i18n="signalTag">AI Signal</span>
-          <span class="time">12m</span>
+          <span class="time">2m ago</span>
         </div>
         <div class="signal-body">
           <div>
@@ -195,7 +213,7 @@ button{font:inherit;color:inherit;background:none;border:none}
         <div class="story-body">
           <div class="story-meta">
             <span class="tag story" data-i18n="storyTag">Story Card</span>
-            <span class="time">28m</span>
+            <span class="time">8m ago</span>
           </div>
           <div class="story-title" data-i18n="macroTitle">This is not just news. It changes how users price safety, volatility and where liquidity might rotate next.</div>
           <div class="story-desc" data-i18n="macroDesc">A wallet home should not dump headlines. It should explain why the event matters for holdings, stablecoin behavior, and short-term trading posture.</div>
@@ -211,10 +229,62 @@ button{font:inherit;color:inherit;background:none;border:none}
         </div>
       </article>
 
+      <article class="card story-card">
+        <div class="story-cover gold">
+          <div class="cover-badge" data-i18n="goldBadge">避险课堂</div>
+          <div class="cover-chip" data-i18n="goldChip">Education</div>
+          <div class="cover-art"></div>
+          <div class="story-copy">
+            <div class="story-kicker" data-i18n="goldKicker">Contract education opportunity</div>
+            <div class="story-headline" data-i18n="goldHeadline">当地缘风险升温，黄金重新成为避险课堂。</div>
+          </div>
+        </div>
+        <div class="story-body">
+          <div class="story-meta">
+            <span class="tag story" data-i18n="goldTag">教育机会</span>
+            <span class="time">11m ago</span>
+          </div>
+          <div class="story-title" data-i18n="goldTitle">这张卡不是鼓励用户盲目开仓，而是借黄金这个熟悉资产，理解风险事件如何推动避险交易逻辑。</div>
+          <div class="story-desc" data-i18n="goldDesc">在 Bitget Wallet 的首页里，教育卡不该脱离市场情境。它应该在“为什么黄金走强”与“如何看懂合约机会”之间搭一座桥。</div>
+          <div class="story-highlights">
+            <span class="pill">Gold ↑</span>
+            <span class="pill" data-i18n="goldPill2">Risk hedge</span>
+            <span class="pill" data-i18n="goldPill3">Learn before trade</span>
+          </div>
+          <div class="card-foot">
+            <div class="source" data-i18n="goldSource">Education layer · Safe-haven guide</div>
+            <button class="cta" data-i18n="goldCta">查看黄金避险教学</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card signal-card live-node">
+        <div class="signal-head">
+          <span class="tag signal" data-i18n="alphaTag">Wallet Alpha</span>
+          <span class="time" data-i18n="alphaTime">LIVE</span>
+        </div>
+        <div class="signal-body">
+          <div>
+            <div class="signal-title" data-i18n="alphaTitle">WTI 跌穿 90，风险溢价开始回吐，市场正在快速重定价。</div>
+            <div class="signal-desc" data-i18n="alphaDesc">这不是一条普通新闻，而是 Wallet Alpha 的实时入口：当地缘风险预期降温，避险链条、油价与风险资产会一起重排。</div>
+            <div class="signal-kpis">
+              <span class="pill">WTI &lt; 90</span>
+              <span class="pill" data-i18n="alphaPill2">War premium off</span>
+              <span class="pill" data-i18n="alphaPill3">Risk reset live</span>
+            </div>
+          </div>
+          <div class="mini-chart wire"></div>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="alphaSource">Real-time wire · Wallet Alpha专题</div>
+          <button class="cta primary" data-i18n="alphaCta">进入 Wallet Alpha</button>
+        </div>
+      </article>
+
       <article class="card action-card">
         <div class="action-meta">
           <span class="tag action" data-i18n="actionTag">Action Card</span>
-          <span class="time">41m</span>
+          <span class="time">17m ago</span>
         </div>
         <div class="action-hero buy">
           <div class="action-grid">
@@ -240,7 +310,7 @@ button{font:inherit;color:inherit;background:none;border:none}
       <article class="card signal-card">
         <div class="signal-head">
           <span class="tag signal" data-i18n="kolTag">KOL Pulse</span>
-          <span class="time">56m</span>
+          <span class="time">24m ago</span>
         </div>
         <div class="signal-body">
           <div>
@@ -273,7 +343,7 @@ button{font:inherit;color:inherit;background:none;border:none}
         <div class="story-body">
           <div class="story-meta">
             <span class="tag story">Story Card</span>
-            <span class="time">1h</span>
+            <span class="time">31m ago</span>
           </div>
           <div class="story-title" data-i18n="narrativeTitle">The best wallet feed is not only about what pumps. It frames which narratives are becoming durable user behavior.</div>
           <div class="story-desc" data-i18n="narrativeDesc">This card format is for ideas worth pausing on: bigger than a signal, smaller than a full article, and directly connected to possible actions.</div>
@@ -292,7 +362,7 @@ button{font:inherit;color:inherit;background:none;border:none}
       <article class="card action-card">
         <div class="action-meta">
           <span class="tag action" data-i18n="earnTag">Earn Opportunity</span>
-          <span class="time">1h 18m</span>
+          <span class="time">39m ago</span>
         </div>
         <div class="action-hero earn">
           <div class="action-grid">
@@ -328,7 +398,7 @@ button{font:inherit;color:inherit;background:none;border:none}
         <div class="story-body">
           <div class="story-meta">
             <span class="tag story">Feature Story</span>
-            <span class="time">1h 36m</span>
+            <span class="time">46m ago</span>
           </div>
           <div class="story-title" data-i18n="featureTitle">When incentives, curation and timing come together, branded content can feel like a useful issue of the product — not a banner.</div>
           <div class="story-desc" data-i18n="featureDesc">This is where Bitget Wallet can be different: not just showing sponsored content, but editorializing opportunities in a way users actually respect.</div>
@@ -347,19 +417,31 @@ button{font:inherit;color:inherit;background:none;border:none}
 
     <section class="follow-panel shell">
       <div class="section-head" style="padding:0">
-        <h2 data-i18n="followTitle">Follow-up layer</h2>
-        <p data-i18n="followSub">Turn one-time reading into an ongoing wallet relationship</p>
+        <h2 data-i18n="followTitle">继续跟踪</h2>
+        <p data-i18n="followSub">把今天最重要的线索留在你的首页</p>
       </div>
-      <div class="follow-grid">
-        <div class="follow-item">
-          <h3 data-i18n="followItem1Title">Save this setup</h3>
-          <p data-i18n="followItem1Desc">Pin AI agents, macro risk and SOL yield into one personalized home stack.</p>
-          <span class="mini" data-i18n="followItem1Cta">Save layout</span>
+      <div class="follow-list">
+        <div class="follow-row">
+          <div class="follow-copy">
+            <div class="follow-live" data-i18n="followLive">持续更新中</div>
+            <h3 data-i18n="followItem1Title">把这条时间线固定到首页</h3>
+            <p data-i18n="followItem1Desc">你稍后再打开时，今天最重要的宏观、避险、AI 和收益机会会继续按时间顺序更新。</p>
+          </div>
+          <button class="follow-action" data-i18n="followItem1Cta">固定首页</button>
         </div>
-        <div class="follow-item">
-          <h3 data-i18n="followItem2Title">Get smarter alerts</h3>
-          <p data-i18n="followItem2Desc">Don’t subscribe to noise. Only follow changes that match your narratives and wallet actions.</p>
-          <span class="mini" data-i18n="followItem2Cta">Set alerts</span>
+        <div class="follow-row">
+          <div class="follow-copy">
+            <h3 data-i18n="followItem2Title">只在真正有变化时提醒我</h3>
+            <p data-i18n="followItem2Desc">当油价、黄金、BTC 或你关注的币种出现关键变化，再提醒你，不用被普通波动打扰。</p>
+          </div>
+          <button class="follow-action" data-i18n="followItem2Cta">设置提醒</button>
+        </div>
+        <div class="follow-row">
+          <div class="follow-copy">
+            <h3 data-i18n="followItem3Title">继续看 Wallet Alpha</h3>
+            <p data-i18n="followItem3Desc">如果你现在要做决定，直接进入专题，不用在零碎信息里来回切换。</p>
+          </div>
+          <button class="follow-action" data-i18n="followItem3Cta">打开专题</button>
         </div>
       </div>
     </section>
@@ -379,31 +461,35 @@ button{font:inherit;color:inherit;background:none;border:none}
 <script>
 const T = {
   zh: {
-    eyebrow:'Bitget Wallet 首页实验 vNext', title:'Wallet Feed Lab', portfolioLabel:'资产总览', portfolioChange:'+2.84% 今日 · 不只是价格，更是判断', marketPulse:'市场脉搏 · 风险偏好回升',
-    heroPanel1Label:'今日判断', heroPanel1Value:'轮动回来了：AI、meme、earn 都有动作空间', heroPanel1Sub:'这版首页不是让用户刷资讯，而是帮助用户发现、判断并立刻行动。', heroPanel2Label:'你的优势', heroPanel2Sub:'未来 6 小时值得动作的 3 个信号',
-    swap:'兑换', buy:'买币', earn:'赚币', discover:'发现', sectionTitle:'Adaptive Feed', sectionSub:'钱包原生壳层 · 编辑判断 · 可执行卡片',
-    signalTag:'AI 信号', signalTitle:'BTC 突破区间阻力，AI 判断大市值 meme 可能跟随扩散。', signalDesc:'不是只报价格，而是告诉用户发生了什么、为什么重要，以及下一步该关注钱包里的哪一类机会。', signalPill2:'Meme beta 升温', signalPill3:'适合快速轮动', signalSource:'AI 市场引擎 · 实时更新', signalCta:'查看相关代币',
-    macroBadge:'宏观', macroChip:'突发', macroKicker:'全球风险监控', macroHeadline:'中东升级，正在重塑加密市场的风险偏好。', storyTag:'故事卡', macroTitle:'这不只是新闻，它会改变用户如何理解避险、波动，以及流动性下一步可能流向哪里。', macroDesc:'钱包首页不该堆标题，而应该解释：这件事为什么会影响持仓、稳定币行为和短线交易姿态。', macroPill3:'关注避险资产', macroSource:'编辑台 · 3 分钟简报', macroCta:'打开情景简报',
-    actionTag:'动作卡', buyLabel:'即时入金', buyValue:'Apple Pay → USDT', buySub:'把市场判断直接转成动作路径，不跳出钱包心智，减少犹豫。', buyStat1:'从判断到入金', buyStat2:'适合突破时刻', buyStat3:'符合钱包原生场景', buySource:'On-ramp 层 · 情境化动作', buyCta:'用 Apple Pay 买入',
-    kolTag:'KOL 脉冲', kolTitle:'三位头部加密 KOL 正在同时靠拢同一个 AI Agent 叙事。', kolDesc:'社区热度本身不是价值，但当 KOL 流向、成交活跃和钱包可执行性叠加时，它就成了可用信号。', kolPill3:'叙事升温中', kolSource:'社区层 · 钱包观察列表', kolCta:'跟踪这个叙事',
-    narrativeBadge:'叙事', narrativeChip:'扩散中', narrativeKicker:'用户该理解什么', narrativeHeadline:'AI Agents 正从 meme 走向真实产品类别。', narrativeTitle:'最好的钱包首页不只是告诉用户什么在涨，而是帮助用户理解什么叙事正在变成持续行为。', narrativeDesc:'这类卡比信号更深、比长文更轻，适合承载值得停一下的判断，并直接连接到后续动作。', narrativePill3:'观察生态代币', narrativeSource:'叙事编辑台 · 精选', narrativeCta:'打开话题地图',
-    earnTag:'Earn 机会', earnLabel:'带上下文的收益', earnSub:'不是每个用户都想交易。聪明的钱包首页应该在市场情绪合适时，给出更稳的机会。', earnStat2:'适合闲置资产', earnStat3:'SOL 原生机会', earnSource:'Earn 层 · 被动路径', earnCta:'开始赚取收益',
-    featureBadge:'专题', featureChip:'原生内容', featureKicker:'钱包编辑部', featureHeadline:'Bitget Wallet 可以把 campaign 做成内容，而不是广告。', featureTitle:'当激励、编辑判断和时间点合在一起时，品牌内容可以像产品的一期专题，而不是一个 banner。', featureDesc:'这会是 Bitget Wallet 的差异化能力：不是简单展示赞助内容，而是把机会编辑成用户愿意看的首页内容。', featurePill1:'Issue 形式', featurePill2:'品牌原生', featurePill3:'附带动作', featureSource:'专题编辑 · 4 分钟阅读', featureCta:'打开专题期刊',
-    followTitle:'Follow-up Layer', followSub:'让一次阅读变成持续关系', followItem1Title:'保存这套首页', followItem1Desc:'把 AI Agents、宏观风险和 SOL 收益固定成一套个性化首页结构。', followItem1Cta:'保存布局', followItem2Title:'只接收聪明提醒', followItem2Desc:'不要订阅噪音。只跟踪真正匹配你叙事偏好和钱包动作的变化。', followItem2Cta:'设置提醒',
+    eyebrow:'Bitget Wallet · 实时首页实验', title:'Wallet Feed Lab', portfolioLabel:'总资产', portfolioChange:'+2.84% 今日 · 风险偏好回暖', marketPulse:'市场脉搏 · 风险资产回暖', heroSummaryTitle:'先看真正影响判断的变化，再决定要不要动作。', heroSummarySub:'不是给你更多信息，而是先给你更重要的信息。',
+    heroPanel1Label:'现在最重要', heroPanel1Value:'决定下一步的，不是信息量，而是信息排序。', heroPanel1Sub:'这条时间线只保留当下最值得你判断和跟进的变化。', heroPanel2Label:'接下来 6 小时', heroPanel2Sub:'3 个值得继续跟进的变化',
+    swap:'兑换', buy:'买币', earn:'赚币', discover:'发现', sectionTitle:'正在发生', sectionSub:'此刻最影响你交易、投资与理财决策的信息',
+    signalTag:'AI 信号', signalTitle:'BTC 站稳关键区间后，AI 板块开始接力。', signalDesc:'短线资金愿意重新承担风险，接下来重点看 AI、meme 和高弹性资产有没有继续放量。', signalPill2:'Meme 升温', signalPill3:'轮动继续', signalSource:'2 分钟前 · AI 市场引擎', signalCta:'查看相关币种',
+    macroBadge:'宏观', macroChip:'刚刚', macroKicker:'全球风险事件', macroHeadline:'中东局势升级，市场先买避险，再重新定价风险。', storyTag:'重点解读', macroTitle:'这会直接影响黄金、原油、比特币和你的仓位节奏。', macroDesc:'如果冲突继续升级，黄金和油价可能继续走强；如果局势缓和，市场会迅速切回风险偏好。', macroPill3:'留意黄金与原油', macroSource:'8 分钟前 · 全球市场监控', macroCta:'查看完整解读',
+    goldBadge:'避险课堂', goldChip:'现在可学', goldKicker:'黄金为什么在涨', goldHeadline:'当地缘风险升温，黄金重新成为最重要的避险资产。', goldTag:'教育机会', goldTitle:'想做合约，不一定要马上交易，但一定要先看懂资金为什么先流向黄金。', goldDesc:'先理解避险链条，再决定要不要做下一步交易。', goldPill2:'黄金避险', goldPill3:'先看懂再下单', goldSource:'11 分钟前 · 避险教学', goldCta:'查看避险教学',
+    alphaTag:'Wallet Alpha', alphaTime:'LIVE', alphaTitle:'WTI 跌穿 90，战争溢价回落，风险资产开始重定价。', alphaDesc:'真正重要的是：油价、黄金、比特币和山寨币，接下来几个小时可能一起变化。', alphaPill2:'油价回落', alphaPill3:'风险重定价', alphaSource:'刚刚 · Wallet Alpha 专题', alphaCta:'进入 Wallet Alpha',
+    actionTag:'即时动作', buyLabel:'快速入金', buyValue:'Apple Pay → USDT', buySub:'如果你已经确认机会，这是一条最短的资金入口。路径越短，执行越稳定。', buyStat1:'从判断到入金', buyStat2:'适合快速进场', buyStat3:'钱包内完成', buySource:'17 分钟前 · 入金入口', buyCta:'立即买入',
+    kolTag:'KOL 热度', kolTitle:'多位头部 KOL 同时转向 AI Agent 叙事。', kolDesc:'最该看的不是谁发了推，而是这波热度有没有真的带动成交量和链上热度。', kolPill3:'关注是否放量', kolSource:'24 分钟前 · 社区观察', kolCta:'跟踪这个叙事',
+    narrativeBadge:'叙事', narrativeChip:'升温中', narrativeKicker:'接下来该盯什么', narrativeHeadline:'AI Agents 正从热度，走向更真实的市场主线。', narrativeTitle:'如果你错过了第一波，现在要看的是还有哪些细分方向继续吸引资金。', narrativeDesc:'这张卡不是告诉你它很火，而是帮你判断还值不值得继续看。', narrativePill3:'观察强势币种', narrativeSource:'31 分钟前 · 叙事追踪', narrativeCta:'打开话题地图',
+    earnTag:'稳健收益', earnLabel:'今天更稳的选择', earnSub:'如果你不想追波动，把一部分资金放到低门槛收益里，会更容易控制风险。', earnStat2:'闲置资金可用', earnStat3:'SOL 机会', earnSource:'39 分钟前 · Earn 推荐', earnCta:'开始赚取收益',
+    featureBadge:'专题', featureChip:'现在可看', featureKicker:'Wallet Alpha 选题', featureHeadline:'今天最值得持续跟踪的机会，已经整理进 Wallet Alpha。', featureTitle:'不想在碎片信息里来回切换，就直接进入专题。', featureDesc:'最重要的宏观变化、热点轮动、链上机会和可执行动作，都在同一条阅读路径里。', featurePill1:'实时更新', featurePill2:'决策导向', featurePill3:'附带动作', featureSource:'46 分钟前 · Wallet Alpha', featureCta:'打开今日专题',
+    followTitle:'继续跟踪', followSub:'把今天真正重要的变化留在你的首页', followLive:'持续更新中', followItem1Title:'把这条时间线固定到首页', followItem1Desc:'你稍后再打开时，今天最重要的变化会继续按时间顺序更新。', followItem1Cta:'固定首页', followItem2Title:'只在真正有变化时提醒我', followItem2Desc:'当油价、黄金、BTC 或你关注的币种出现关键变化，再提醒你。', followItem2Cta:'设置提醒', followItem3Title:'继续看 Wallet Alpha', followItem3Desc:'如果你现在要做决定，直接进入专题，不用在零碎信息里来回切换。', followItem3Cta:'打开专题',
     navHome:'首页', navMarkets:'市场', navEarn:'赚币', navDiscover:'发现', navAssets:'资产'
   },
   en: {
-    eyebrow:'Bitget Wallet home experiment vNext', title:'Wallet Feed Lab', portfolioLabel:'Portfolio value', portfolioChange:'+2.84% today · not just price, but judgment', marketPulse:'Market pulse · risk appetite improving',
-    heroPanel1Label:'Today’s judgment', heroPanel1Value:'Rotation is back: AI, meme and earn all look actionable.', heroPanel1Sub:'This home should help users discover, decide and do — not just consume content.', heroPanel2Label:'Your edge', heroPanel2Sub:'3 signals worth acting on in the next 6 hours',
-    swap:'Swap', buy:'Buy', earn:'Earn', discover:'Discover', sectionTitle:'Adaptive Feed', sectionSub:'wallet-native shell · editorial judgment · action-ready cards',
-    signalTag:'AI Signal', signalTitle:'BTC broke range resistance. AI sees spillover into large-cap memes.', signalDesc:'Instead of showing price only, this card tells users what changed, why it matters, and where the next wallet opportunity may live.', signalPill2:'Meme beta rising', signalPill3:'Good for fast rotation', signalSource:'AI Market Engine · Live', signalCta:'See related tokens',
-    macroBadge:'Macro', macroChip:'Breaking', macroKicker:'Global risk monitor', macroHeadline:'Middle East escalation is reshaping crypto risk appetite.', storyTag:'Story Card', macroTitle:'This is not just news. It changes how users price safety, volatility and where liquidity may rotate next.', macroDesc:'A wallet home should not dump headlines. It should explain why the event matters for holdings, stablecoin behavior and short-term posture.', macroPill3:'Watch safe assets', macroSource:'Editorial desk · 3 min brief', macroCta:'Open scenario brief',
-    actionTag:'Action Card', buyLabel:'Instant on-ramp', buyValue:'Apple Pay → USDT', buySub:'Turn a market view into an action path without leaving the wallet mindset.', buyStat1:'from insight to funding', buyStat2:'best for breakout moments', buyStat3:'fits wallet-native use', buySource:'On-ramp layer · Contextual action', buyCta:'Buy with Apple Pay',
-    kolTag:'KOL Pulse', kolTitle:'Three major crypto voices are converging on the same AI-agent narrative.', kolDesc:'Community attention alone is not value. But when KOL flow, volume and wallet access align, it becomes a usable signal.', kolPill3:'Narrative heating up', kolSource:'Community layer · Wallet watchlist', kolCta:'Track this narrative',
-    narrativeBadge:'Narrative', narrativeChip:'Spreading', narrativeKicker:'What users should understand', narrativeHeadline:'AI agents are moving from meme to real product category.', narrativeTitle:'The best wallet home does not only show what pumps. It frames which narratives are becoming durable user behavior.', narrativeDesc:'This card sits between signal and article: worth pausing on, but still directly tied to action.', narrativePill3:'Watch ecosystem tokens', narrativeSource:'Narrative desk · Curated', narrativeCta:'Open topic map',
-    earnTag:'Earn Opportunity', earnLabel:'Yield with context', earnSub:'Not every user wants to trade. A smart wallet home should also surface calmer opportunities when market mood fits.', earnStat2:'for parked assets', earnStat3:'native SOL route', earnSource:'Earn layer · Passive route', earnCta:'Start earning',
-    featureBadge:'Feature', featureChip:'Native content', featureKicker:'Wallet editorial', featureHeadline:'Bitget Wallet can package campaigns as content, not ads.', featureTitle:'When incentives, timing and curation come together, branded content can feel like an issue of the product — not a banner.', featureDesc:'This could become a true Bitget Wallet advantage: editorialized opportunity rather than obvious sponsored placement.', featurePill1:'Issue format', featurePill2:'Brand-native', featurePill3:'Action attached', featureSource:'Feature desk · 4 min read', featureCta:'Open feature issue',
-    followTitle:'Follow-up Layer', followSub:'Turn one-time reading into an ongoing wallet relationship', followItem1Title:'Save this setup', followItem1Desc:'Pin AI agents, macro risk and SOL yield into a personalized home stack.', followItem1Cta:'Save layout', followItem2Title:'Get smarter alerts', followItem2Desc:'Do not subscribe to noise. Follow only what matches your narratives and wallet actions.', followItem2Cta:'Set alerts',
+    eyebrow:'Bitget Wallet · Live home experiment', title:'Wallet Feed Lab', portfolioLabel:'Total assets', portfolioChange:'+2.84% today · risk appetite is improving', marketPulse:'Market pulse · risk-on improving', heroSummaryTitle:'See the changes that shape judgment first, then decide whether to act.', heroSummarySub:'Not more information. More important information, earlier.',
+    heroPanel1Label:'What matters now', heroPanel1Value:'What decides the next move is not information volume, but information order.', heroPanel1Sub:'This timeline keeps only the changes worth paying attention to right now.', heroPanel2Label:'Next 6 hours', heroPanel2Sub:'3 developments worth following',
+    swap:'Swap', buy:'Buy', earn:'Earn', discover:'Discover', sectionTitle:'Happening now', sectionSub:'The most important events affecting your money right now',
+    signalTag:'AI Signal', signalTitle:'After BTC reclaimed a key range, AI started to lead the next rotation.', signalDesc:'Risk appetite is back. Watch whether AI, meme, and other high-beta names keep printing volume.', signalPill2:'Meme heating up', signalPill3:'Rotation still on', signalSource:'2 min ago · AI market engine', signalCta:'See related tokens',
+    macroBadge:'Macro', macroChip:'Just now', macroKicker:'Global risk event', macroHeadline:'Middle East tension is pushing markets into defense first, then repricing risk.', storyTag:'Key update', macroTitle:'This can move gold, oil, BTC, and your portfolio rhythm on the same day.', macroDesc:'If the conflict escalates, gold and oil may stay strong. If tension cools, markets can switch back to risk-on very quickly.', macroPill3:'Watch gold and oil', macroSource:'8 min ago · Global market monitor', macroCta:'See full breakdown',
+    goldBadge:'Safe-haven class', goldChip:'Learn now', goldKicker:'Why gold is moving', goldHeadline:'As geopolitical tension rises, gold becomes the market’s first safe-haven trade again.', goldTag:'Education', goldTitle:'If you want to trade contracts, do not rush. First understand why money moves into gold.', goldDesc:'Understand the safe-haven chain first, then decide whether to trade it.', goldPill2:'Gold hedge', goldPill3:'Learn before entry', goldSource:'11 min ago · Safe-haven guide', goldCta:'Open hedge guide',
+    alphaTag:'Wallet Alpha', alphaTime:'LIVE', alphaTitle:'WTI broke below 90 as war premium faded and risk assets began to reprice.', alphaDesc:'What matters is that oil, gold, BTC, and altcoins may all shift together over the next few hours.', alphaPill2:'Oil easing', alphaPill3:'Risk repricing', alphaSource:'Just now · Wallet Alpha', alphaCta:'Open Wallet Alpha',
+    actionTag:'Action now', buyLabel:'Fast funding', buyValue:'Apple Pay → USDT', buySub:'If you already know what to do, this is the shortest path from decision to capital.', buyStat1:'from idea to funding', buyStat2:'good for quick entry', buyStat3:'inside the wallet', buySource:'17 min ago · Funding path', buyCta:'Buy now',
+    kolTag:'KOL Heat', kolTitle:'Several top KOLs are converging on the same AI Agent narrative.', kolDesc:'Do not focus on who posted. Focus on whether attention is turning into real volume and follow-through.', kolPill3:'Watch for real volume', kolSource:'24 min ago · Community watch', kolCta:'Track this narrative',
+    narrativeBadge:'Narrative', narrativeChip:'Heating up', narrativeKicker:'What to watch next', narrativeHeadline:'AI Agents are moving from hype into a more durable market theme.', narrativeTitle:'If you missed the first move, look for the segments that still have money flowing in.', narrativeDesc:'This card helps you decide whether the trend is still worth following.', narrativePill3:'Watch leading names', narrativeSource:'31 min ago · Narrative tracker', narrativeCta:'Open topic map',
+    earnTag:'Steady yield', earnLabel:'The calmer option today', earnSub:'If you do not want to chase volatility, parking part of your capital in lower-friction yield may be the better move.', earnStat2:'works for idle funds', earnStat3:'SOL route', earnSource:'39 min ago · Earn idea', earnCta:'Start earning',
+    featureBadge:'Feature', featureChip:'Worth reading now', featureKicker:'Wallet Alpha issue', featureHeadline:'Today’s most important opportunities have already been organized into Wallet Alpha.', featureTitle:'If you do not want fragmented headlines, go straight into the issue.', featureDesc:'Macro changes, market rotation, onchain opportunities, and next actions all live in one decision path.', featurePill1:'Live updates', featurePill2:'Decision-first', featurePill3:'Action attached', featureSource:'46 min ago · Wallet Alpha', featureCta:'Open today’s issue',
+    followTitle:'Keep following', followSub:'Keep the changes that actually matter on your home', followLive:'Still updating', followItem1Title:'Pin this timeline to my home', followItem1Desc:'When you come back later, today’s most important changes will still be here in time order.', followItem1Cta:'Pin home', followItem2Title:'Alert me only when something really changes', followItem2Desc:'Notify me only when oil, gold, BTC, or the assets I care about make a meaningful move.', followItem2Cta:'Set alerts', followItem3Title:'Keep reading Wallet Alpha', followItem3Desc:'If you need to make a decision now, go straight into the issue.', followItem3Cta:'Open issue',
     navHome:'Home', navMarkets:'Markets', navEarn:'Earn', navDiscover:'Discover', navAssets:'Assets'
   }
 };
