@@ -59,7 +59,8 @@ button{font:inherit;color:inherit;background:none;border:none}
 .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:16px;position:relative;z-index:1}
 .quick{min-height:58px;border-radius:16px;background:color-mix(in srgb,var(--panel-2) 90%, transparent);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:none}
 .quick i{font-style:normal;font-size:16px}.quick span{font-size:10px;font-weight:700;color:var(--muted)}
-.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 2px 0}.section-head h2{font-size:15px;font-weight:800;letter-spacing:-.01em}.section-head p{font-size:12px;color:var(--muted);text-align:right;line-height:1.45;max-width:210px}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 2px 0}.section-head h2{font-size:15px;font-weight:800;letter-spacing:-.01em}.live-title{display:inline-flex;align-items:center;gap:8px}.live-dot{width:8px;height:8px;border-radius:999px;background:#ff6467;box-shadow:0 0 0 0 rgba(255,100,103,.45);animation:livePulse 1.8s ease-out infinite;flex:none}.section-head p{font-size:12px;color:var(--muted);text-align:right;line-height:1.45;max-width:210px}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(255,100,103,.42);transform:scale(1)}70%{box-shadow:0 0 0 10px rgba(255,100,103,0);transform:scale(1.08)}100%{box-shadow:0 0 0 0 rgba(255,100,103,0);transform:scale(1)}}
 .feed{display:flex;flex-direction:column;gap:var(--section-gap);position:relative;padding-left:16px}
 .feed::before{content:'';position:absolute;left:6px;top:10px;bottom:10px;width:1px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border-radius:999px}
 .card{border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;position:relative}
@@ -165,7 +166,7 @@ button{font:inherit;color:inherit;background:none;border:none}
     </section>
 
     <div class="section-head">
-      <h2 data-i18n="sectionTitle">正在发生</h2>
+      <h2 class="live-title"><span class="live-dot" aria-hidden="true"></span><span data-i18n="sectionTitle">正在发生</span></h2>
       <p data-i18n="sectionSub">此刻最影响你交易、投资与理财决策的信息</p>
     </div>
 
