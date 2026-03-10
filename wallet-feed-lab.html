@@ -117,6 +117,7 @@ button{font:inherit;color:inherit;background:none;border:none}
 .action-visual.earn::after{right:14px;top:16px;width:82px;height:82px;border-radius:999px;border:8px solid rgba(255,255,255,.18);border-top-color:rgba(255,255,255,.84);border-right-color:rgba(16,185,129,.92);transform:rotate(20deg)}
 .action-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:var(--space-3)}.stat{padding:11px;border-radius:15px;background:rgba(255,255,255,.032);border:1px solid var(--line)}.stat b{display:block;font-size:13px;font-weight:840}.stat span{display:block;margin-top:4px;font-size:10px;color:var(--muted);font-weight:700}
 .follow-panel{padding:var(--card-pad);border-radius:24px}.follow-list{display:flex;flex-direction:column;gap:10px;margin-top:var(--meta-gap)}.follow-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px;border-radius:17px;background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.014));border:1px solid var(--line)}.follow-copy{flex:1;min-width:0}.follow-copy h3{font-size:13px;font-weight:800;line-height:1.35}.follow-copy p{margin-top:var(--space-2);font-size:12px;line-height:1.5;color:var(--muted)}.follow-action{white-space:nowrap;min-height:34px;padding:0 12px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:11px;font-weight:800;display:flex;align-items:center}.follow-live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#ffb3aa;margin-bottom:var(--space-2)}.follow-live::before{content:'';width:7px;height:7px;border-radius:999px;background:#ff6467;box-shadow:0 0 8px rgba(255,100,103,.26)}
+.text-card{padding:var(--card-pad);background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 96%, transparent),color-mix(in srgb,var(--panel-3) 98%, transparent))}.text-card.highlight{background:linear-gradient(180deg,rgba(79,143,255,.12),rgba(0,212,170,.06))}.text-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}.text-title{margin-top:var(--space-3);font-size:16px;line-height:1.34;font-weight:860;letter-spacing:-.02em}.text-desc{margin-top:var(--space-2);font-size:12px;line-height:1.58;color:var(--muted)}.text-pills{display:flex;gap:7px;flex-wrap:wrap;margin-top:var(--space-3)}
 .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);padding:10px 16px calc(env(safe-area-inset-bottom,10px) + 12px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 94%, transparent),transparent)}
 .bottom-shell{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:9px;border-radius:22px;background:color-mix(in srgb,var(--panel) 94%, transparent);border:1px solid var(--line);box-shadow:0 10px 26px rgba(0,0,0,.2);backdrop-filter:blur(16px)}
 .nav-item{min-height:54px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:11px;font-weight:700;color:var(--muted)}.nav-item.active{background:linear-gradient(180deg,rgba(88,166,255,.1),rgba(0,212,170,.08));color:var(--text)}
@@ -250,6 +251,24 @@ button{font:inherit;color:inherit;background:none;border:none}
         </div>
       </article>
 
+      <article class="card text-card highlight">
+        <div class="text-meta">
+          <span class="tag signal" data-i18n="tsmcTag">Stocks / RWA</span>
+          <span class="time">13m ago</span>
+        </div>
+        <div class="text-title" data-i18n="tsmcTitle">TSMC earnings are out. For users watching AI and semis, this is where stock attention can turn into an onchain RWA action.</div>
+        <div class="text-desc" data-i18n="tsmcDesc">This card makes a stock catalyst feel native inside Bitget Wallet: start with the earnings event, then guide interested users into the RWA stock trading zone instead of sending them away to another app.</div>
+        <div class="text-pills">
+          <span class="pill">TSMC</span>
+          <span class="pill" data-i18n="tsmcPill2">Earnings day</span>
+          <span class="pill" data-i18n="tsmcPill3">RWA stocks</span>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="tsmcSource">Market catalyst · RWA stock zone</div>
+          <button class="cta primary" data-i18n="tsmcCta">进入股票 RWA 专区</button>
+        </div>
+      </article>
+
       <article class="card signal-card live-node">
         <div class="signal-head">
           <span class="tag signal" data-i18n="alphaTag">Wallet Alpha</span>
@@ -319,6 +338,24 @@ button{font:inherit;color:inherit;background:none;border:none}
         <div class="card-foot">
           <div class="source" data-i18n="kolSource">Community layer · Wallet watchlist</div>
           <button class="cta" data-i18n="kolCta">Track this narrative</button>
+        </div>
+      </article>
+
+      <article class="card text-card highlight">
+        <div class="text-meta">
+          <span class="tag action" data-i18n="fomoTag">FOMO Thursday</span>
+          <span class="time">27m ago</span>
+        </div>
+        <div class="text-title" data-i18n="fomoTitle">FOMO Thursday is live: complete trading tasks and share a 200,000 U reward pool.</div>
+        <div class="text-desc" data-i18n="fomoDesc">Instead of feeling like a generic campaign banner, this card reads like a timely opportunity inside the wallet. It tells users what the event is, why today matters, and gives them a clean path into the task flow.</div>
+        <div class="text-pills">
+          <span class="pill">200,000 U</span>
+          <span class="pill" data-i18n="fomoPill2">Trade tasks</span>
+          <span class="pill" data-i18n="fomoPill3">Thursday only</span>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="fomoSource">Campaign live · Task-based rewards</div>
+          <button class="cta primary" data-i18n="fomoCta">去完成交易任务</button>
         </div>
       </article>
 
@@ -405,6 +442,24 @@ button{font:inherit;color:inherit;background:none;border:none}
           </div>
         </div>
       </article>
+
+      <article class="card text-card">
+        <div class="text-meta">
+          <span class="tag story" data-i18n="feedbackTag">Feedback</span>
+          <span class="time">52m ago</span>
+        </div>
+        <div class="text-title" data-i18n="feedbackTitle">What should Bitget Wallet surface better on Home? Tell us what feels useful, missing, or noisy.</div>
+        <div class="text-desc" data-i18n="feedbackDesc">This card is intentionally simple and low-pressure. It invites users to shape the product with specific feedback, while reinforcing that the wallet team is actively listening and iterating.</div>
+        <div class="text-pills">
+          <span class="pill" data-i18n="feedbackPill1">Product feedback</span>
+          <span class="pill" data-i18n="feedbackPill2">Home experience</span>
+          <span class="pill" data-i18n="feedbackPill3">Help us improve</span>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="feedbackSource">User research · Open feedback loop</div>
+          <button class="cta" data-i18n="feedbackCta">提交使用建议</button>
+        </div>
+      </article>
     </section>
 
     <section class="follow-panel shell">
@@ -459,12 +514,15 @@ const T = {
     signalTag:'AI 信号', signalTitle:'BTC 站稳关键区间后，AI 板块开始接力。', signalDesc:'短线资金愿意重新承担风险，接下来重点看 AI、meme 和高弹性资产有没有继续放量。', signalPill2:'Meme 升温', signalPill3:'轮动继续', signalSource:'2 分钟前 · AI 市场引擎', signalCta:'查看相关币种',
     macroBadge:'宏观', macroChip:'刚刚', macroKicker:'全球风险事件', macroHeadline:'中东局势升级，市场先买避险，再重新定价风险。', storyTag:'重点解读', macroTitle:'这会直接影响黄金、原油、比特币和你的仓位节奏。', macroDesc:'如果冲突继续升级，黄金和油价可能继续走强；如果局势缓和，市场会迅速切回风险偏好。', macroPill3:'留意黄金与原油', macroSource:'8 分钟前 · 全球市场监控', macroCta:'查看完整解读',
     goldBadge:'避险课堂', goldChip:'现在可学', goldKicker:'黄金为什么在涨', goldHeadline:'当地缘风险升温，黄金重新成为最重要的避险资产。', goldTag:'教育机会', goldTitle:'想做合约，不一定要马上交易，但一定要先看懂资金为什么先流向黄金。', goldDesc:'先理解避险链条，再决定要不要做下一步交易。', goldPill2:'黄金避险', goldPill3:'先看懂再下单', goldSource:'11 分钟前 · 避险教学', goldCta:'查看避险教学',
+    tsmcTag:'股票 / RWA', tsmcTitle:'TSMC 财报发布了。对关注 AI 与半导体的用户来说，这里可以把股票关注，顺手转成链上的 RWA 交易入口。', tsmcDesc:'这张卡把“财报事件”自然接进 Bitget Wallet 的语境里：先告诉用户发生了什么，再把有兴趣的人引导到股票 RWA 交易专区，而不是把人丢去别的 App。', tsmcPill2:'财报日', tsmcPill3:'股票 RWA', tsmcSource:'市场催化 · 股票 RWA 专区', tsmcCta:'进入股票 RWA 专区',
     alphaTag:'Wallet Alpha', alphaTime:'LIVE', alphaTitle:'WTI 跌穿 90，战争溢价回落，风险资产开始重定价。', alphaDesc:'真正重要的是：油价、黄金、比特币和山寨币，接下来几个小时可能一起变化。', alphaPill2:'油价回落', alphaPill3:'风险重定价', alphaSource:'刚刚 · Wallet Alpha 专题', alphaCta:'进入 Wallet Alpha',
     actionTag:'即时动作', buyLabel:'快速入金', buyValue:'Apple Pay → USDT', buySub:'如果你已经确认机会，这是一条最短的资金入口。路径越短，执行越稳定。', buyStat1:'从判断到入金', buyStat2:'适合快速进场', buyStat3:'钱包内完成', buySource:'17 分钟前 · 入金入口', buyCta:'立即买入',
     kolTag:'KOL 热度', kolTitle:'多位头部 KOL 同时转向 AI Agent 叙事。', kolDesc:'最该看的不是谁发了推，而是这波热度有没有真的带动成交量和链上热度。', kolPill3:'关注是否放量', kolSource:'24 分钟前 · 社区观察', kolCta:'跟踪这个叙事',
+    fomoTag:'FOMO 星期四', fomoTitle:'FOMO 星期四正在进行：完成交易任务，瓜分 20 万 U 奖池。', fomoDesc:'这张卡不做成普通活动横幅，而是像首页里一个及时的机会提醒。先告诉用户今天为什么值得看，再给一条干净直接的任务入口。', fomoPill2:'交易任务', fomoPill3:'仅限周四', fomoSource:'活动进行中 · 任务奖励', fomoCta:'去完成交易任务',
     narrativeBadge:'叙事', narrativeChip:'升温中', narrativeKicker:'接下来该盯什么', narrativeHeadline:'AI Agents 正从热度，走向更真实的市场主线。', narrativeTitle:'如果你错过了第一波，现在要看的是还有哪些细分方向继续吸引资金。', narrativeDesc:'这张卡不是告诉你它很火，而是帮你判断还值不值得继续看。', narrativePill3:'观察强势币种', narrativeSource:'31 分钟前 · 叙事追踪', narrativeCta:'打开话题地图',
     earnTag:'稳健收益', earnLabel:'今天更稳的选择', earnSub:'如果你不想追波动，把一部分资金放到低门槛收益里，会更容易控制风险。', earnStat2:'闲置资金可用', earnStat3:'SOL 机会', earnSource:'39 分钟前 · Earn 推荐', earnCta:'开始赚取收益',
     featureBadge:'专题', featureChip:'现在可看', featureKicker:'Wallet Alpha 选题', featureHeadline:'今天最值得持续跟踪的机会，已经整理进 Wallet Alpha。', featureTitle:'不想在碎片信息里来回切换，就直接进入专题。', featureDesc:'最重要的宏观变化、热点轮动、链上机会和可执行动作，都在同一条阅读路径里。', featurePill1:'实时更新', featurePill2:'决策导向', featurePill3:'附带动作', featureSource:'46 分钟前 · Wallet Alpha', featureCta:'打开今日专题',
+    feedbackTag:'反馈', feedbackTitle:'你希望 Bitget Wallet 首页更应该优先展示什么？告诉我们哪些有用、哪些缺失、哪些太吵。', feedbackDesc:'这张卡故意做得简单、低打扰。它不是形式化收集意见，而是认真邀请用户一起把首页体验打磨得更好。', feedbackPill1:'产品反馈', feedbackPill2:'首页体验', feedbackPill3:'帮助我们改进', feedbackSource:'用户研究 · 持续收集中', feedbackCta:'提交使用建议',
     followTitle:'继续跟踪', followSub:'把今天真正重要的变化留在你的首页', followLive:'持续更新中', followItem1Title:'把这条时间线固定到首页', followItem1Desc:'你稍后再打开时，今天最重要的变化会继续按时间顺序更新。', followItem1Cta:'固定首页', followItem2Title:'只在真正有变化时提醒我', followItem2Desc:'当油价、黄金、BTC 或你关注的币种出现关键变化，再提醒你。', followItem2Cta:'设置提醒', followItem3Title:'继续看 Wallet Alpha', followItem3Desc:'如果你现在要做决定，直接进入专题，不用在零碎信息里来回切换。', followItem3Cta:'打开专题',
     navHome:'首页', navMarkets:'市场', navEarn:'赚币', navDiscover:'发现', navAssets:'资产'
   },
@@ -475,12 +533,15 @@ const T = {
     signalTag:'AI Signal', signalTitle:'After BTC reclaimed a key range, AI started to lead the next rotation.', signalDesc:'Risk appetite is back. Watch whether AI, meme, and other high-beta names keep printing volume.', signalPill2:'Meme heating up', signalPill3:'Rotation still on', signalSource:'2 min ago · AI market engine', signalCta:'See related tokens',
     macroBadge:'Macro', macroChip:'Just now', macroKicker:'Global risk event', macroHeadline:'Middle East tension is pushing markets into defense first, then repricing risk.', storyTag:'Key update', macroTitle:'This can move gold, oil, BTC, and your portfolio rhythm on the same day.', macroDesc:'If the conflict escalates, gold and oil may stay strong. If tension cools, markets can switch back to risk-on very quickly.', macroPill3:'Watch gold and oil', macroSource:'8 min ago · Global market monitor', macroCta:'See full breakdown',
     goldBadge:'Safe-haven class', goldChip:'Learn now', goldKicker:'Why gold is moving', goldHeadline:'As geopolitical tension rises, gold becomes the market’s first safe-haven trade again.', goldTag:'Education', goldTitle:'If you want to trade contracts, do not rush. First understand why money moves into gold.', goldDesc:'Understand the safe-haven chain first, then decide whether to trade it.', goldPill2:'Gold hedge', goldPill3:'Learn before entry', goldSource:'11 min ago · Safe-haven guide', goldCta:'Open hedge guide',
+    tsmcTag:'Stocks / RWA', tsmcTitle:'TSMC earnings are out. For users watching AI and semis, this is where stock attention can turn into an onchain RWA action.', tsmcDesc:'This card makes a stock catalyst feel native inside Bitget Wallet: start with the earnings event, then guide interested users into the RWA stock trading zone instead of sending them away to another app.', tsmcPill2:'Earnings day', tsmcPill3:'RWA stocks', tsmcSource:'Market catalyst · RWA stock zone', tsmcCta:'Open stock RWA zone',
     alphaTag:'Wallet Alpha', alphaTime:'LIVE', alphaTitle:'WTI broke below 90 as war premium faded and risk assets began to reprice.', alphaDesc:'What matters is that oil, gold, BTC, and altcoins may all shift together over the next few hours.', alphaPill2:'Oil easing', alphaPill3:'Risk repricing', alphaSource:'Just now · Wallet Alpha', alphaCta:'Open Wallet Alpha',
     actionTag:'Action now', buyLabel:'Fast funding', buyValue:'Apple Pay → USDT', buySub:'If you already know what to do, this is the shortest path from decision to capital.', buyStat1:'from idea to funding', buyStat2:'good for quick entry', buyStat3:'inside the wallet', buySource:'17 min ago · Funding path', buyCta:'Buy now',
     kolTag:'KOL Heat', kolTitle:'Several top KOLs are converging on the same AI Agent narrative.', kolDesc:'Do not focus on who posted. Focus on whether attention is turning into real volume and follow-through.', kolPill3:'Watch for real volume', kolSource:'24 min ago · Community watch', kolCta:'Track this narrative',
+    fomoTag:'FOMO Thursday', fomoTitle:'FOMO Thursday is live: complete trading tasks and share a 200,000 U reward pool.', fomoDesc:'Instead of feeling like a generic campaign banner, this card reads like a timely opportunity inside the wallet. It tells users what the event is, why today matters, and gives them a clean path into the task flow.', fomoPill2:'Trade tasks', fomoPill3:'Thursday only', fomoSource:'Campaign live · Task-based rewards', fomoCta:'Start the trading tasks',
     narrativeBadge:'Narrative', narrativeChip:'Heating up', narrativeKicker:'What to watch next', narrativeHeadline:'AI Agents are moving from hype into a more durable market theme.', narrativeTitle:'If you missed the first move, look for the segments that still have money flowing in.', narrativeDesc:'This card helps you decide whether the trend is still worth following.', narrativePill3:'Watch leading names', narrativeSource:'31 min ago · Narrative tracker', narrativeCta:'Open topic map',
     earnTag:'Steady yield', earnLabel:'The calmer option today', earnSub:'If you do not want to chase volatility, parking part of your capital in lower-friction yield may be the better move.', earnStat2:'works for idle funds', earnStat3:'SOL route', earnSource:'39 min ago · Earn idea', earnCta:'Start earning',
     featureBadge:'Feature', featureChip:'Worth reading now', featureKicker:'Wallet Alpha issue', featureHeadline:'Today’s most important opportunities have already been organized into Wallet Alpha.', featureTitle:'If you do not want fragmented headlines, go straight into the issue.', featureDesc:'Macro changes, market rotation, onchain opportunities, and next actions all live in one decision path.', featurePill1:'Live updates', featurePill2:'Decision-first', featurePill3:'Action attached', featureSource:'46 min ago · Wallet Alpha', featureCta:'Open today’s issue',
+    feedbackTag:'Feedback', feedbackTitle:'What should Bitget Wallet surface better on Home? Tell us what feels useful, missing, or noisy.', feedbackDesc:'This card is intentionally simple and low-pressure. It invites users to shape the product with specific feedback, while reinforcing that the wallet team is actively listening and iterating.', feedbackPill1:'Product feedback', feedbackPill2:'Home experience', feedbackPill3:'Help us improve', feedbackSource:'User research · Open feedback loop', feedbackCta:'Send feedback',
     followTitle:'Keep following', followSub:'Keep the changes that actually matter on your home', followLive:'Still updating', followItem1Title:'Pin this timeline to my home', followItem1Desc:'When you come back later, today’s most important changes will still be here in time order.', followItem1Cta:'Pin home', followItem2Title:'Alert me only when something really changes', followItem2Desc:'Notify me only when oil, gold, BTC, or the assets I care about make a meaningful move.', followItem2Cta:'Set alerts', followItem3Title:'Keep reading Wallet Alpha', followItem3Desc:'If you need to make a decision now, go straight into the issue.', followItem3Cta:'Open issue',
     navHome:'Home', navMarkets:'Markets', navEarn:'Earn', navDiscover:'Discover', navAssets:'Assets'
   }
