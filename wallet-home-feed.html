@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wallet Home Feed — Card Stream Experiment</title>
+<meta name="description" content="Bitget Wallet 首页卡片信息流实验 — 热点内容驱动的钱包首页">
+<meta name="theme-color" content="#0b1020">
+<script>
+(function(){
+  var theme = localStorage.getItem('vibecoding_theme_vnext') || 'dark';
+  var lang = localStorage.getItem('vibecoding_lang_vnext') || 'zh';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.setAttribute('data-lang', lang);
+})();
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07111f;--bg-2:#0b1629;--panel:#0f1c33;--panel-2:#12243f;--panel-3:#182b49;--line:rgba(203,213,225,.1);
+  --text:#f8fbff;--muted:#9cb0c9;--soft:#7286a1;--blue:#58a6ff;--cyan:#34d7ff;--teal:#00d4aa;--green:#53e08f;
+  --purple:#9b6bff;--orange:#ff9f43;--red:#ff6467;--yellow:#ffd166;--shadow:0 14px 34px rgba(0,0,0,.24);
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;
+  --card-pad:15px;--stack-gap:14px;--section-gap:16px;--meta-gap:12px;
+  --radius:24px;--radius-md:18px;--radius-sm:14px;
+}
+[data-theme='light']{
+  --bg:#edf3fb;--bg-2:#f7faff;--panel:#ffffff;--panel-2:#f7faff;--panel-3:#eef4fd;--line:rgba(15,23,42,.08);
+  --text:#0f172a;--muted:#64748b;--soft:#93a4bb;--shadow:0 14px 40px rgba(15,23,42,.08);
+}
+html,body{min-height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(88,166,255,.1),transparent 26%),
+    radial-gradient(circle at top right,rgba(155,107,255,.08),transparent 22%),
+    linear-gradient(180deg,var(--bg),var(--bg-2));
+  color:var(--text);-webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* ── Layout ── */
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding:calc(env(safe-area-inset-top,0px) + 12px) 15px calc(env(safe-area-inset-bottom,20px) + 112px)}
+.stack{display:flex;flex-direction:column;gap:var(--stack-gap)}
+
+/* ── Top bar ── */
+.topbar{display:flex;align-items:center;gap:11px;margin-bottom:4px}
+.brand{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.brand-meta{flex:1;min-width:0}.eyebrow{font-size:10px;color:var(--soft);letter-spacing:.015em}.title{margin-top:2px;font-size:16px;font-weight:840;letter-spacing:-.02em}
+.tools{display:flex;gap:7px}.icon-btn{width:36px;height:36px;border-radius:12px;background:color-mix(in srgb,var(--panel) 90%, transparent);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.12);font-size:13px}
+
+/* ── Hero ── */
+.shell{border:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 95%, transparent),color-mix(in srgb,var(--panel-2) 98%, transparent));box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.hero{padding:17px;border-radius:28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 14% 10%,rgba(255,255,255,.08),transparent 18%),radial-gradient(circle at 84% 16%,rgba(52,215,255,.1),transparent 20%),linear-gradient(135deg,rgba(255,255,255,.035),transparent 36%);pointer-events:none}
+.hero::after{content:'';position:absolute;inset:auto -12% -32% 42%;height:180px;background:radial-gradient(circle,rgba(88,166,255,.18),transparent 58%);filter:blur(14px);pointer-events:none}
+.portfolio-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:relative;z-index:1}
+.balance-label{font-size:12px;color:var(--soft)}.balance-value{margin-top:4px;font-size:36px;font-weight:920;letter-spacing:-.055em}.balance-change{margin-top:8px;font-size:12px;font-weight:720;color:var(--green)}
+.live-pill{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-size:11px;font-weight:700;color:var(--muted)}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:16px;position:relative;z-index:1}
+.quick{min-height:58px;border-radius:16px;background:color-mix(in srgb,var(--panel-2) 90%, transparent);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:none}
+.quick i{font-style:normal;font-size:16px}.quick span{font-size:10px;font-weight:700;color:var(--muted)}
+
+/* ── Section Head ── */
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 2px 0}
+.section-head h2{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.live-title{display:inline-flex;align-items:center;gap:8px}
+.live-dot{width:8px;height:8px;border-radius:999px;background:#ff6467;box-shadow:0 0 0 0 rgba(255,100,103,.45);animation:livePulse 1.8s ease-out infinite;flex:none}
+.section-head p{font-size:12px;color:var(--muted);text-align:right;line-height:1.45;max-width:210px}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(255,100,103,.42);transform:scale(1)}70%{box-shadow:0 0 0 10px rgba(255,100,103,0);transform:scale(1.08)}100%{box-shadow:0 0 0 0 rgba(255,100,103,0);transform:scale(1)}}
+
+/* ── Feed ── */
+.feed{display:flex;flex-direction:column;gap:var(--section-gap);position:relative;padding-left:16px}
+.feed::before{content:'';position:absolute;left:6px;top:10px;bottom:10px;width:1px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border-radius:999px}
+
+/* ── Card base ── */
+.card{border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;position:relative}
+.card::before{content:'';position:absolute;left:-13px;top:24px;width:7px;height:7px;border-radius:999px;background:#89c0ff;box-shadow:0 0 0 4px rgba(137,192,255,.06)}
+.card.live-node::before{background:#ff8e7f;box-shadow:0 0 0 4px rgba(255,142,127,.08)}
+
+/* ── Shared ── */
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.04em;border:1px solid transparent}
+.time{font-size:11px;font-weight:700;color:var(--soft)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:var(--space-4)}.source{flex:1;min-width:0;font-size:12px;color:var(--muted);line-height:1.4;padding-right:8px}
+.cta{min-height:38px;padding:0 14px;border-radius:12px;font-size:12px;font-weight:800;border:1px solid var(--line);background:rgba(255,255,255,.04);white-space:nowrap;display:inline-flex;align-items:center}
+.cta.primary{background:linear-gradient(135deg,#4f8fff,#18c7b0);color:#fff;border:none}
+
+/* ── Bottom Nav ── */
+.bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);padding:10px 16px calc(env(safe-area-inset-bottom,10px) + 12px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 94%, transparent),transparent)}
+.bottom-shell{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:9px;border-radius:22px;background:color-mix(in srgb,var(--panel) 94%, transparent);border:1px solid var(--line);box-shadow:0 10px 26px rgba(0,0,0,.2);backdrop-filter:blur(16px)}
+.nav-item{min-height:54px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:11px;font-weight:700;color:var(--muted)}.nav-item.active{background:linear-gradient(180deg,rgba(88,166,255,.1),rgba(0,212,170,.08));color:var(--text)}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD 1: BREAKING 突发                            ║
+   ╚══════════════════════════════════════════════════╝ */
+.breaking-card{background:linear-gradient(180deg,rgba(255,100,103,.1),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,100,103,.2);position:relative}
+.breaking-card .breaking-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:24px}
+.breaking-card .breaking-bg::before{content:'';position:absolute;right:-8px;top:50px;width:140px;height:120px;
+  background:
+    linear-gradient(180deg,transparent 0 58%,rgba(255,100,103,.18) 58.5%,rgba(255,100,103,.05) 59%,transparent 60%),
+    linear-gradient(170deg,transparent 0 38%,rgba(255,100,103,.14) 38.5%,rgba(255,100,103,.04) 39%,transparent 40%),
+    linear-gradient(160deg,transparent 0 22%,rgba(255,100,103,.2) 22.5%,rgba(255,100,103,.06) 23%,transparent 24%),
+    radial-gradient(circle at 30% 80%,rgba(255,100,103,.06),transparent 60%);
+  opacity:.7}
+.breaking-card .breaking-bg::after{content:'📉';position:absolute;right:20px;top:60px;font-size:52px;opacity:.08}
+.breaking-banner{display:flex;align-items:center;gap:8px;padding:10px 14px;background:linear-gradient(90deg,#e63946,#ff4d6d);font-size:12px;font-weight:900;color:#fff;letter-spacing:.06em;text-transform:uppercase;position:relative;z-index:1}
+.breaking-flash{width:8px;height:8px;border-radius:999px;background:#fff;animation:breakingFlash 1s ease-in-out infinite}
+@keyframes breakingFlash{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+.breaking-body{padding:var(--card-pad);position:relative;z-index:1}
+.breaking-title{font-size:18px;line-height:1.28;font-weight:900;letter-spacing:-.03em}
+.breaking-time{display:inline-flex;align-items:center;gap:7px;margin-top:var(--space-2);font-size:11px;font-weight:700;color:var(--red)}
+.breaking-impacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:var(--space-3)}
+.impact-item{padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);display:flex;align-items:center;gap:6px}
+.impact-asset{font-size:11px;font-weight:800;color:var(--muted)}
+.impact-change{font-size:12px;font-weight:800}
+.impact-item.up .impact-change{color:var(--green)}
+.impact-item.down .impact-change{color:var(--red)}
+.breaking-cta{background:linear-gradient(135deg,#e63946,#ff6b6b)!important;color:#fff!important;border:none!important}
+.breaking-card .card-foot{padding:0 var(--card-pad) var(--card-pad)}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD 2: AI SIGNAL AI信号                        ║
+   ╚══════════════════════════════════════════════════╝ */
+.signal-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(52,215,255,.06),color-mix(in srgb,var(--panel) 97%,transparent));border-color:rgba(52,215,255,.12)}
+.signal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tag.ai-signal{background:rgba(52,215,255,.1);border-color:rgba(52,215,255,.16);color:#7dd3fc}
+.signal-confidence{display:flex;gap:4px;align-items:center}
+.conf-dot{width:6px;height:6px;border-radius:999px;background:var(--cyan);box-shadow:0 0 6px rgba(52,215,255,.4)}
+.conf-dot.dim{background:rgba(52,215,255,.18);box-shadow:none}
+.signal-direction{margin-top:var(--space-3);display:flex;align-items:center;gap:10px}
+.direction-badge{padding:6px 12px;border-radius:10px;font-size:12px;font-weight:900;letter-spacing:.02em}
+.direction-badge.bullish{background:rgba(83,224,143,.12);border:1px solid rgba(83,224,143,.2);color:var(--green)}
+.direction-badge.bearish{background:rgba(255,100,103,.12);border:1px solid rgba(255,100,103,.2);color:var(--red)}
+.signal-title{font-size:17px;line-height:1.28;font-weight:860;letter-spacing:-.03em}
+.signal-desc{margin-top:var(--space-2);font-size:12px;line-height:1.58;color:var(--muted)}
+.signal-data{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:var(--space-3)}
+.data-point{padding:10px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line);text-align:center}
+.data-label{font-size:10px;font-weight:700;color:var(--soft);display:block}
+.data-value{font-size:15px;font-weight:860;margin-top:4px;display:block}
+.data-value.strong{color:var(--cyan)}
+.signal-viz{margin-top:var(--space-3);height:72px;border-radius:14px;background:linear-gradient(180deg,rgba(7,14,28,.9),rgba(8,31,63,.6));border:1px solid rgba(52,215,255,.08);position:relative;overflow:hidden}
+.signal-viz::before{content:'';position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(52,215,255,.06) 1px,transparent 1px),
+  linear-gradient(rgba(52,215,255,.04) 1px,transparent 1px),
+  radial-gradient(circle at 14% 50%,rgba(52,215,255,.15) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 30% 30%,rgba(52,215,255,.12) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 46% 65%,rgba(52,215,255,.18) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 62% 35%,rgba(83,224,143,.2) 0 3px,transparent 3.5px),
+  radial-gradient(circle at 78% 55%,rgba(52,215,255,.15) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 90% 40%,rgba(83,224,143,.12) 0 2px,transparent 2.5px);
+  background-size:20px 20px,20px 20px,auto,auto,auto,auto,auto,auto}
+/* ETH diamond shape */
+.signal-eth{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:36px;height:36px}
+.signal-eth::before{content:'';position:absolute;inset:0;background:
+  linear-gradient(135deg,transparent 38%,rgba(52,215,255,.3) 38.5%,rgba(52,215,255,.15) 50%,rgba(52,215,255,.3) 61.5%,transparent 62%),
+  linear-gradient(225deg,transparent 38%,rgba(83,224,143,.2) 38.5%,rgba(83,224,143,.1) 50%,rgba(83,224,143,.2) 61.5%,transparent 62%);
+  filter:drop-shadow(0 0 8px rgba(52,215,255,.3))}
+/* Whale flow line */
+.signal-viz::after{content:'';position:absolute;left:8%;top:50%;width:76%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(52,215,255,.3) 10%,rgba(52,215,255,.6) 30%,rgba(83,224,143,.8) 55%,rgba(52,215,255,.5) 75%,rgba(83,224,143,.6) 90%,transparent);
+  filter:blur(1px);animation:signalScan 3s ease-in-out infinite}
+@keyframes signalScan{0%{opacity:.3;transform:translateY(-10px)}50%{opacity:1;transform:translateY(10px)}100%{opacity:.3;transform:translateY(-10px)}}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD 3: NARRATIVE 今日热门叙事                    ║
+   ╚══════════════════════════════════════════════════╝ */
+.narrative-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(255,159,67,.08),color-mix(in srgb,var(--panel) 96%,transparent));border-color:rgba(255,159,67,.16);position:relative;overflow:hidden}
+.narrative-card>.narrative-bg{position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 90% 10%,rgba(255,159,67,.12),transparent 32%),
+    radial-gradient(ellipse at 95% 40%,rgba(255,100,103,.06),transparent 24%)}
+.narrative-card>.narrative-bg::before{content:'🔥';position:absolute;right:8px;top:4px;font-size:48px;opacity:.06}
+.narrative-card>.narrative-bg::after{content:'';position:absolute;right:0;top:0;width:100px;height:100px;
+  background:radial-gradient(circle at 80% 20%,rgba(255,159,67,.08),transparent 50%)}
+.narrative-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tag.narrative{background:rgba(255,159,67,.12);border-color:rgba(255,159,67,.18);color:#ffc078}
+.narrative-list{display:flex;flex-direction:column;gap:10px;margin-top:var(--meta-gap)}
+.narrative-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.narrative-rank{font-size:20px;font-weight:900;letter-spacing:-.04em;min-width:28px;background:linear-gradient(135deg,var(--orange),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.narrative-info{flex:1;min-width:0}
+.narrative-name{font-size:14px;font-weight:840;letter-spacing:-.01em}
+.narrative-tokens{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+.token-tick{font-size:10px;font-weight:700;padding:3px 7px;border-radius:8px}
+.token-tick.up{background:rgba(83,224,143,.1);color:var(--green)}
+.token-tick.down{background:rgba(255,100,103,.1);color:var(--red)}
+.narrative-heat{width:52px;height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.heat-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--orange),var(--red));animation:heatGrow .8s ease-out forwards;transform-origin:left}
+@keyframes heatGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.narrative-arrow{font-size:14px;color:var(--soft);font-weight:700}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD 4: PREDICT 预测市场                         ║
+   ╚══════════════════════════════════════════════════╝ */
+.predict-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(91,33,182,.14),rgba(18,24,38,.95));border-color:rgba(139,92,246,.16);position:relative;overflow:hidden}
+.predict-card>.predict-bg{position:absolute;inset:0;pointer-events:none}
+.predict-card>.predict-bg::before{content:'🏀';position:absolute;right:-6px;top:-6px;font-size:72px;opacity:.06}
+.predict-card>.predict-bg::after{content:'';position:absolute;left:0;top:0;right:0;bottom:0;
+  background:radial-gradient(circle at 15% 85%,rgba(85,228,183,.06),transparent 22%),
+  radial-gradient(circle at 85% 85%,rgba(255,141,151,.06),transparent 22%)}
+.predict-head{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
+.tag.predict{background:rgba(155,107,255,.12);border-color:rgba(155,107,255,.18);color:#c4b5fd}
+.predict-live{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:800;color:#c9d4ff;padding:4px 10px;border-radius:999px;background:rgba(255,100,103,.08)}
+.predict-live .live-dot{width:6px;height:6px}
+.predict-event{margin-top:var(--space-3);font-size:17px;line-height:1.28;font-weight:870;letter-spacing:-.025em}
+.predict-meta{margin-top:6px;font-size:12px;line-height:1.5;color:var(--muted)}
+.predict-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:var(--space-4);padding:14px;border-radius:18px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.predict-side{display:flex;flex-direction:column;align-items:center;gap:6px}
+.predict-team{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.predict-odds{font-size:28px;font-weight:920;letter-spacing:-.04em}
+.yes-side .predict-odds{color:#55e4b7}
+.no-side .predict-odds{color:#ff8d97}
+.predict-vs-badge{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,rgba(155,107,255,.3),rgba(255,100,103,.2));border:2px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;letter-spacing:.03em}
+.predict-bar{margin-top:var(--space-3);height:8px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.04);display:flex}
+.predict-fill-yes{background:linear-gradient(90deg,#19c7a4,#55e4b7);border-radius:999px 0 0 999px}
+.predict-fill-no{background:linear-gradient(90deg,#ff8d97,#ff6976);border-radius:0 999px 999px 0}
+.predict-volume{display:flex;justify-content:space-between;margin-top:var(--space-2);font-size:11px;font-weight:700;color:var(--soft)}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD 5: EDITORIAL 编辑推荐                       ║
+   ╚══════════════════════════════════════════════════╝ */
+.editorial-card{background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 97%,transparent),color-mix(in srgb,var(--panel-3) 97%,transparent))}
+.editorial-cover{height:192px;position:relative;overflow:hidden;background:linear-gradient(135deg,#071524 0%,#1a3a6d 46%,#4f8fff 100%)}
+.editorial-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 16% 18%,rgba(255,255,255,.1),transparent 18%),radial-gradient(circle at 84% 24%,rgba(52,215,255,.12),transparent 16%),linear-gradient(120deg,rgba(255,255,255,.04),transparent 32%)}
+.editorial-cover::after{content:'';position:absolute;left:0;right:0;bottom:0;height:100px;background:linear-gradient(180deg,transparent,rgba(3,8,20,.28) 42%,rgba(3,8,20,.84));z-index:1}
+/* TSMC chip/circuit art */
+.editorial-art{position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    radial-gradient(circle at 76% 30%,rgba(255,255,255,.8) 0 3px,transparent 3.5px),
+    radial-gradient(circle at 76% 30%,transparent 0 14%,rgba(255,255,255,.12) 14.5%,transparent 16%),
+    radial-gradient(circle at 76% 30%,transparent 0 26%,rgba(255,255,255,.06) 26.5%,transparent 28%),
+    linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:auto,auto,auto,28px 28px,28px 28px}
+/* Chip core on TSMC default cover */
+.editorial-cover:not(.wallet-card):not(.travel-pay) .editorial-art::before{content:'';position:absolute;right:48px;top:26px;width:56px;height:56px;
+  border:2px solid rgba(255,255,255,.12);border-radius:8px;
+  box-shadow:inset 0 0 18px rgba(88,166,255,.12)}
+.editorial-cover:not(.wallet-card):not(.travel-pay) .editorial-art::after{content:'';position:absolute;right:40px;top:18px;width:72px;height:72px;
+  background:
+    linear-gradient(0deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat center top/2px 10px,
+    linear-gradient(0deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat center bottom/2px 10px,
+    linear-gradient(90deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat left center/10px 2px,
+    linear-gradient(90deg,rgba(255,255,255,.1) 0 2px,transparent 2px) no-repeat right center/10px 2px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 25% top/2px 8px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 75% top/2px 8px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 25% bottom/2px 8px,
+    linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px) no-repeat 75% bottom/2px 8px}
+.editorial-badge{position:absolute;top:13px;left:13px;padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;background:rgba(255,255,255,.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);color:#f8fbff;z-index:2}
+.editorial-chip{position:absolute;top:13px;right:13px;padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;background:rgba(6,12,24,.24);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);color:#f8fbff;z-index:2}
+.editorial-copy{position:absolute;left:15px;right:15px;bottom:14px;z-index:2;color:#f8fbff}
+.editorial-kicker{font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:rgba(248,251,255,.76)}
+.editorial-headline{max-width:260px;margin-top:7px;font-size:20px;line-height:1.12;font-weight:900;letter-spacing:-.05em;text-shadow:0 8px 18px rgba(0,0,0,.22)}
+.editorial-body{padding:var(--card-pad) var(--card-pad) 17px}
+.editorial-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tag.editorial{background:rgba(88,166,255,.1);border-color:rgba(88,166,255,.14);color:#a9d1ff}
+.editorial-desc{margin-top:var(--space-2);font-size:12px;line-height:1.58;color:var(--muted)}
+.editorial-author{display:flex;align-items:center;gap:8px;margin-top:var(--space-3);font-size:11px;color:var(--soft);font-weight:700}
+.author-avatar{width:22px;height:22px;border-radius:999px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff}
+.author-dot{width:3px;height:3px;border-radius:999px;background:var(--soft)}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD 6: EARN 理财                                ║
+   ╚══════════════════════════════════════════════════╝ */
+.earn-card{padding:var(--card-pad);background:linear-gradient(180deg,rgba(0,212,170,.06),color-mix(in srgb,var(--panel) 97%,transparent));border-color:rgba(0,212,170,.12)}
+.earn-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tag.earn{background:rgba(0,212,170,.1);border-color:rgba(0,212,170,.16);color:#b8ffef}
+.earn-hero{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-top:var(--meta-gap)}
+.earn-asset{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.earn-apy{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+.apy-label{font-size:11px;font-weight:700;color:var(--soft)}
+.apy-value{font-size:32px;font-weight:920;letter-spacing:-.05em;color:var(--teal)}
+.apy-trend{font-size:12px;font-weight:800;color:var(--green)}
+.earn-desc{margin-top:var(--space-2);font-size:12px;line-height:1.5;color:var(--muted)}
+.earn-visual{width:80px;height:80px;border-radius:999px;border:6px solid rgba(0,212,170,.15);border-top-color:var(--teal);border-right-color:rgba(0,212,170,.5);position:relative;transform:rotate(-45deg)}
+.earn-visual::after{content:'SOL';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--teal);transform:rotate(45deg)}
+.earn-comparison{display:flex;flex-direction:column;gap:8px;margin-top:var(--space-3)}
+.earn-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.earn-protocol{font-size:11px;font-weight:800;color:var(--muted);min-width:62px}
+.earn-rate{font-size:12px;font-weight:860;color:var(--teal);min-width:38px}
+.earn-rate-bar{flex:1;height:5px;border-radius:999px;background:rgba(255,255,255,.04);overflow:hidden;position:relative}
+.earn-rate-bar::after{content:'';position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--green));width:var(--rate)}
+
+/* ╔══════════════════════════════════════════════════╗
+   ║  CARD 7: ACTIVITY 热点活动                        ║
+   ╚══════════════════════════════════════════════════╝ */
+.activity-card{padding:0;background:linear-gradient(135deg,#1a0a2e 0%,#2d1b69 36%,#ff6b35 100%);border-color:rgba(255,107,53,.2)}
+.activity-card::after{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 90% 20%,rgba(255,209,102,.18),transparent 28%),
+    radial-gradient(circle at 10% 80%,rgba(155,107,255,.2),transparent 24%),
+    /* Floating coins */
+    radial-gradient(circle at 88% 14%,rgba(255,209,102,.4) 0 6px,transparent 6.5px),
+    radial-gradient(circle at 88% 14%,rgba(255,209,102,.1) 0 10px,transparent 11px),
+    radial-gradient(circle at 92% 30%,rgba(255,209,102,.25) 0 4px,transparent 4.5px),
+    radial-gradient(circle at 82% 8%,rgba(255,159,67,.2) 0 3px,transparent 3.5px),
+    radial-gradient(circle at 96% 22%,rgba(255,159,67,.15) 0 3px,transparent 3.5px),
+    /* Trophy sparkle */
+    radial-gradient(circle at 85% 18%,rgba(255,255,255,.06),transparent 16%);
+  pointer-events:none;border-radius:24px}
+.activity-inner{position:relative;z-index:1;padding:var(--card-pad)}
+.activity-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tag.activity{background:rgba(255,209,102,.16);border-color:rgba(255,209,102,.24);color:var(--yellow)}
+.activity-countdown{font-size:10px;font-weight:800;color:rgba(255,255,255,.7);padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.activity-title{margin-top:var(--space-3);font-size:19px;line-height:1.24;font-weight:900;letter-spacing:-.03em;color:#fff}
+.activity-reward{margin-top:var(--space-3);display:flex;align-items:center;gap:10px}
+.reward-amount{font-size:26px;font-weight:920;letter-spacing:-.04em;background:linear-gradient(135deg,var(--yellow),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.reward-token{font-size:12px;font-weight:800;color:rgba(255,255,255,.6)}
+.activity-tasks{display:flex;flex-direction:column;gap:6px;margin-top:var(--space-3)}
+.task-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:700;color:rgba(255,255,255,.85)}
+.task-check{width:18px;height:18px;border-radius:6px;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:9px;flex:none}
+.task-item.done .task-check{background:var(--green);border-color:var(--green);color:#fff}
+.activity-progress{margin-top:var(--space-3);height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.activity-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--yellow),var(--orange));width:33%}
+.activity-card .card-foot{padding:0}
+.activity-cta{background:linear-gradient(135deg,var(--yellow),var(--orange))!important;color:#1a0a2e!important;border:none!important}
+
+/* ── Editorial cover variants ── */
+.editorial-cover.wallet-card{background:linear-gradient(135deg,#0a0a1a 0%,#1a1a3e 36%,#4f46e5 100%)}
+.editorial-cover.wallet-card .editorial-art{background:
+  radial-gradient(circle at 72% 36%,rgba(99,102,241,.5) 0 6px,transparent 6.5px),
+  radial-gradient(circle at 72% 36%,transparent 0 18%,rgba(99,102,241,.14) 18.5%,transparent 20%),
+  radial-gradient(circle at 72% 36%,transparent 0 32%,rgba(99,102,241,.08) 32.5%,transparent 34%),
+  linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
+  linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:auto,auto,auto,24px 24px,24px 24px}
+/* Credit card shape */
+.editorial-cover.wallet-card .editorial-art::before{content:'';position:absolute;right:28px;top:28px;width:92px;height:58px;
+  border-radius:10px;border:1.5px solid rgba(255,255,255,.16);
+  background:linear-gradient(145deg,rgba(99,102,241,.25),rgba(79,70,229,.15));
+  backdrop-filter:blur(4px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+/* Cashback % sparkle */
+.editorial-cover.wallet-card .editorial-art::after{content:'50%';position:absolute;right:42px;top:42px;
+  font-size:18px;font-weight:900;color:rgba(255,255,255,.5);letter-spacing:-.02em}
+.editorial-cover.travel-pay{background:linear-gradient(135deg,#071a12 0%,#0d6d3f 42%,#34d399 100%)}
+.editorial-cover.travel-pay .editorial-art{background:
+  /* Map pin dots representing Asian countries */
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.8) 0 3px,transparent 3.5px),
+  radial-gradient(circle at 58% 28%,rgba(52,211,153,.15) 0 8px,transparent 9px),
+  radial-gradient(circle at 72% 36%,rgba(52,211,153,.6) 0 2.5px,transparent 3px),
+  radial-gradient(circle at 65% 50%,rgba(52,211,153,.5) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 80% 44%,rgba(52,211,153,.4) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 52% 42%,rgba(52,211,153,.5) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 75% 56%,rgba(52,211,153,.4) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 62% 62%,rgba(52,211,153,.35) 0 2px,transparent 2.5px),
+  radial-gradient(circle at 48% 55%,rgba(52,211,153,.3) 0 1.5px,transparent 2px),
+  radial-gradient(circle at 85% 52%,rgba(52,211,153,.3) 0 1.5px,transparent 2px),
+  radial-gradient(circle at 30% 60%,rgba(255,255,255,.04),transparent 12%),
+  linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
+  linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,26px 26px,26px 26px}
+/* Connecting lines between map pins */
+.editorial-cover.travel-pay .editorial-art::before{content:'';position:absolute;right:30px;top:30px;width:120px;height:80px;
+  background:
+    linear-gradient(135deg,transparent 0 40%,rgba(52,211,153,.12) 40.5%,transparent 41%),
+    linear-gradient(165deg,transparent 0 30%,rgba(52,211,153,.08) 30.5%,transparent 31%),
+    linear-gradient(110deg,transparent 0 55%,rgba(52,211,153,.1) 55.5%,transparent 56%)}
+/* USDT coin icon */
+.editorial-cover.travel-pay .editorial-art::after{content:'₮';position:absolute;right:36px;top:32px;
+  width:28px;height:28px;border-radius:999px;
+  background:rgba(0,166,126,.3);border:1.5px solid rgba(52,211,153,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:rgba(52,211,153,.8)}
+
+/* ── Light theme overrides ── */
+[data-theme='light'] .tag{background:rgba(15,23,42,.78);border-color:rgba(15,23,42,.14);color:#fff;box-shadow:0 4px 12px rgba(15,23,42,.08)}
+[data-theme='light'] .tag.ai-signal,[data-theme='light'] .tag.narrative,[data-theme='light'] .tag.predict,[data-theme='light'] .tag.editorial,[data-theme='light'] .tag.earn,[data-theme='light'] .tag.activity{color:#fff}
+[data-theme='light'] .cta{background:#fff;border-color:rgba(15,23,42,.1);color:#0f172a}
+[data-theme='light'] .cta.primary{background:linear-gradient(135deg,#4f8fff,#18c7b0);color:#fff}
+[data-theme='light'] .breaking-cta{background:linear-gradient(135deg,#e63946,#ff6b6b)!important;color:#fff!important}
+[data-theme='light'] .time{color:#64748b}
+[data-theme='light'] .editorial-badge,[data-theme='light'] .editorial-chip{box-shadow:0 6px 18px rgba(0,0,0,.14)}
+[data-theme='light'] .breaking-card{border-color:rgba(255,100,103,.16)}
+[data-theme='light'] .signal-card{border-color:rgba(52,215,255,.1)}
+[data-theme='light'] .narrative-card{border-color:rgba(255,159,67,.12)}
+[data-theme='light'] .predict-card{border-color:rgba(139,92,246,.12);background:linear-gradient(180deg,rgba(91,33,182,.06),var(--panel))}
+[data-theme='light'] .earn-card{border-color:rgba(0,212,170,.1)}
+
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">BW</div>
+    <div class="brand-meta">
+      <div class="eyebrow" data-i18n="eyebrow">Bitget Wallet · 实验性首页</div>
+      <div class="title" data-i18n="title">Home Feed</div>
+    </div>
+    <div class="tools">
+      <button class="icon-btn" id="langToggle">中</button>
+      <button class="icon-btn" id="themeToggle">◐</button>
+    </div>
+  </div>
+
+  <div class="stack">
+    <!-- ── Hero ── -->
+    <section class="hero shell">
+      <div class="portfolio-row">
+        <div>
+          <div class="balance-label" data-i18n="portfolioLabel">总资产</div>
+          <div class="balance-value">$24,860.42</div>
+          <div class="balance-change" data-i18n="portfolioChange">+2.84% 今日</div>
+        </div>
+        <div class="live-pill" data-i18n="marketPulse">Risk-on · 偏多</div>
+      </div>
+      <div class="quick-grid">
+        <button class="quick"><i>💱</i><span data-i18n="swap">兑换</span></button>
+        <button class="quick"><i>💳</i><span data-i18n="buy">买币</span></button>
+        <button class="quick"><i>📈</i><span data-i18n="earn">赚币</span></button>
+        <button class="quick"><i>🌐</i><span data-i18n="discover">发现</span></button>
+      </div>
+    </section>
+
+    <!-- ── Section Header ── -->
+    <div class="section-head">
+      <h2><span class="live-title"><span class="live-dot" aria-hidden="true"></span> <span data-i18n="sectionTitle">正在发生</span></span></h2>
+      <p data-i18n="sectionSub">热点资讯 × 钱包功能</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- FEED                                           -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="feed">
+
+      <!-- ── Card 1: Breaking 突发 ── -->
+      <article class="card breaking-card live-node">
+        <div class="breaking-bg"></div>
+        <div class="breaking-banner">
+          <span class="breaking-flash"></span>
+          <span data-i18n="breakingLabel">突发</span>
+        </div>
+        <div class="breaking-body">
+          <div class="breaking-title" data-i18n="breakingTitle">特朗普发布声明伊朗战争很快结束，国际油价迅速跌破 $80</div>
+          <div class="breaking-time">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span data-i18n="breakingTime">2 分钟前</span>
+          </div>
+          <div class="breaking-impacts">
+            <div class="impact-item down">
+              <span class="impact-asset">OIL</span>
+              <span class="impact-change">-4.2%</span>
+            </div>
+            <div class="impact-item up">
+              <span class="impact-asset">BTC</span>
+              <span class="impact-change">+1.8%</span>
+            </div>
+            <div class="impact-item up">
+              <span class="impact-asset">S&P 500</span>
+              <span class="impact-change">+0.6%</span>
+            </div>
+          </div>
+          <div class="card-foot">
+            <div class="source" data-i18n="breakingSource">Reuters · 地缘政治快讯</div>
+            <button class="cta breaking-cta" data-i18n="breakingCta">原油合约交易 →</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── Card: Editorial — Wallet Card ── -->
+      <article class="card editorial-card">
+        <div class="editorial-cover wallet-card">
+          <div class="editorial-art"></div>
+          <div class="editorial-badge" data-i18n="ed2Badge">编辑推荐</div>
+          <div class="editorial-chip">Bitget Wallet Card</div>
+          <div class="editorial-copy">
+            <div class="editorial-kicker" data-i18n="ed2Kicker">产品推荐</div>
+            <div class="editorial-headline" data-i18n="ed2Headline">AI 订阅，获得 50% Cashback</div>
+          </div>
+        </div>
+        <div class="editorial-body">
+          <div class="editorial-meta">
+            <span class="tag editorial" data-i18n="ed2Tag">💳 Wallet Card</span>
+            <span class="time" data-i18n="ed2Time">8 分钟前</span>
+          </div>
+          <div class="editorial-desc" data-i18n="ed2Desc">用 Bitget Wallet Card 订阅 ChatGPT、Midjourney 等 AI 服务，即享 50% Cashback，返现直接到账。</div>
+          <div class="editorial-author">
+            <span class="author-avatar">B</span>
+            <span data-i18n="ed2Author">Bitget Wallet</span>
+            <span class="author-dot"></span>
+            <span data-i18n="ed2Read">2 min read</span>
+          </div>
+          <div class="card-foot">
+            <div class="source" data-i18n="ed2Source">Wallet Card · 虚拟卡</div>
+            <button class="cta primary" data-i18n="ed2Cta">申请 Wallet Card →</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── Card 2: AI Signal AI信号 ── -->
+      <article class="card signal-card">
+        <div class="signal-head">
+          <span class="tag ai-signal" data-i18n="signalTag">⚡ AI 信号</span>
+          <div class="signal-confidence">
+            <span class="conf-dot"></span>
+            <span class="conf-dot"></span>
+            <span class="conf-dot"></span>
+            <span class="conf-dot dim"></span>
+            <span class="conf-dot dim"></span>
+          </div>
+          <span class="time" data-i18n="signalTime">5m ago</span>
+        </div>
+        <div class="signal-direction">
+          <span class="direction-badge bullish" data-i18n="signalBullish">看多</span>
+          <span class="signal-title" data-i18n="signalTitle">巨鲸集中买入 ETH</span>
+        </div>
+        <div class="signal-desc" data-i18n="signalDesc">过去 1 小时内，12 个巨鲸地址累计增持 $48M ETH，链上资金持续流入，短线看多信号明确。</div>
+        <div class="signal-data">
+          <div class="data-point">
+            <span class="data-label" data-i18n="signalWhales">鲸鱼数量</span>
+            <span class="data-value">12</span>
+          </div>
+          <div class="data-point">
+            <span class="data-label" data-i18n="signalVolume">总买入</span>
+            <span class="data-value">$48M</span>
+          </div>
+          <div class="data-point">
+            <span class="data-label" data-i18n="signalStrength">信号强度</span>
+            <span class="data-value strong" data-i18n="signalStrengthVal">强</span>
+          </div>
+        </div>
+        <div class="signal-viz"><div class="signal-eth"></div></div>
+        <div class="card-foot">
+          <div class="source" data-i18n="signalSource">AI 链上分析引擎</div>
+          <button class="cta primary" data-i18n="signalCta">查看 ETH 交易 →</button>
+        </div>
+      </article>
+
+      <!-- ── Card 3: Narrative 今日热门叙事 ── -->
+      <article class="card narrative-card">
+        <div class="narrative-bg"></div>
+        <div class="narrative-head" style="position:relative;z-index:1">
+          <span class="tag narrative" data-i18n="narrativeTag">🔥 今日热门叙事</span>
+          <span class="time" data-i18n="narrativeTime">刚刚更新</span>
+        </div>
+        <div class="narrative-list">
+          <div class="narrative-item">
+            <div class="narrative-rank">#1</div>
+            <div class="narrative-info">
+              <div class="narrative-name">OpenClaw</div>
+              <div class="narrative-tokens">
+                <span class="token-tick up">CLAW +12.4%</span>
+                <span class="token-tick up">OC +8.7%</span>
+              </div>
+            </div>
+            <div class="narrative-heat"><div class="heat-fill" style="width:88%"></div></div>
+            <span class="narrative-arrow">→</span>
+          </div>
+          <div class="narrative-item">
+            <div class="narrative-rank">#2</div>
+            <div class="narrative-info">
+              <div class="narrative-name">Base AI</div>
+              <div class="narrative-tokens">
+                <span class="token-tick up">VIRTUAL +8.2%</span>
+                <span class="token-tick down">AIXBT -2.1%</span>
+              </div>
+            </div>
+            <div class="narrative-heat"><div class="heat-fill" style="width:72%"></div></div>
+            <span class="narrative-arrow">→</span>
+          </div>
+          <div class="narrative-item">
+            <div class="narrative-rank">#3</div>
+            <div class="narrative-info">
+              <div class="narrative-name">SUI DeFi</div>
+              <div class="narrative-tokens">
+                <span class="token-tick up">SUI +5.6%</span>
+                <span class="token-tick up">DEEP +3.4%</span>
+              </div>
+            </div>
+            <div class="narrative-heat"><div class="heat-fill" style="width:58%"></div></div>
+            <span class="narrative-arrow">→</span>
+          </div>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="narrativeSource">Meme 交易热度追踪</div>
+          <button class="cta primary" data-i18n="narrativeCta">进入 Meme 交易 →</button>
+        </div>
+      </article>
+
+      <!-- ── Card: Activity — Fomo Thursday ── -->
+      <article class="card activity-card">
+        <div class="activity-inner">
+          <div class="activity-head">
+            <span class="tag activity" data-i18n="activityTag">🎉 热点活动</span>
+            <span class="activity-countdown" data-i18n="activityCountdown">⏰ 本周四截止</span>
+          </div>
+          <div class="activity-title" data-i18n="activityTitle">Fomo Thursday — 完成 3 个任务，瓜分 100 万</div>
+          <div class="activity-reward">
+            <span class="reward-amount">1,000,000</span>
+            <span class="reward-token">$IDOS</span>
+          </div>
+          <div class="activity-tasks">
+            <div class="task-item done">
+              <span class="task-check">✓</span>
+              <span data-i18n="activityTask1">完成一笔 Swap 交易</span>
+            </div>
+            <div class="task-item">
+              <span class="task-check"></span>
+              <span data-i18n="activityTask2">邀请 1 位好友注册</span>
+            </div>
+            <div class="task-item">
+              <span class="task-check"></span>
+              <span data-i18n="activityTask3">持有任意 NFT 超过 24h</span>
+            </div>
+          </div>
+          <div class="activity-progress"><div class="activity-progress-fill"></div></div>
+          <div class="card-foot">
+            <div class="source" data-i18n="activitySource">Fomo Thursday · 每周活动</div>
+            <button class="cta activity-cta" data-i18n="activityCta">参与瓜分 →</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── Card 4: Predict 预测市场 ── -->
+      <article class="card predict-card">
+        <div class="predict-bg"></div>
+        <div class="predict-head">
+          <span class="tag predict" data-i18n="predictTag">🎯 预测市场</span>
+          <span class="predict-live"><span class="live-dot" aria-hidden="true"></span> LIVE</span>
+        </div>
+        <div class="predict-event" data-i18n="predictEvent">今天湖人与勇士巅峰对决</div>
+        <div class="predict-meta" data-i18n="predictMeta">NBA 季后赛 · 今晚 10:30 开赛</div>
+        <div class="predict-vs">
+          <div class="predict-side yes-side">
+            <div class="predict-team" data-i18n="predictTeamA">Lakers</div>
+            <div class="predict-odds">64%</div>
+          </div>
+          <div class="predict-vs-badge">VS</div>
+          <div class="predict-side no-side">
+            <div class="predict-team" data-i18n="predictTeamB">Warriors</div>
+            <div class="predict-odds">36%</div>
+          </div>
+        </div>
+        <div class="predict-bar">
+          <div class="predict-fill-yes" style="width:64%"></div>
+          <div class="predict-fill-no" style="width:36%"></div>
+        </div>
+        <div class="predict-volume">
+          <span data-i18n="predictVolLabel">交易量 $2.4M</span>
+          <span data-i18n="predictVolChange">24h +18%</span>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="predictSource">Polymarket 热门事件</div>
+          <button class="cta primary" data-i18n="predictCta">查看预测市场 →</button>
+        </div>
+      </article>
+
+      <!-- ── Card 5: Editorial 编辑推荐 ── -->
+      <article class="card editorial-card">
+        <div class="editorial-cover">
+          <div class="editorial-art"></div>
+          <div class="editorial-badge" data-i18n="editorialBadge">编辑推荐</div>
+          <div class="editorial-chip">TSMC · 2330.TW</div>
+          <div class="editorial-copy">
+            <div class="editorial-kicker" data-i18n="editorialKicker">财报日深度分析</div>
+            <div class="editorial-headline" data-i18n="editorialHeadline">TSMC 财报发布，AI 战车是否能继续狂飙</div>
+          </div>
+        </div>
+        <div class="editorial-body">
+          <div class="editorial-meta">
+            <span class="tag editorial" data-i18n="editorialTag">📰 深度</span>
+            <span class="time" data-i18n="editorialTime">15 分钟前</span>
+          </div>
+          <div class="editorial-desc" data-i18n="editorialDesc">台积电 Q1 财报超预期，AI 芯片需求爆发式增长。本文分析财报亮点、估值空间与 RWA 代币化交易机会。</div>
+          <div class="editorial-author">
+            <span class="author-avatar">W</span>
+            <span data-i18n="editorialAuthor">Wallet Editorial</span>
+            <span class="author-dot"></span>
+            <span data-i18n="editorialRead">4 min read</span>
+          </div>
+          <div class="card-foot">
+            <div class="source" data-i18n="editorialSource">RWA 股票交易</div>
+            <button class="cta primary" data-i18n="editorialCta">阅读分析 →</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── Card: Editorial — USDT/USDC Travel Pay ── -->
+      <article class="card editorial-card">
+        <div class="editorial-cover travel-pay">
+          <div class="editorial-art"></div>
+          <div class="editorial-badge" data-i18n="ed3Badge">编辑推荐</div>
+          <div class="editorial-chip">17 Countries</div>
+          <div class="editorial-copy">
+            <div class="editorial-kicker" data-i18n="ed3Kicker">出行必备</div>
+            <div class="editorial-headline" data-i18n="ed3Headline">用 USDT/USDC 走遍世界</div>
+          </div>
+        </div>
+        <div class="editorial-body">
+          <div class="editorial-meta">
+            <span class="tag editorial" data-i18n="ed3Tag">🌏 出行支付</span>
+            <span class="time" data-i18n="ed3Time">1 小时前</span>
+          </div>
+          <div class="editorial-desc" data-i18n="ed3Desc">支持日本、泰国、韩国、新加坡等 17 个亚洲国家扫码支付，USDT/USDC 直接消费，无需换汇，到店即扫。</div>
+          <div class="editorial-author">
+            <span class="author-avatar">B</span>
+            <span data-i18n="ed3Author">Bitget Wallet</span>
+            <span class="author-dot"></span>
+            <span data-i18n="ed3Read">3 min read</span>
+          </div>
+          <div class="card-foot">
+            <div class="source" data-i18n="ed3Source">Scan-to-Pay · 扫码支付</div>
+            <button class="cta primary" data-i18n="ed3Cta">查看支持地区 →</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── Card 6: Earn 理财 ── -->
+      <article class="card earn-card">
+        <div class="earn-head">
+          <span class="tag earn" data-i18n="earnTag">💰 理财机会</span>
+          <span class="time" data-i18n="earnTime">32m ago</span>
+        </div>
+        <div class="earn-hero">
+          <div>
+            <div class="earn-asset">SOL Staking</div>
+            <div class="earn-apy">
+              <span class="apy-label">APY</span>
+              <span class="apy-value">6.5%</span>
+              <span class="apy-trend">↑ 0.3%</span>
+            </div>
+            <div class="earn-desc" data-i18n="earnDesc">赚无风险收益，灵活申赎</div>
+          </div>
+          <div class="earn-visual"></div>
+        </div>
+        <div class="earn-comparison">
+          <div class="earn-row">
+            <span class="earn-protocol">Lido</span>
+            <span class="earn-rate">6.5%</span>
+            <div class="earn-rate-bar" style="--rate:100%"></div>
+          </div>
+          <div class="earn-row">
+            <span class="earn-protocol">Jito</span>
+            <span class="earn-rate">6.2%</span>
+            <div class="earn-rate-bar" style="--rate:88%"></div>
+          </div>
+          <div class="earn-row">
+            <span class="earn-protocol">Marinade</span>
+            <span class="earn-rate">5.8%</span>
+            <div class="earn-rate-bar" style="--rate:76%"></div>
+          </div>
+        </div>
+        <div class="card-foot">
+          <div class="source" data-i18n="earnSource">Earn · 收益聚合</div>
+          <button class="cta primary" data-i18n="earnCta">开始赚取收益 →</button>
+        </div>
+      </article>
+
+    </div><!-- /feed -->
+  </div><!-- /stack -->
+</div><!-- /app -->
+
+<!-- ── Bottom Nav ── -->
+<nav class="bottom-nav">
+  <div class="bottom-shell">
+    <button class="nav-item active"><i style="font-style:normal;font-size:15px">🏠</i><span data-i18n="navHome">首页</span></button>
+    <button class="nav-item"><i style="font-style:normal;font-size:15px">📊</i><span data-i18n="navMarkets">市场</span></button>
+    <button class="nav-item"><i style="font-style:normal;font-size:15px">💰</i><span data-i18n="navEarn">赚币</span></button>
+    <button class="nav-item"><i style="font-style:normal;font-size:15px">🔍</i><span data-i18n="navDiscover">发现</span></button>
+    <button class="nav-item"><i style="font-style:normal;font-size:15px">👛</i><span data-i18n="navAssets">资产</span></button>
+  </div>
+</nav>
+
+<script>
+/* ── i18n ── */
+var T = {
+  zh: {
+    eyebrow:'Bitget Wallet · 实验性首页', title:'Home Feed',
+    portfolioLabel:'总资产', portfolioChange:'+2.84% 今日',
+    marketPulse:'Risk-on · 偏多',
+    swap:'兑换', buy:'买币', earn:'赚币', discover:'发现',
+    sectionTitle:'正在发生', sectionSub:'热点资讯 × 钱包功能',
+    /* Breaking */
+    breakingLabel:'突发', breakingTitle:'特朗普发布声明伊朗战争很快结束，国际油价迅速跌破 $80',
+    breakingTime:'2 分钟前', breakingSource:'Reuters · 地缘政治快讯', breakingCta:'原油合约交易 →',
+    /* Signal */
+    signalTag:'⚡ AI 信号', signalTime:'5 分钟前',
+    signalBullish:'看多', signalTitle:'巨鲸集中买入 ETH',
+    signalDesc:'过去 1 小时内，12 个巨鲸地址累计增持 $48M ETH，链上资金持续流入，短线看多信号明确。',
+    signalWhales:'鲸鱼数量', signalVolume:'总买入', signalStrength:'信号强度', signalStrengthVal:'强',
+    signalSource:'AI 链上分析引擎', signalCta:'查看 ETH 交易 →',
+    /* Narrative */
+    narrativeTag:'🔥 今日热门叙事', narrativeTime:'刚刚更新',
+    narrativeSource:'Meme 交易热度追踪', narrativeCta:'进入 Meme 交易 →',
+    /* Predict */
+    predictTag:'🎯 预测市场', predictEvent:'今天湖人与勇士巅峰对决',
+    predictMeta:'NBA 季后赛 · 今晚 10:30 开赛',
+    predictTeamA:'Lakers', predictTeamB:'Warriors',
+    predictVolLabel:'交易量 $2.4M', predictVolChange:'24h +18%',
+    predictSource:'Polymarket 热门事件', predictCta:'查看预测市场 →',
+    /* Editorial */
+    editorialBadge:'编辑推荐', editorialKicker:'财报日深度分析',
+    editorialHeadline:'TSMC 财报发布，AI 战车是否能继续狂飙',
+    editorialTag:'📰 深度', editorialTime:'15 分钟前',
+    editorialDesc:'台积电 Q1 财报超预期，AI 芯片需求爆发式增长。本文分析财报亮点、估值空间与 RWA 代币化交易机会。',
+    editorialAuthor:'Wallet Editorial', editorialRead:'4 分钟阅读',
+    editorialSource:'RWA 股票交易', editorialCta:'阅读分析 →',
+    /* Editorial 2: Wallet Card */
+    ed2Badge:'编辑推荐', ed2Kicker:'产品推荐',
+    ed2Headline:'AI 订阅，获得 50% Cashback',
+    ed2Tag:'💳 Wallet Card', ed2Time:'8 分钟前',
+    ed2Desc:'用 Bitget Wallet Card 订阅 ChatGPT、Midjourney 等 AI 服务，即享 50% Cashback，返现直接到账。',
+    ed2Author:'Bitget Wallet', ed2Read:'2 分钟阅读',
+    ed2Source:'Wallet Card · 虚拟卡', ed2Cta:'申请 Wallet Card →',
+    /* Activity: Fomo Thursday */
+    activityTag:'🎉 热点活动', activityCountdown:'⏰ 本周四截止',
+    activityTitle:'Fomo Thursday — 完成 3 个任务，瓜分 100 万',
+    activityTask1:'完成一笔 Swap 交易', activityTask2:'邀请 1 位好友注册', activityTask3:'持有任意 NFT 超过 24h',
+    activitySource:'Fomo Thursday · 每周活动', activityCta:'参与瓜分 →',
+    /* Editorial 3: USDT Travel Pay */
+    ed3Badge:'编辑推荐', ed3Kicker:'出行必备',
+    ed3Headline:'用 USDT/USDC 走遍世界',
+    ed3Tag:'🌏 出行支付', ed3Time:'1 小时前',
+    ed3Desc:'支持日本、泰国、韩国、新加坡等 17 个亚洲国家扫码支付，USDT/USDC 直接消费，无需换汇，到店即扫。',
+    ed3Author:'Bitget Wallet', ed3Read:'3 分钟阅读',
+    ed3Source:'Scan-to-Pay · 扫码支付', ed3Cta:'查看支持地区 →',
+    /* Earn */
+    earnTag:'💰 理财机会', earnTime:'32 分钟前',
+    earnDesc:'赚无风险收益，灵活申赎', earnSource:'Earn · 收益聚合', earnCta:'开始赚取收益 →',
+    /* Nav */
+    navHome:'首页', navMarkets:'市场', navEarn:'赚币', navDiscover:'发现', navAssets:'资产'
+  },
+  en: {
+    eyebrow:'Bitget Wallet · Experimental Home', title:'Home Feed',
+    portfolioLabel:'Portfolio value', portfolioChange:'+2.84% today',
+    marketPulse:'Risk-on · Bullish',
+    swap:'Swap', buy:'Buy', earn:'Earn', discover:'Discover',
+    sectionTitle:'Happening Now', sectionSub:'Hot info × Wallet features',
+    /* Breaking */
+    breakingLabel:'BREAKING', breakingTitle:'Trump announces Iran war ending soon — oil drops below $80',
+    breakingTime:'2 min ago', breakingSource:'Reuters · Geopolitics', breakingCta:'Trade Oil Futures →',
+    /* Signal */
+    signalTag:'⚡ AI Signal', signalTime:'5m ago',
+    signalBullish:'Bullish', signalTitle:'Whale Accumulation on ETH',
+    signalDesc:'12 whale addresses accumulated $48M ETH in the past hour. On-chain inflow surging, short-term bullish signal confirmed.',
+    signalWhales:'Whales', signalVolume:'Total Buy', signalStrength:'Strength', signalStrengthVal:'Strong',
+    signalSource:'AI On-chain Engine', signalCta:'View ETH Trading →',
+    /* Narrative */
+    narrativeTag:'🔥 Hot Narratives', narrativeTime:'Just updated',
+    narrativeSource:'Meme Trading Tracker', narrativeCta:'Enter Meme Trading →',
+    /* Predict */
+    predictTag:'🎯 Prediction', predictEvent:'Lakers vs Warriors — Tonight\'s Showdown',
+    predictMeta:'NBA Playoffs · Tips off 10:30 PM',
+    predictTeamA:'Lakers', predictTeamB:'Warriors',
+    predictVolLabel:'Volume $2.4M', predictVolChange:'24h +18%',
+    predictSource:'Polymarket Hot Events', predictCta:'View Predictions →',
+    /* Editorial */
+    editorialBadge:'Editor\'s Pick', editorialKicker:'Earnings Day Analysis',
+    editorialHeadline:'TSMC Earnings: Can the AI Express Keep Running?',
+    editorialTag:'📰 Deep Dive', editorialTime:'15m ago',
+    editorialDesc:'TSMC Q1 earnings beat expectations. AI chip demand surging. Analysis of highlights, valuation, and RWA tokenized trading opportunities.',
+    editorialAuthor:'Wallet Editorial', editorialRead:'4 min read',
+    editorialSource:'RWA Stock Trading', editorialCta:'Read Analysis →',
+    /* Editorial 2: Wallet Card */
+    ed2Badge:'Editor\'s Pick', ed2Kicker:'Product Highlight',
+    ed2Headline:'AI Subscriptions, 50% Cashback',
+    ed2Tag:'💳 Wallet Card', ed2Time:'8m ago',
+    ed2Desc:'Subscribe to ChatGPT, Midjourney & more AI services with Bitget Wallet Card — get 50% Cashback instantly.',
+    ed2Author:'Bitget Wallet', ed2Read:'2 min read',
+    ed2Source:'Wallet Card · Virtual Card', ed2Cta:'Apply for Card →',
+    /* Activity: Fomo Thursday */
+    activityTag:'🎉 Hot Event', activityCountdown:'⏰ Ends Thursday',
+    activityTitle:'Fomo Thursday — Complete 3 Tasks, Split 1M',
+    activityTask1:'Complete a Swap trade', activityTask2:'Invite 1 friend to sign up', activityTask3:'Hold any NFT for 24h+',
+    activitySource:'Fomo Thursday · Weekly Event', activityCta:'Join Now →',
+    /* Editorial 3: USDT Travel Pay */
+    ed3Badge:'Editor\'s Pick', ed3Kicker:'Travel Essential',
+    ed3Headline:'Pay with USDT/USDC Worldwide',
+    ed3Tag:'🌏 Travel Pay', ed3Time:'1h ago',
+    ed3Desc:'Scan-to-pay in 17 Asian countries including Japan, Thailand, Korea & Singapore. Spend USDT/USDC directly — no FX needed.',
+    ed3Author:'Bitget Wallet', ed3Read:'3 min read',
+    ed3Source:'Scan-to-Pay', ed3Cta:'View Supported Regions →',
+    /* Earn */
+    earnTag:'💰 Earn', earnTime:'32m ago',
+    earnDesc:'Earn risk-free yield, flexible redemption', earnSource:'Earn · Yield Aggregator', earnCta:'Start Earning →',
+    /* Nav */
+    navHome:'Home', navMarkets:'Markets', navEarn:'Earn', navDiscover:'Discover', navAssets:'Assets'
+  }
+};
+
+function applyI18n(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  localStorage.setItem('vibecoding_lang_vnext', lang);
+  var dict = T[lang] || T.zh;
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (dict[key] != null) el.textContent = dict[key];
+  });
+  var btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'zh' ? '中' : 'EN';
+}
+
+function toggleTheme() {
+  var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('vibecoding_theme_vnext', next);
+}
+
+function toggleLang() {
+  var next = document.documentElement.getAttribute('data-lang') === 'zh' ? 'en' : 'zh';
+  applyI18n(next);
+}
+
+document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+document.getElementById('langToggle').addEventListener('click', toggleLang);
+applyI18n(document.documentElement.getAttribute('data-lang') || 'zh');
+</script>
+</body>
+</html>
