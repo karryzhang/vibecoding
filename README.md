@@ -8,6 +8,8 @@
 
 ### 2026-03-10
 
+- Visual: 升级全部 10 张卡片插画至 App Store 编辑推荐品质
+- Style: Apple HIG 设计规范全面优化，提升视觉一致性
 - Reorder: wallet-home-feed 卡片按时间倒序排列
 - 新增 Banner 广告位、副标题文案优化、KOL 观点卡片
 - Visual: 强化卡片内容图形设计，提升沉浸式体验
