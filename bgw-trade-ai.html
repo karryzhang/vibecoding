@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BGW Trade × AI 战略方案</title>
+    <title>BGW TradeAI 战略方案</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -52,7 +52,6 @@
             z-index: 1;
         }
 
-        /* Language Toggle */
         .lang-toggle {
             position: fixed;
             top: 20px;
@@ -83,7 +82,6 @@
             color: var(--black);
         }
 
-        /* Header */
         header {
             padding: 100px 0 60px;
             text-align: center;
@@ -121,7 +119,6 @@
             transform: rotate(1deg);
         }
 
-        /* Sections */
         section { padding: 50px 0; }
 
         .section-card {
@@ -182,7 +179,6 @@
 
         strong { background: var(--yellow); padding: 0 4px; }
 
-        /* Core Box */
         .core-box {
             font-size: 18px;
             font-weight: 600;
@@ -198,7 +194,6 @@
         .core-box.action { border-left: 8px solid var(--green); }
         .core-box.warning { border-left: 8px solid var(--orange); }
 
-        /* Grid Cards */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -228,7 +223,6 @@
         .card .title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
         .card .desc { font-size: 14px; opacity: 0.85; }
 
-        /* Feature List */
         .feature-list {
             list-style: none;
             margin: 16px 0;
@@ -252,7 +246,79 @@
             font-size: 18px;
         }
 
-        /* Timeline */
+        /* Evolution Steps */
+        .evolution {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 32px 0;
+            position: relative;
+        }
+
+        .evolution::before {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 40px;
+            bottom: 40px;
+            width: 6px;
+            background: repeating-linear-gradient(0deg, var(--pink) 0px, var(--pink) 15px, var(--blue) 15px, var(--blue) 30px, var(--green) 30px, var(--green) 45px);
+            border-radius: 3px;
+        }
+
+        .evolution-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            padding: 20px 0;
+        }
+
+        .evolution-step .number {
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .evolution-step:nth-child(2) .number { background: var(--blue); }
+        .evolution-step:nth-child(3) .number { background: var(--green); }
+
+        .evolution-step .content {
+            flex: 1;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .evolution-step .phase {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--white);
+            background: var(--purple);
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .evolution-step:nth-child(2) .phase { background: var(--blue); color: var(--black); }
+        .evolution-step:nth-child(3) .phase { background: var(--green); color: var(--black); }
+
+        .evolution-step .title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+        .evolution-step .tagline { font-size: 15px; color: var(--purple); font-weight: 600; margin-bottom: 8px; }
+        .evolution-step .desc { font-size: 14px; opacity: 0.8; }
+
         .timeline {
             position: relative;
             padding-left: 40px;
@@ -323,7 +389,6 @@
             border-radius: 20px;
         }
 
-        /* Table */
         .data-table {
             width: 100%;
             border-collapse: separate;
@@ -351,7 +416,6 @@
 
         .data-table td { font-size: 14px; }
 
-        /* Highlight Box */
         .highlight-box {
             background: var(--purple);
             color: var(--white);
@@ -366,7 +430,6 @@
         .highlight-box .big { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
         .highlight-box .sub { font-size: 16px; opacity: 0.9; }
 
-        /* Quote */
         .quote {
             font-size: 20px;
             font-weight: 600;
@@ -377,6 +440,7 @@
             margin: 28px 0;
             transform: rotate(-0.5deg);
             position: relative;
+            text-align: center;
         }
 
         .quote::before {
@@ -388,7 +452,6 @@
             font-family: Georgia, serif;
         }
 
-        /* Part Divider */
         .part-divider {
             text-align: center;
             padding: 60px 0 40px;
@@ -405,7 +468,6 @@
             box-shadow: 6px 6px 0 var(--purple);
         }
 
-        /* Conclusion */
         .conclusion {
             background: var(--yellow);
             border: 4px solid var(--black);
@@ -437,7 +499,6 @@
             transform: rotate(-2deg);
         }
 
-        /* Footer */
         footer {
             padding: 40px 0;
             text-align: center;
@@ -454,7 +515,6 @@
             display: inline-block;
         }
 
-        /* Responsive */
         @media (max-width: 640px) {
             header { padding: 80px 0 40px; }
             section { padding: 30px 0; }
@@ -466,9 +526,11 @@
             .timeline-item::before { left: -28px; width: 18px; height: 18px; }
             .lang-toggle { top: 12px; right: 12px; }
             .lang-btn { padding: 6px 12px; font-size: 12px; }
+            .evolution::before { left: 24px; }
+            .evolution-step { gap: 16px; }
+            .evolution-step .number { width: 48px; height: 48px; min-width: 48px; font-size: 20px; }
         }
 
-        /* Language */
         [data-lang="en"] { display: none; }
         html[lang="en"] [data-lang="zh"] { display: none; }
         html[lang="en"] [data-lang="en"] { display: block; }
@@ -505,16 +567,88 @@
                 <span data-lang="zh">🎯 产品 × 品牌方案</span>
                 <span data-lang="en">🎯 Product × Brand Plan</span>
             </div>
-            <h1>Trade × AI</h1>
+            <h1>BGW TradeAI</h1>
             <p class="subtitle">
-                <span data-lang="zh">让 BGW 成为「交易前先问 AI」的第一心智</span>
-                <span data-lang="en">Make BGW the First Choice for "Ask AI Before Trading"</span>
+                <span data-lang="zh">从看懂到做好，全程陪你</span>
+                <span data-lang="en">From Understanding to Execution, With You All the Way</span>
             </p>
             <p style="font-size: 14px; opacity: 0.7;">2026-03-16 · v1.0</p>
         </div>
     </header>
 
     <main>
+        <!-- Core Concept -->
+        <section>
+            <div class="container">
+                <div class="section-card pink">
+                    <h2>
+                        <span data-lang="zh">🎯 核心概念</span>
+                        <span data-lang="en">🎯 Core Concept</span>
+                    </h2>
+
+                    <div class="highlight-box">
+                        <div class="big" data-lang="zh">BGW TradeAI</div>
+                        <div class="big" data-lang="en">BGW TradeAI</div>
+                        <div class="sub" data-lang="zh">你的链上交易 AI 搭档 — 从看懂到做好，全程陪你</div>
+                        <div class="sub" data-lang="en">Your On-chain Trading AI Partner — From Understanding to Execution</div>
+                    </div>
+
+                    <h3 data-lang="zh">概念澄清：不是替你做，是陪你做</h3>
+                    <h3 data-lang="en">Concept Clarification: Not Doing For You, But With You</h3>
+
+                    <p data-lang="zh">TradeAI 不是「自主交易机器人」，而是一个<strong>渐进式的交易伙伴</strong>：</p>
+                    <p data-lang="en">TradeAI is not an "autonomous trading bot," but a <strong>progressive trading partner</strong>:</p>
+
+                    <div class="evolution">
+                        <div class="evolution-step">
+                            <div class="number">1</div>
+                            <div class="content">
+                                <div class="phase" data-lang="zh">第一阶段</div>
+                                <div class="phase" data-lang="en">Phase 1</div>
+                                <div class="title" data-lang="zh">帮你看懂</div>
+                                <div class="title" data-lang="en">Help You Understand</div>
+                                <div class="tagline" data-lang="zh">「交易前，先问 TradeAI」</div>
+                                <div class="tagline" data-lang="en">"Before trading, ask TradeAI"</div>
+                                <div class="desc" data-lang="zh">AI 分析数据、识别风险、解读市场 → 你自己做决定</div>
+                                <div class="desc" data-lang="en">AI analyzes data, identifies risks, interprets market → You decide</div>
+                            </div>
+                        </div>
+                        <div class="evolution-step">
+                            <div class="number">2</div>
+                            <div class="content">
+                                <div class="phase" data-lang="zh">第二阶段</div>
+                                <div class="phase" data-lang="en">Phase 2</div>
+                                <div class="title" data-lang="zh">帮你想好</div>
+                                <div class="title" data-lang="en">Help You Decide</div>
+                                <div class="tagline" data-lang="zh">「不知道怎么办？TradeAI 给你建议」</div>
+                                <div class="tagline" data-lang="en">"Not sure what to do? TradeAI gives advice"</div>
+                                <div class="desc" data-lang="zh">AI 根据你的持仓和偏好，给出具体操作建议 → 你点击确认</div>
+                                <div class="desc" data-lang="en">AI gives specific advice based on your holdings and preferences → You confirm</div>
+                            </div>
+                        </div>
+                        <div class="evolution-step">
+                            <div class="number">3</div>
+                            <div class="content">
+                                <div class="phase" data-lang="zh">第三阶段</div>
+                                <div class="phase" data-lang="en">Phase 3</div>
+                                <div class="title" data-lang="zh">帮你做好</div>
+                                <div class="title" data-lang="en">Help You Execute</div>
+                                <div class="tagline" data-lang="zh">「一句话，TradeAI 帮你搞定」</div>
+                                <div class="tagline" data-lang="en">"One sentence, TradeAI handles it"</div>
+                                <div class="desc" data-lang="zh">你说意图，AI 在你授权范围内执行 → 你随时监控和叫停</div>
+                                <div class="desc" data-lang="en">You state intent, AI executes within your authorized scope → You monitor and can stop anytime</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="core-box insight">
+                        <span data-lang="zh"><strong>核心逻辑</strong>：用户信任是渐进的。先当顾问，再当助手，最后才是代理。每一步都由用户主动开启更高权限。</span>
+                        <span data-lang="en"><strong>Core Logic</strong>: User trust is progressive. First be an advisor, then assistant, finally agent. Each step is user-initiated.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Part A: Product -->
         <div class="part-divider">
             <div class="container">
@@ -527,100 +661,61 @@
 
         <section>
             <div class="container">
-                <div class="section-card pink">
-                    <h2>
-                        <span data-lang="zh">🎯 核心定位</span>
-                        <span data-lang="en">🎯 Core Positioning</span>
-                    </h2>
-
-                    <div class="core-box insight">
-                        <span data-lang="zh"><strong>BGW TradeGPT</strong> — 你的链上交易 AI 搭档<br>从「告诉我怎么做」到「帮我做」</span>
-                        <span data-lang="en"><strong>BGW TradeGPT</strong> — Your On-chain Trading AI Partner<br>From "Tell me how" to "Do it for me"</span>
-                    </div>
-
-                    <h3 data-lang="zh">用户痛点 → AI 解决方案</h3>
-                    <h3 data-lang="en">User Pain Points → AI Solutions</h3>
-
-                    <div class="card-grid">
-                        <div class="card">
-                            <div class="icon">❓</div>
-                            <div class="title" data-lang="zh">不知道买什么</div>
-                            <div class="title" data-lang="en">Don't know what to buy</div>
-                            <div class="desc" data-lang="zh">→ AI 实时分析链上数据 + 社交情绪 + 巨鲸动向</div>
-                            <div class="desc" data-lang="en">→ AI analyzes on-chain data + social sentiment + whale movements</div>
-                        </div>
-                        <div class="card">
-                            <div class="icon">⏰</div>
-                            <div class="title" data-lang="zh">不知道什么时候买</div>
-                            <div class="title" data-lang="en">Don't know when to buy</div>
-                            <div class="desc" data-lang="zh">→ AI 基于技术指标 + 市场情绪给出具体时机建议</div>
-                            <div class="desc" data-lang="en">→ AI gives timing advice based on technicals + market sentiment</div>
-                        </div>
-                        <div class="card">
-                            <div class="icon">😰</div>
-                            <div class="title" data-lang="zh">不知道会不会亏</div>
-                            <div class="title" data-lang="en">Don't know if I'll lose</div>
-                            <div class="desc" data-lang="zh">→ AI 风险评估 + Rug 预警 + 持仓分布分析</div>
-                            <div class="desc" data-lang="en">→ AI risk assessment + Rug alerts + holder distribution analysis</div>
-                        </div>
-                        <div class="card">
-                            <div class="icon">🔧</div>
-                            <div class="title" data-lang="zh">操作太复杂</div>
-                            <div class="title" data-lang="en">Too complex to execute</div>
-                            <div class="desc" data-lang="zh">→ AI 自动选最优路径、设滑点、分批执行</div>
-                            <div class="desc" data-lang="en">→ AI auto-selects best route, sets slippage, batch executes</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
                 <div class="section-card yellow">
                     <h2>
-                        <span data-lang="zh">🧠 产品功能架构</span>
-                        <span data-lang="en">🧠 Product Feature Architecture</span>
+                        <span data-lang="zh">🧠 三层功能架构</span>
+                        <span data-lang="en">🧠 Three-Layer Feature Architecture</span>
                     </h2>
 
-                    <h3 data-lang="zh">Layer 1：信息层 — AI 帮你看懂</h3>
-                    <h3 data-lang="en">Layer 1: Information — AI Helps You Understand</h3>
+                    <h3 data-lang="zh">Layer 1：看懂层 — AI 帮你分析</h3>
+                    <h3 data-lang="en">Layer 1: Understanding — AI Analyzes For You</h3>
+                    <p data-lang="zh" style="color: var(--purple); font-weight: 600;">「交易前，先问 TradeAI」</p>
+                    <p data-lang="en" style="color: var(--purple); font-weight: 600;">"Before trading, ask TradeAI"</p>
                     <ul class="feature-list">
-                        <li data-lang="zh"><strong>Token 智能分析</strong>：输入任意币，一句话总结「值不值得买」</li>
-                        <li data-lang="en"><strong>Token Smart Analysis</strong>: Enter any token, get one-line verdict on "worth buying or not"</li>
-                        <li data-lang="zh"><strong>链上透视</strong>：聪明钱流向、内部人买卖、巨鲸持仓变化</li>
-                        <li data-lang="en"><strong>On-chain X-ray</strong>: Smart money flow, insider trades, whale position changes</li>
-                        <li data-lang="zh"><strong>风险雷达</strong>：合约漏洞、Rug 风险评分、社交异常检测</li>
-                        <li data-lang="en"><strong>Risk Radar</strong>: Contract vulnerabilities, Rug risk score, social anomaly detection</li>
-                        <li data-lang="zh"><strong>实时舆情</strong>：Twitter/Telegram 情绪分析 + KOL 动向追踪</li>
-                        <li data-lang="en"><strong>Real-time Sentiment</strong>: Twitter/Telegram sentiment + KOL movement tracking</li>
+                        <li data-lang="zh"><strong>Token 快速分析</strong>：输入任意币，AI 一句话总结「什么情况」</li>
+                        <li data-lang="en"><strong>Quick Token Analysis</strong>: Enter any token, AI summarizes "what's the situation" in one line</li>
+                        <li data-lang="zh"><strong>链上透视</strong>：聪明钱流向、内部人买卖、持仓集中度</li>
+                        <li data-lang="en"><strong>On-chain X-ray</strong>: Smart money flow, insider trades, holder concentration</li>
+                        <li data-lang="zh"><strong>风险雷达</strong>：合约风险评分、Rug 概率、社交异常</li>
+                        <li data-lang="en"><strong>Risk Radar</strong>: Contract risk score, Rug probability, social anomalies</li>
+                        <li data-lang="zh"><strong>市场情绪</strong>：Twitter/Telegram 情绪分析 + KOL 观点汇总</li>
+                        <li data-lang="en"><strong>Market Sentiment</strong>: Twitter/Telegram sentiment + KOL opinion summary</li>
                     </ul>
 
-                    <h3 data-lang="zh">Layer 2：决策层 — AI 帮你判断</h3>
-                    <h3 data-lang="en">Layer 2: Decision — AI Helps You Decide</h3>
+                    <h3 data-lang="zh">Layer 2：建议层 — AI 帮你判断</h3>
+                    <h3 data-lang="en">Layer 2: Advisory — AI Helps You Decide</h3>
+                    <p data-lang="zh" style="color: var(--blue); font-weight: 600;">「不确定的时候，TradeAI 给你建议」</p>
+                    <p data-lang="en" style="color: var(--blue); font-weight: 600;">"When uncertain, TradeAI gives advice"</p>
                     <ul class="feature-list">
-                        <li data-lang="zh"><strong>个性化建议</strong>：基于你的持仓 + 风险偏好 + 市场状态，给出具体操作建议</li>
-                        <li data-lang="en"><strong>Personalized Advice</strong>: Based on your holdings + risk preference + market state, give specific action advice</li>
-                        <li data-lang="zh"><strong>仓位管理</strong>：「你现在应该卖掉 30%，理由是…」</li>
-                        <li data-lang="en"><strong>Position Management</strong>: "You should sell 30% now, because..."</li>
-                        <li data-lang="zh"><strong>时机提醒</strong>：「ETH 跌到 $2800 时建议加仓」</li>
-                        <li data-lang="en"><strong>Timing Alerts</strong>: "Suggest adding when ETH drops to $2800"</li>
-                        <li data-lang="zh"><strong>组合优化</strong>：「你的仓位过于集中 Meme，建议分散」</li>
-                        <li data-lang="en"><strong>Portfolio Optimization</strong>: "Your position is too Meme-heavy, suggest diversifying"</li>
+                        <li data-lang="zh"><strong>个性化建议</strong>：基于你的持仓 + 风险偏好，给出「现在应该怎么做」</li>
+                        <li data-lang="en"><strong>Personalized Advice</strong>: Based on your holdings + risk preference, "what you should do now"</li>
+                        <li data-lang="zh"><strong>仓位提醒</strong>：「你的 XX 占比过高，建议分散」</li>
+                        <li data-lang="en"><strong>Position Alerts</strong>: "Your XX allocation is too high, suggest diversifying"</li>
+                        <li data-lang="zh"><strong>时机提示</strong>：「ETH 跌到 $2800 可以考虑加仓」（你自己决定是否操作）</li>
+                        <li data-lang="en"><strong>Timing Tips</strong>: "Consider adding when ETH drops to $2800" (you decide whether to act)</li>
+                        <li data-lang="zh"><strong>风险预警</strong>：「检测到异常，建议立即检查」</li>
+                        <li data-lang="en"><strong>Risk Warnings</strong>: "Anomaly detected, recommend checking immediately"</li>
                     </ul>
 
-                    <h3 data-lang="zh">Layer 3：执行层 — AI 帮你做</h3>
-                    <h3 data-lang="en">Layer 3: Execution — AI Does It For You</h3>
+                    <h3 data-lang="zh">Layer 3：执行层 — AI 帮你操作（需授权）</h3>
+                    <h3 data-lang="en">Layer 3: Execution — AI Operates For You (Requires Auth)</h3>
+                    <p data-lang="zh" style="color: var(--green); font-weight: 600;">「说一句话，TradeAI 帮你搞定」</p>
+                    <p data-lang="en" style="color: var(--green); font-weight: 600;">"Say one sentence, TradeAI handles it"</p>
                     <ul class="feature-list">
-                        <li data-lang="zh"><strong>意图交易</strong>：「帮我买 1000U ETH，分 3 次，每跌 2% 买一次」</li>
-                        <li data-lang="en"><strong>Intent Trading</strong>: "Buy $1000 ETH for me, in 3 batches, buy each time it drops 2%"</li>
-                        <li data-lang="zh"><strong>智能路由</strong>：自动选择 Gas 最低、滑点最小的执行路径</li>
-                        <li data-lang="en"><strong>Smart Routing</strong>: Auto-select path with lowest gas and slippage</li>
-                        <li data-lang="zh"><strong>跨链执行</strong>：「把 Base 上的 USDC 换成 Solana 上的 SOL」</li>
-                        <li data-lang="en"><strong>Cross-chain Execution</strong>: "Swap USDC on Base to SOL on Solana"</li>
-                        <li data-lang="zh"><strong>条件单</strong>：止盈止损、价格触发、时间触发</li>
-                        <li data-lang="en"><strong>Conditional Orders</strong>: Take-profit/stop-loss, price triggers, time triggers</li>
+                        <li data-lang="zh"><strong>意图执行</strong>：「帮我买 500U ETH，分两次买」→ AI 规划 + 你确认 → 执行</li>
+                        <li data-lang="en"><strong>Intent Execution</strong>: "Buy $500 ETH for me, in two batches" → AI plans + You confirm → Execute</li>
+                        <li data-lang="zh"><strong>条件单</strong>：「如果跌到 $2700 帮我加仓」→ 设置后自动监控和执行</li>
+                        <li data-lang="en"><strong>Conditional Orders</strong>: "Add position if it drops to $2700" → Set up auto-monitoring and execution</li>
+                        <li data-lang="zh"><strong>智能路由</strong>：AI 自动选最优 Gas、最小滑点路径</li>
+                        <li data-lang="en"><strong>Smart Routing</strong>: AI auto-selects optimal gas, minimum slippage path</li>
+                        <li data-lang="zh"><strong>权限控制</strong>：用户设置单笔上限、日上限、可操作币种白名单</li>
+                        <li data-lang="en"><strong>Permission Control</strong>: User sets per-trade limit, daily limit, token whitelist</li>
                     </ul>
+
+                    <div class="core-box warning">
+                        <span data-lang="zh">⚠️ <strong>关键设计</strong>：执行层是「可选开启」的高级功能，默认关闭。用户必须主动授权、设置限额后才能使用。AI 永远不会在未授权情况下操作用户资产。</span>
+                        <span data-lang="en">⚠️ <strong>Key Design</strong>: Execution layer is an "opt-in" advanced feature, off by default. Users must actively authorize and set limits before use. AI will never operate user assets without authorization.</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -629,66 +724,66 @@
             <div class="container">
                 <div class="section-card blue">
                     <h2>
-                        <span data-lang="zh">🎮 杀手级场景：Meme 交易</span>
-                        <span data-lang="en">🎮 Killer Use Case: Meme Trading</span>
+                        <span data-lang="zh">🎮 首发场景：Meme 交易</span>
+                        <span data-lang="en">🎮 Launch Scenario: Meme Trading</span>
                     </h2>
 
                     <div class="core-box action">
-                        <span data-lang="zh">为什么先打 Meme？<br>信息最不对称 + 决策窗口最短 + 最需要 AI 速度 + BGW 用户重叠度高</span>
-                        <span data-lang="en">Why Meme First?<br>Highest info asymmetry + Shortest decision window + Most need for AI speed + High overlap with BGW users</span>
+                        <span data-lang="zh">为什么先打 Meme？<br>→ 信息最不对称（最需要 AI 分析）<br>→ 风险最高（最需要 AI 预警）<br>→ 决策最快（最需要 AI 速度）<br>→ BGW 用户重叠度高</span>
+                        <span data-lang="en">Why Meme First?<br>→ Highest info asymmetry (most need for AI analysis)<br>→ Highest risk (most need for AI warnings)<br>→ Fastest decisions (most need for AI speed)<br>→ High overlap with BGW users</span>
                     </div>
 
-                    <h3 data-lang="zh">Meme AI 功能包</h3>
-                    <h3 data-lang="en">Meme AI Feature Pack</h3>
+                    <h3 data-lang="zh">Meme 场景功能包</h3>
+                    <h3 data-lang="en">Meme Scenario Feature Pack</h3>
 
                     <div class="card-grid">
                         <div class="card">
                             <div class="icon">🔍</div>
-                            <div class="title" data-lang="zh">新币狙击</div>
-                            <div class="title" data-lang="en">New Token Sniper</div>
-                            <div class="desc" data-lang="zh">实时监控 Pump.fun / Moonshot，AI 评分筛选高潜力币</div>
-                            <div class="desc" data-lang="en">Real-time monitoring of Pump.fun / Moonshot, AI scoring for high-potential tokens</div>
+                            <div class="title" data-lang="zh">新币速览</div>
+                            <div class="title" data-lang="en">New Token Overview</div>
+                            <div class="desc" data-lang="zh">实时监控 Pump.fun / Moonshot，AI 快速评分</div>
+                            <div class="desc" data-lang="en">Real-time monitoring of Pump.fun / Moonshot, AI quick scoring</div>
                         </div>
                         <div class="card">
                             <div class="icon">🚨</div>
                             <div class="title" data-lang="zh">Rug 预警</div>
                             <div class="title" data-lang="en">Rug Alert</div>
-                            <div class="desc" data-lang="zh">开发者钱包异动、流动性撤离、合约权限变更实时告警</div>
-                            <div class="desc" data-lang="en">Real-time alerts for dev wallet moves, liquidity pulls, contract permission changes</div>
+                            <div class="desc" data-lang="zh">开发者钱包异动、流动性撤离实时告警</div>
+                            <div class="desc" data-lang="en">Real-time alerts for dev wallet moves, liquidity pulls</div>
                         </div>
                         <div class="card">
                             <div class="icon">🐋</div>
                             <div class="title" data-lang="zh">聪明钱追踪</div>
-                            <div class="title" data-lang="en">Smart Money Tracking</div>
-                            <div class="desc" data-lang="zh">标记并追踪历史胜率高的钱包，跟单提醒</div>
-                            <div class="desc" data-lang="en">Tag and track wallets with high win rates, copy-trade alerts</div>
+                            <div class="title" data-lang="en">Smart Money Track</div>
+                            <div class="desc" data-lang="zh">标记高胜率钱包，动向提醒</div>
+                            <div class="desc" data-lang="en">Tag high win-rate wallets, movement alerts</div>
                         </div>
                         <div class="card">
                             <div class="icon">📊</div>
                             <div class="title" data-lang="zh">热度排行</div>
                             <div class="title" data-lang="en">Trending Ranking</div>
-                            <div class="desc" data-lang="zh">社交热度 × 链上活跃度 × 持仓分布综合排名</div>
-                            <div class="desc" data-lang="en">Combined ranking: Social buzz × On-chain activity × Holder distribution</div>
+                            <div class="desc" data-lang="zh">社交热度 × 链上活跃度综合排名</div>
+                            <div class="desc" data-lang="en">Combined ranking: Social buzz × On-chain activity</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">💡</div>
+                            <div class="title" data-lang="zh">买卖建议</div>
+                            <div class="title" data-lang="en">Buy/Sell Advice</div>
+                            <div class="desc" data-lang="zh">「涨了 5x，可以考虑先出一部分」</div>
+                            <div class="desc" data-lang="en">"Up 5x, consider taking some profit"</div>
                         </div>
                         <div class="card">
                             <div class="icon">⚡</div>
-                            <div class="title" data-lang="zh">一键买入</div>
-                            <div class="title" data-lang="en">One-click Buy</div>
-                            <div class="desc" data-lang="zh">看到信号，一键买入，自动设置滑点和 Gas</div>
-                            <div class="desc" data-lang="en">See signal, one-click buy, auto-set slippage and gas</div>
-                        </div>
-                        <div class="card">
-                            <div class="icon">🎯</div>
-                            <div class="title" data-lang="zh">AI 止盈建议</div>
-                            <div class="title" data-lang="en">AI Take-profit Advice</div>
-                            <div class="desc" data-lang="zh">「已涨 5x，建议先出 50%」</div>
-                            <div class="desc" data-lang="en">"Up 5x already, suggest taking 50% profit"</div>
+                            <div class="title" data-lang="zh">快速交易</div>
+                            <div class="title" data-lang="en">Quick Trade</div>
+                            <div class="desc" data-lang="zh">看完分析，一键跳转交易（用户自己点）</div>
+                            <div class="desc" data-lang="en">After analysis, one-click to trade (user clicks)</div>
                         </div>
                     </div>
 
                     <div class="quote">
-                        <span data-lang="zh">口号：「Meme 交易，先问 BGW AI」</span>
-                        <span data-lang="en">Tagline: "Meme Trading? Ask BGW AI First"</span>
+                        <span data-lang="zh">「Meme 交易，先问 TradeAI」</span>
+                        <span data-lang="en">"Meme Trading? Ask TradeAI First"</span>
                     </div>
                 </div>
             </div>
@@ -705,11 +800,11 @@
                     <div class="timeline">
                         <div class="timeline-item">
                             <div class="phase">Phase 1 · Month 1-2</div>
-                            <div class="title" data-lang="zh">MVP：Meme AI 分析</div>
-                            <div class="title" data-lang="en">MVP: Meme AI Analysis</div>
+                            <div class="title" data-lang="zh">看懂层 MVP</div>
+                            <div class="title" data-lang="en">Understanding Layer MVP</div>
                             <div class="tag-list">
-                                <span class="tag" data-lang="zh">Token 智能分析</span>
-                                <span class="tag" data-lang="en">Token Smart Analysis</span>
+                                <span class="tag" data-lang="zh">Token 分析</span>
+                                <span class="tag" data-lang="en">Token Analysis</span>
                                 <span class="tag" data-lang="zh">风险评分</span>
                                 <span class="tag" data-lang="en">Risk Scoring</span>
                                 <span class="tag" data-lang="zh">链上透视</span>
@@ -720,108 +815,48 @@
                         </div>
                         <div class="timeline-item p2">
                             <div class="phase">Phase 2 · Month 3-4</div>
-                            <div class="title" data-lang="zh">进阶：决策辅助</div>
-                            <div class="title" data-lang="en">Advanced: Decision Support</div>
+                            <div class="title" data-lang="zh">建议层上线</div>
+                            <div class="title" data-lang="en">Advisory Layer Launch</div>
                             <div class="tag-list">
                                 <span class="tag" data-lang="zh">个性化建议</span>
                                 <span class="tag" data-lang="en">Personalized Advice</span>
-                                <span class="tag" data-lang="zh">Rug 预警</span>
-                                <span class="tag" data-lang="en">Rug Alerts</span>
-                                <span class="tag" data-lang="zh">聪明钱追踪</span>
-                                <span class="tag" data-lang="en">Smart Money Track</span>
                                 <span class="tag" data-lang="zh">时机提醒</span>
                                 <span class="tag" data-lang="en">Timing Alerts</span>
+                                <span class="tag" data-lang="zh">Rug 预警</span>
+                                <span class="tag" data-lang="en">Rug Alerts</span>
+                                <span class="tag" data-lang="zh">仓位分析</span>
+                                <span class="tag" data-lang="en">Position Analysis</span>
                             </div>
                         </div>
                         <div class="timeline-item p3">
                             <div class="phase">Phase 3 · Month 5-6</div>
-                            <div class="title" data-lang="zh">高阶：AI 执行</div>
-                            <div class="title" data-lang="en">Pro: AI Execution</div>
+                            <div class="title" data-lang="zh">执行层开放（Beta）</div>
+                            <div class="title" data-lang="en">Execution Layer (Beta)</div>
                             <div class="tag-list">
                                 <span class="tag" data-lang="zh">意图交易</span>
                                 <span class="tag" data-lang="en">Intent Trading</span>
                                 <span class="tag" data-lang="zh">条件单</span>
                                 <span class="tag" data-lang="en">Conditional Orders</span>
-                                <span class="tag" data-lang="zh">跨链执行</span>
-                                <span class="tag" data-lang="en">Cross-chain Exec</span>
-                                <span class="tag" data-lang="zh">自动止盈止损</span>
-                                <span class="tag" data-lang="en">Auto TP/SL</span>
+                                <span class="tag" data-lang="zh">权限控制</span>
+                                <span class="tag" data-lang="en">Permission Control</span>
+                                <span class="tag" data-lang="zh">智能路由</span>
+                                <span class="tag" data-lang="en">Smart Routing</span>
                             </div>
                         </div>
                         <div class="timeline-item p4">
                             <div class="phase">Phase 4 · Month 7+</div>
-                            <div class="title" data-lang="zh">生态：AI 开放平台</div>
-                            <div class="title" data-lang="en">Ecosystem: AI Open Platform</div>
+                            <div class="title" data-lang="zh">生态扩展</div>
+                            <div class="title" data-lang="en">Ecosystem Expansion</div>
                             <div class="tag-list">
-                                <span class="tag" data-lang="zh">策略市场</span>
-                                <span class="tag" data-lang="en">Strategy Market</span>
+                                <span class="tag" data-lang="zh">更多场景（DeFi/NFT）</span>
+                                <span class="tag" data-lang="en">More Scenarios (DeFi/NFT)</span>
                                 <span class="tag" data-lang="zh">API 开放</span>
                                 <span class="tag" data-lang="en">API Access</span>
-                                <span class="tag" data-lang="zh">第三方 AI 接入</span>
-                                <span class="tag" data-lang="en">3rd Party AI Integration</span>
+                                <span class="tag" data-lang="zh">策略市场</span>
+                                <span class="tag" data-lang="en">Strategy Market</span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="section-card green">
-                    <h2>
-                        <span data-lang="zh">⚙️ 技术架构</span>
-                        <span data-lang="en">⚙️ Technical Architecture</span>
-                    </h2>
-
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th data-lang="zh">模块</th>
-                                <th data-lang="en">Module</th>
-                                <th data-lang="zh">技术方案</th>
-                                <th data-lang="en">Tech Stack</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td data-lang="zh">LLM 推理</td>
-                                <td data-lang="en">LLM Inference</td>
-                                <td data-lang="zh">Claude API + 本地微调模型（交易特化）</td>
-                                <td data-lang="en">Claude API + Fine-tuned local model (trading-specialized)</td>
-                            </tr>
-                            <tr>
-                                <td data-lang="zh">链上数据</td>
-                                <td data-lang="en">On-chain Data</td>
-                                <td data-lang="zh">Dune + Flipside + 自建索引器</td>
-                                <td data-lang="en">Dune + Flipside + Self-built indexer</td>
-                            </tr>
-                            <tr>
-                                <td data-lang="zh">社交情绪</td>
-                                <td data-lang="en">Social Sentiment</td>
-                                <td data-lang="zh">Twitter API + Telegram Bot + LunarCrush</td>
-                                <td data-lang="en">Twitter API + Telegram Bot + LunarCrush</td>
-                            </tr>
-                            <tr>
-                                <td data-lang="zh">风险检测</td>
-                                <td data-lang="en">Risk Detection</td>
-                                <td data-lang="zh">GoPlus + 自研合约分析器</td>
-                                <td data-lang="en">GoPlus + Proprietary contract analyzer</td>
-                            </tr>
-                            <tr>
-                                <td data-lang="zh">执行引擎</td>
-                                <td data-lang="en">Execution Engine</td>
-                                <td data-lang="zh">BGW 现有 Swap + Bridge + 新增条件单模块</td>
-                                <td data-lang="en">BGW existing Swap + Bridge + New conditional order module</td>
-                            </tr>
-                            <tr>
-                                <td data-lang="zh">权限控制</td>
-                                <td data-lang="en">Permission Control</td>
-                                <td data-lang="zh">分级授权：只读 → 建议 → 受限执行 → 完全执行</td>
-                                <td data-lang="en">Tiered auth: Read-only → Suggest → Limited exec → Full exec</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </section>
@@ -847,42 +882,40 @@
                     <div class="highlight-box">
                         <div class="big" data-lang="zh">目标心智</div>
                         <div class="big" data-lang="en">Target Mind Share</div>
-                        <div class="sub" data-lang="zh">「交易之前，先问 BGW AI」</div>
-                        <div class="sub" data-lang="en">"Before Trading, Ask BGW AI First"</div>
+                        <div class="sub" data-lang="zh">「交易前，先问 TradeAI」</div>
+                        <div class="sub" data-lang="en">"Before Trading, Ask TradeAI First"</div>
                     </div>
 
-                    <h3 data-lang="zh">四大心智锚点</h3>
-                    <h3 data-lang="en">Four Mental Anchors</h3>
+                    <h3 data-lang="zh">心智演进路径</h3>
+                    <h3 data-lang="en">Mind Share Evolution Path</h3>
 
                     <div class="card-grid">
                         <div class="card">
-                            <div class="icon">🏷️</div>
-                            <div class="title" data-lang="zh">专属概念</div>
-                            <div class="title" data-lang="en">Owned Concept</div>
-                            <div class="desc" data-lang="zh"><strong>BGW TradeGPT</strong> — 独占性词汇，让用户说「我问问 TradeGPT」</div>
-                            <div class="desc" data-lang="en"><strong>BGW TradeGPT</strong> — Owned vocabulary, users say "Let me ask TradeGPT"</div>
+                            <div class="icon">1️⃣</div>
+                            <div class="title" data-lang="zh">Phase 1 心智</div>
+                            <div class="title" data-lang="en">Phase 1 Mind Share</div>
+                            <div class="desc" data-lang="zh">「买之前不确定？问 TradeAI」<br>→ 定位：<strong>交易顾问</strong></div>
+                            <div class="desc" data-lang="en">"Unsure before buying? Ask TradeAI"<br>→ Position: <strong>Trading Advisor</strong></div>
                         </div>
                         <div class="card">
-                            <div class="icon">🎯</div>
-                            <div class="title" data-lang="zh">聚焦场景</div>
-                            <div class="title" data-lang="en">Focus Scenario</div>
-                            <div class="desc" data-lang="zh">先打透 <strong>Meme 交易</strong>，成为这个场景的代名词</div>
-                            <div class="desc" data-lang="en">Dominate <strong>Meme Trading</strong> first, become synonymous with it</div>
+                            <div class="icon">2️⃣</div>
+                            <div class="title" data-lang="zh">Phase 2 心智</div>
+                            <div class="title" data-lang="en">Phase 2 Mind Share</div>
+                            <div class="desc" data-lang="zh">「不知道怎么办？TradeAI 帮你想」<br>→ 定位：<strong>交易助手</strong></div>
+                            <div class="desc" data-lang="en">"Don't know what to do? TradeAI helps you think"<br>→ Position: <strong>Trading Assistant</strong></div>
                         </div>
                         <div class="card">
-                            <div class="icon">📸</div>
-                            <div class="title" data-lang="zh">传播时刻</div>
-                            <div class="title" data-lang="en">Viral Moments</div>
-                            <div class="desc" data-lang="zh">设计「可截图」的 AI 输出，让传播自然发生</div>
-                            <div class="desc" data-lang="en">Design "screenshot-worthy" AI outputs, let sharing happen naturally</div>
+                            <div class="icon">3️⃣</div>
+                            <div class="title" data-lang="zh">Phase 3 心智</div>
+                            <div class="title" data-lang="en">Phase 3 Mind Share</div>
+                            <div class="desc" data-lang="zh">「说一句，TradeAI 帮你搞定」<br>→ 定位：<strong>交易伙伴</strong></div>
+                            <div class="desc" data-lang="en">"Say one sentence, TradeAI handles it"<br>→ Position: <strong>Trading Partner</strong></div>
                         </div>
-                        <div class="card">
-                            <div class="icon">📰</div>
-                            <div class="title" data-lang="zh">持续输出</div>
-                            <div class="title" data-lang="en">Continuous Content</div>
-                            <div class="desc" data-lang="zh">每日 AI 观点 + 每周战绩 + 预警回顾，建立「AI 有洞察」的共识</div>
-                            <div class="desc" data-lang="en">Daily AI views + Weekly performance + Alert reviews, build "AI has insights" consensus</div>
-                        </div>
+                    </div>
+
+                    <div class="core-box insight">
+                        <span data-lang="zh"><strong>关键点</strong>：每个阶段的传播口号要匹配当前已上线的功能。不要在只有「看懂」功能时，传播「帮你交易」的心智。</span>
+                        <span data-lang="en"><strong>Key Point</strong>: Each phase's messaging must match currently available features. Don't promote "trade for you" messaging when only "understand" features are live.</span>
                     </div>
                 </div>
             </div>
@@ -892,47 +925,47 @@
             <div class="container">
                 <div class="section-card pink">
                     <h2>
-                        <span data-lang="zh">📸 可传播的「AI 时刻」设计</span>
-                        <span data-lang="en">📸 Designing Viral "AI Moments"</span>
+                        <span data-lang="zh">📸 可传播的「AI 时刻」</span>
+                        <span data-lang="en">📸 Viral "AI Moments"</span>
                     </h2>
 
-                    <p data-lang="zh">用户需要一个「哇」的瞬间，然后去传播。</p>
-                    <p data-lang="en">Users need a "wow" moment, then they share.</p>
+                    <p data-lang="zh">设计让用户「哇」然后截图分享的瞬间：</p>
+                    <p data-lang="en">Design moments that make users say "wow" and screenshot to share:</p>
 
                     <div class="card-grid">
                         <div class="card">
                             <div class="icon">🚨</div>
                             <div class="title" data-lang="zh">预警截图</div>
                             <div class="title" data-lang="en">Alert Screenshot</div>
-                            <div class="desc" data-lang="zh">「BGW AI 提前 10 分钟预警 Rug Pull，救了我 $5000」</div>
-                            <div class="desc" data-lang="en">"BGW AI warned me 10 min before Rug Pull, saved my $5000"</div>
-                        </div>
-                        <div class="card">
-                            <div class="icon">📈</div>
-                            <div class="title" data-lang="zh">收益晒单</div>
-                            <div class="title" data-lang="en">Profit Flex</div>
-                            <div class="desc" data-lang="zh">「AI 推荐的币 7 天涨了 500%」+ AI 分析截图</div>
-                            <div class="desc" data-lang="en">"AI-recommended token up 500% in 7 days" + AI analysis screenshot</div>
-                        </div>
-                        <div class="card">
-                            <div class="icon">💰</div>
-                            <div class="title" data-lang="zh">省钱证明</div>
-                            <div class="title" data-lang="en">Savings Proof</div>
-                            <div class="desc" data-lang="zh">「AI 帮我找到最优路由，省了 $200 Gas」</div>
-                            <div class="desc" data-lang="en">"AI found optimal route, saved me $200 in gas"</div>
+                            <div class="desc" data-lang="zh">「TradeAI 提前 10 分钟预警 Rug，救了我」</div>
+                            <div class="desc" data-lang="en">"TradeAI warned me 10 min before Rug, saved me"</div>
                         </div>
                         <div class="card">
                             <div class="icon">🎯</div>
-                            <div class="title" data-lang="zh">精准预测</div>
-                            <div class="title" data-lang="en">Accurate Prediction</div>
-                            <div class="desc" data-lang="zh">「昨天 AI 说等 $2800 加仓，今天真到了」</div>
-                            <div class="desc" data-lang="en">"Yesterday AI said wait for $2800, today it hit"</div>
+                            <div class="title" data-lang="zh">精准分析</div>
+                            <div class="title" data-lang="en">Accurate Analysis</div>
+                            <div class="desc" data-lang="zh">「TradeAI 说的风险点，第二天就应验了」</div>
+                            <div class="desc" data-lang="en">"The risk TradeAI mentioned came true the next day"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">💡</div>
+                            <div class="title" data-lang="zh">洞察截图</div>
+                            <div class="title" data-lang="en">Insight Screenshot</div>
+                            <div class="desc" data-lang="zh">「TradeAI 发现聪明钱在买，我跟了一手」</div>
+                            <div class="desc" data-lang="en">"TradeAI spotted smart money buying, I followed"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📊</div>
+                            <div class="title" data-lang="zh">分析报告</div>
+                            <div class="title" data-lang="en">Analysis Report</div>
+                            <div class="desc" data-lang="zh">一页纸总结某个币的全面分析，适合分享</div>
+                            <div class="desc" data-lang="en">One-page summary of comprehensive token analysis, share-ready</div>
                         </div>
                     </div>
 
                     <div class="core-box action">
-                        <span data-lang="zh">设计原则：每个 AI 输出都要有「分享按钮」，截图要自带品牌水印</span>
-                        <span data-lang="en">Design Principle: Every AI output needs a "Share" button, screenshots must have brand watermark</span>
+                        <span data-lang="zh">设计原则：每个 AI 输出都有「分享」按钮，截图自带 BGW TradeAI 水印</span>
+                        <span data-lang="en">Design Principle: Every AI output has a "Share" button, screenshots include BGW TradeAI watermark</span>
                     </div>
                 </div>
             </div>
@@ -953,64 +986,48 @@
                                 <th data-lang="en">Content Type</th>
                                 <th data-lang="zh">频率</th>
                                 <th data-lang="en">Frequency</th>
-                                <th data-lang="zh">渠道</th>
-                                <th data-lang="en">Channel</th>
                                 <th data-lang="zh">目的</th>
                                 <th data-lang="en">Purpose</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-lang="zh">TradeGPT 每日观点</td>
-                                <td data-lang="en">TradeGPT Daily View</td>
-                                <td data-lang="zh">每日 1 条</td>
+                                <td data-lang="zh">TradeAI 每日洞察</td>
+                                <td data-lang="en">TradeAI Daily Insights</td>
+                                <td data-lang="zh">每日</td>
                                 <td data-lang="en">Daily</td>
-                                <td>Twitter / TG</td>
                                 <td data-lang="zh">建立「AI 有洞察」认知</td>
                                 <td data-lang="en">Build "AI has insights" perception</td>
                             </tr>
                             <tr>
-                                <td data-lang="zh">AI 预警回顾</td>
-                                <td data-lang="en">AI Alert Review</td>
+                                <td data-lang="zh">预警回顾</td>
+                                <td data-lang="en">Alert Review</td>
                                 <td data-lang="zh">每周 2-3 条</td>
                                 <td data-lang="en">2-3x/week</td>
-                                <td>Twitter / TG</td>
                                 <td data-lang="zh">证明 AI 预警有效</td>
                                 <td data-lang="en">Prove AI alerts work</td>
                             </tr>
                             <tr>
-                                <td data-lang="zh">本周 AI 战绩</td>
-                                <td data-lang="en">Weekly AI Performance</td>
-                                <td data-lang="zh">每周 1 条</td>
-                                <td data-lang="en">Weekly</td>
-                                <td>Twitter / Blog</td>
-                                <td data-lang="zh">量化 AI 价值</td>
-                                <td data-lang="en">Quantify AI value</td>
-                            </tr>
-                            <tr>
-                                <td data-lang="zh">用户晒单 UGC</td>
-                                <td data-lang="en">User Flex UGC</td>
+                                <td data-lang="zh">用户故事 UGC</td>
+                                <td data-lang="en">User Story UGC</td>
                                 <td data-lang="zh">持续转发</td>
                                 <td data-lang="en">Ongoing RT</td>
-                                <td>Twitter</td>
                                 <td data-lang="zh">社会证明</td>
                                 <td data-lang="en">Social proof</td>
                             </tr>
                             <tr>
-                                <td data-lang="zh">深度教程</td>
-                                <td data-lang="en">Deep Tutorials</td>
+                                <td data-lang="zh">使用教程</td>
+                                <td data-lang="en">Tutorials</td>
                                 <td data-lang="zh">每周 1 条</td>
                                 <td data-lang="en">Weekly</td>
-                                <td>YouTube / Blog</td>
-                                <td data-lang="zh">教育 + SEO</td>
-                                <td data-lang="en">Education + SEO</td>
+                                <td data-lang="zh">降低使用门槛</td>
+                                <td data-lang="en">Lower usage barrier</td>
                             </tr>
                             <tr>
-                                <td data-lang="zh">KOL 合作体验</td>
-                                <td data-lang="en">KOL Collab Experience</td>
+                                <td data-lang="zh">KOL 体验分享</td>
+                                <td data-lang="en">KOL Experience</td>
                                 <td data-lang="zh">每月 5-10 个</td>
                                 <td data-lang="en">5-10/month</td>
-                                <td>Twitter / YT</td>
                                 <td data-lang="zh">破圈 + 背书</td>
                                 <td data-lang="en">Reach + Endorsement</td>
                             </tr>
@@ -1022,67 +1039,7 @@
 
         <section>
             <div class="container">
-                <div class="section-card yellow">
-                    <h2>
-                        <span data-lang="zh">📣 传播节奏</span>
-                        <span data-lang="en">📣 Launch Cadence</span>
-                    </h2>
-
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="phase" data-lang="zh">预热期 · 上线前 2 周</div>
-                            <div class="phase" data-lang="en">Pre-launch · 2 Weeks Before</div>
-                            <div class="title" data-lang="zh">悬念 + 期待</div>
-                            <div class="title" data-lang="en">Suspense + Anticipation</div>
-                            <div class="tag-list">
-                                <span class="tag" data-lang="zh">「交易要变了」悬念海报</span>
-                                <span class="tag" data-lang="en">"Trading is About to Change" teaser</span>
-                                <span class="tag" data-lang="zh">TradeGPT 概念视频</span>
-                                <span class="tag" data-lang="en">TradeGPT concept video</span>
-                                <span class="tag" data-lang="zh">Waitlist 开放</span>
-                                <span class="tag" data-lang="en">Waitlist opens</span>
-                            </div>
-                        </div>
-                        <div class="timeline-item p2">
-                            <div class="phase" data-lang="zh">发布期 · 上线第 1 周</div>
-                            <div class="phase" data-lang="en">Launch · Week 1</div>
-                            <div class="title" data-lang="zh">集中爆发</div>
-                            <div class="title" data-lang="en">Concentrated Blast</div>
-                            <div class="tag-list">
-                                <span class="tag" data-lang="zh">CEO Twitter 发布</span>
-                                <span class="tag" data-lang="en">CEO Twitter announcement</span>
-                                <span class="tag" data-lang="zh">10+ KOL 同步体验</span>
-                                <span class="tag" data-lang="en">10+ KOL simultaneous experience</span>
-                                <span class="tag" data-lang="zh">媒体 PR（CoinDesk/TheBlock）</span>
-                                <span class="tag" data-lang="en">Media PR (CoinDesk/TheBlock)</span>
-                                <span class="tag" data-lang="zh">限时体验激励</span>
-                                <span class="tag" data-lang="en">Limited-time experience rewards</span>
-                            </div>
-                        </div>
-                        <div class="timeline-item p3">
-                            <div class="phase" data-lang="zh">持续期 · 上线后</div>
-                            <div class="phase" data-lang="en">Sustaining · Post-launch</div>
-                            <div class="title" data-lang="zh">日常心智渗透</div>
-                            <div class="title" data-lang="en">Daily Mind Share Penetration</div>
-                            <div class="tag-list">
-                                <span class="tag" data-lang="zh">每日 AI 观点</span>
-                                <span class="tag" data-lang="en">Daily AI views</span>
-                                <span class="tag" data-lang="zh">预警回顾</span>
-                                <span class="tag" data-lang="en">Alert reviews</span>
-                                <span class="tag" data-lang="zh">用户 UGC 激励</span>
-                                <span class="tag" data-lang="en">User UGC incentives</span>
-                                <span class="tag" data-lang="zh">每周战绩榜</span>
-                                <span class="tag" data-lang="en">Weekly leaderboard</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="section-card purple">
+                <div class="section-card green">
                     <h2>
                         <span data-lang="zh">🎯 KPI 指标</span>
                         <span data-lang="en">🎯 KPIs</span>
@@ -1094,17 +1051,17 @@
                                 <th data-lang="zh">指标</th>
                                 <th data-lang="en">Metric</th>
                                 <th data-lang="zh">1个月</th>
-                                <th data-lang="en">Month 1</th>
+                                <th data-lang="en">M1</th>
                                 <th data-lang="zh">3个月</th>
-                                <th data-lang="en">Month 3</th>
+                                <th data-lang="en">M3</th>
                                 <th data-lang="zh">6个月</th>
-                                <th data-lang="en">Month 6</th>
+                                <th data-lang="en">M6</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-lang="zh">TradeGPT MAU</td>
-                                <td data-lang="en">TradeGPT MAU</td>
+                                <td data-lang="zh">TradeAI MAU</td>
+                                <td data-lang="en">TradeAI MAU</td>
                                 <td>100K</td>
                                 <td>500K</td>
                                 <td>2M</td>
@@ -1117,15 +1074,8 @@
                                 <td>15M</td>
                             </tr>
                             <tr>
-                                <td data-lang="zh">AI 驱动交易额</td>
-                                <td data-lang="en">AI-driven Trading Volume</td>
-                                <td>$50M</td>
-                                <td>$300M</td>
-                                <td>$1B</td>
-                            </tr>
-                            <tr>
-                                <td data-lang="zh">Twitter「TradeGPT」提及</td>
-                                <td data-lang="en">Twitter "TradeGPT" Mentions</td>
+                                <td data-lang="zh">Twitter「TradeAI」提及</td>
+                                <td data-lang="en">Twitter "TradeAI" Mentions</td>
                                 <td>5K</td>
                                 <td>30K</td>
                                 <td>100K</td>
@@ -1137,6 +1087,13 @@
                                 <td>50+</td>
                                 <td>60+</td>
                             </tr>
+                            <tr>
+                                <td data-lang="zh">预警准确率</td>
+                                <td data-lang="en">Alert Accuracy</td>
+                                <td>70%+</td>
+                                <td>80%+</td>
+                                <td>85%+</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -1147,22 +1104,24 @@
             <div class="container">
                 <div class="conclusion">
                     <p class="main" data-lang="zh">
-                        让用户形成条件反射：<br>
-                        「交易之前，先问 BGW AI」
+                        BGW TradeAI<br>
+                        从看懂 → 到建议 → 到执行<br>
+                        渐进式赢得用户信任
                     </p>
                     <p class="main" data-lang="en">
-                        Build the user reflex:<br>
-                        "Before Trading, Ask BGW AI First"
+                        BGW TradeAI<br>
+                        From Understanding → To Advice → To Execution<br>
+                        Progressively Earning User Trust
                     </p>
                     <p class="sub" data-lang="zh">
-                        先打透 Meme 交易 → 创造 TradeGPT 专属概念 → 设计可截图传播 → 持续内容心智
+                        Phase 1 心智：「交易前，先问 TradeAI」
                     </p>
                     <p class="sub" data-lang="en">
-                        Dominate Meme Trading → Create TradeGPT owned concept → Design viral screenshots → Sustain content mind share
+                        Phase 1 Mind Share: "Before Trading, Ask TradeAI First"
                     </p>
                     <div class="cta-btn">
-                        <span data-lang="zh">打造交易 × AI 第一心智 🚀</span>
-                        <span data-lang="en">Build #1 Trade × AI Mind Share 🚀</span>
+                        <span data-lang="zh">成为用户最信任的交易 AI 🚀</span>
+                        <span data-lang="en">Become Users' Most Trusted Trading AI 🚀</span>
                     </div>
                 </div>
             </div>
