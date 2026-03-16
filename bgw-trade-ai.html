@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGW Trade × AI 战略方案</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #FF6B9D;
+            --yellow: #FFE156;
+            --blue: #4ECDC4;
+            --purple: #9B5DE5;
+            --orange: #FF9F1C;
+            --green: #00F5D4;
+            --red: #FF6B6B;
+            --black: #1A1A2E;
+            --white: #FFFEF9;
+            --cream: #FFF8E7;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+            background: var(--cream);
+            color: var(--black);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        .memphis-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .shape { position: absolute; opacity: 0.12; }
+        .circle { border-radius: 50%; border: 8px solid; }
+        .triangle { width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 70px solid; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            background: var(--black);
+            border-radius: 30px;
+            padding: 4px;
+            box-shadow: 4px 4px 0 var(--purple);
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 26px;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: var(--yellow);
+            color: var(--black);
+        }
+
+        /* Header */
+        header {
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--pink);
+            border: 3px solid var(--black);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--black);
+            transform: rotate(-2deg);
+        }
+
+        h1 {
+            font-size: clamp(36px, 7vw, 64px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0 var(--yellow), 8px 8px 0 var(--pink);
+        }
+
+        .subtitle {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            background: var(--blue);
+            display: inline-block;
+            padding: 8px 24px;
+            border: 3px solid var(--black);
+            transform: rotate(1deg);
+        }
+
+        /* Sections */
+        section { padding: 50px 0; }
+
+        .section-card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 8px 8px 0 var(--black);
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            top: -15px; right: -15px;
+            border: 3px solid var(--black);
+        }
+
+        .section-card.pink::before { background: var(--pink); }
+        .section-card.yellow::before { background: var(--yellow); }
+        .section-card.blue::before { background: var(--blue); }
+        .section-card.purple::before { background: var(--purple); }
+        .section-card.green::before { background: var(--green); }
+        .section-card.orange::before { background: var(--orange); }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: inline-block;
+            background: var(--yellow);
+            padding: 8px 20px;
+            border: 3px solid var(--black);
+            transform: rotate(-1deg);
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 28px 0 16px;
+            color: var(--black);
+        }
+
+        h4 {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 20px 0 12px;
+            padding: 6px 14px;
+            background: var(--cream);
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        p { margin-bottom: 14px; }
+
+        strong { background: var(--yellow); padding: 0 4px; }
+
+        /* Core Box */
+        .core-box {
+            font-size: 18px;
+            font-weight: 600;
+            padding: 24px;
+            background: repeating-linear-gradient(45deg, var(--cream), var(--cream) 10px, var(--white) 10px, var(--white) 20px);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .core-box.insight { border-left: 8px solid var(--purple); }
+        .core-box.action { border-left: 8px solid var(--green); }
+        .core-box.warning { border-left: 8px solid var(--orange); }
+
+        /* Grid Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 6px 6px 0 var(--black);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--black); }
+
+        .card:nth-child(1) { border-color: var(--pink); box-shadow: 6px 6px 0 var(--pink); }
+        .card:nth-child(2) { border-color: var(--blue); box-shadow: 6px 6px 0 var(--blue); }
+        .card:nth-child(3) { border-color: var(--purple); box-shadow: 6px 6px 0 var(--purple); }
+        .card:nth-child(4) { border-color: var(--orange); box-shadow: 6px 6px 0 var(--orange); }
+        .card:nth-child(5) { border-color: var(--green); box-shadow: 6px 6px 0 var(--green); }
+        .card:nth-child(6) { border-color: var(--yellow); box-shadow: 6px 6px 0 var(--yellow); }
+
+        .card .icon { font-size: 36px; margin-bottom: 12px; }
+        .card .title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+        .card .desc { font-size: 14px; opacity: 0.85; }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            padding-left: 32px;
+            position: relative;
+            border-bottom: 2px dashed var(--black);
+        }
+
+        .feature-list li:last-child { border-bottom: none; }
+
+        .feature-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--purple);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 32px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0; bottom: 0;
+            width: 8px;
+            background: repeating-linear-gradient(0deg, var(--pink) 0px, var(--pink) 20px, var(--yellow) 20px, var(--yellow) 40px, var(--blue) 40px, var(--blue) 60px);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 28px;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px; top: 24px;
+            width: 24px; height: 24px;
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+        }
+
+        .timeline-item.p2::before { background: var(--pink); }
+        .timeline-item.p3::before { background: var(--blue); }
+        .timeline-item.p4::before { background: var(--green); }
+
+        .timeline-item .phase {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--white);
+            background: var(--purple);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px solid var(--black);
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .timeline-item.p2 .phase { background: var(--pink); color: var(--black); }
+        .timeline-item.p3 .phase { background: var(--blue); color: var(--black); }
+        .timeline-item.p4 .phase { background: var(--green); color: var(--black); }
+
+        .timeline-item .title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .tag {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: var(--cream);
+            border: 2px solid var(--black);
+            border-radius: 20px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 24px 0;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .data-table th, .data-table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 2px solid var(--black);
+        }
+
+        .data-table th {
+            font-size: 13px;
+            font-weight: 700;
+            background: var(--yellow);
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+
+        .data-table td { font-size: 14px; }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--purple);
+            color: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 24px 0;
+            text-align: center;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .highlight-box .big { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .highlight-box .sub { font-size: 16px; opacity: 0.9; }
+
+        /* Quote */
+        .quote {
+            font-size: 20px;
+            font-weight: 600;
+            padding: 28px;
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            margin: 28px 0;
+            transform: rotate(-0.5deg);
+            position: relative;
+        }
+
+        .quote::before {
+            content: '"';
+            position: absolute;
+            top: 8px; left: 16px;
+            font-size: 48px;
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
+        /* Part Divider */
+        .part-divider {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .part-label {
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 12px 32px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 30px;
+            box-shadow: 6px 6px 0 var(--purple);
+        }
+
+        /* Conclusion */
+        .conclusion {
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            border-radius: 24px;
+            padding: 48px 40px;
+            margin: 32px 0;
+            text-align: center;
+            box-shadow: 10px 10px 0 var(--black);
+            position: relative;
+        }
+
+        .conclusion::before { content: '★'; position: absolute; top: 20px; left: 30px; font-size: 36px; color: var(--pink); }
+        .conclusion::after { content: '★'; position: absolute; bottom: 20px; right: 30px; font-size: 36px; color: var(--blue); }
+
+        .conclusion .main { font-size: 22px; font-weight: 700; line-height: 1.5; margin-bottom: 16px; }
+        .conclusion .sub { font-size: 18px; font-weight: 500; }
+
+        .cta-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 36px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            background: var(--purple);
+            border: 4px solid var(--black);
+            border-radius: 30px;
+            box-shadow: 6px 6px 0 var(--black);
+            transform: rotate(-2deg);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .confidential {
+            font-size: 14px;
+            color: var(--white);
+            background: var(--red);
+            padding: 8px 20px;
+            border: 3px solid var(--black);
+            border-radius: 20px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            header { padding: 80px 0 40px; }
+            section { padding: 30px 0; }
+            .section-card { padding: 24px; }
+            h2 { font-size: 22px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .timeline { padding-left: 32px; }
+            .timeline::before { left: 8px; width: 6px; }
+            .timeline-item::before { left: -28px; width: 18px; height: 18px; }
+            .lang-toggle { top: 12px; right: 12px; }
+            .lang-btn { padding: 6px 12px; font-size: 12px; }
+        }
+
+        /* Language */
+        [data-lang="en"] { display: none; }
+        html[lang="en"] [data-lang="zh"] { display: none; }
+        html[lang="en"] [data-lang="en"] { display: block; }
+        html[lang="en"] span[data-lang="en"],
+        html[lang="en"] div[data-lang="en"],
+        html[lang="en"] li[data-lang="en"],
+        html[lang="en"] p[data-lang="en"],
+        html[lang="en"] td[data-lang="en"],
+        html[lang="en"] th[data-lang="en"] { display: table-cell; }
+        html[lang="en"] span[data-lang="en"] { display: inline; }
+        html[lang="en"] div[data-lang="en"] { display: block; }
+        html[lang="en"] li[data-lang="en"] { display: list-item; }
+        html[lang="en"] p[data-lang="en"] { display: block; }
+    </style>
+</head>
+<body>
+    <div class="memphis-bg">
+        <div class="shape circle" style="width: 100px; height: 100px; border-color: var(--pink); top: 8%; left: 5%;"></div>
+        <div class="shape circle" style="width: 70px; height: 70px; border-color: var(--blue); top: 25%; right: 8%;"></div>
+        <div class="shape triangle" style="border-bottom-color: var(--yellow); top: 45%; left: 3%; transform: rotate(15deg);"></div>
+        <div class="shape triangle" style="border-bottom-color: var(--purple); top: 65%; right: 5%; transform: rotate(-20deg);"></div>
+        <div class="shape circle" style="width: 60px; height: 60px; border-color: var(--green); bottom: 15%; left: 8%;"></div>
+        <div class="shape circle" style="width: 90px; height: 90px; border-color: var(--orange); bottom: 8%; right: 12%;"></div>
+    </div>
+
+    <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="badge">
+                <span data-lang="zh">🎯 产品 × 品牌方案</span>
+                <span data-lang="en">🎯 Product × Brand Plan</span>
+            </div>
+            <h1>Trade × AI</h1>
+            <p class="subtitle">
+                <span data-lang="zh">让 BGW 成为「交易前先问 AI」的第一心智</span>
+                <span data-lang="en">Make BGW the First Choice for "Ask AI Before Trading"</span>
+            </p>
+            <p style="font-size: 14px; opacity: 0.7;">2026-03-16 · v1.0</p>
+        </div>
+    </header>
+
+    <main>
+        <!-- Part A: Product -->
+        <div class="part-divider">
+            <div class="container">
+                <div class="part-label">
+                    <span data-lang="zh">PART A · 产品方案</span>
+                    <span data-lang="en">PART A · Product Plan</span>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="container">
+                <div class="section-card pink">
+                    <h2>
+                        <span data-lang="zh">🎯 核心定位</span>
+                        <span data-lang="en">🎯 Core Positioning</span>
+                    </h2>
+
+                    <div class="core-box insight">
+                        <span data-lang="zh"><strong>BGW TradeGPT</strong> — 你的链上交易 AI 搭档<br>从「告诉我怎么做」到「帮我做」</span>
+                        <span data-lang="en"><strong>BGW TradeGPT</strong> — Your On-chain Trading AI Partner<br>From "Tell me how" to "Do it for me"</span>
+                    </div>
+
+                    <h3 data-lang="zh">用户痛点 → AI 解决方案</h3>
+                    <h3 data-lang="en">User Pain Points → AI Solutions</h3>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="icon">❓</div>
+                            <div class="title" data-lang="zh">不知道买什么</div>
+                            <div class="title" data-lang="en">Don't know what to buy</div>
+                            <div class="desc" data-lang="zh">→ AI 实时分析链上数据 + 社交情绪 + 巨鲸动向</div>
+                            <div class="desc" data-lang="en">→ AI analyzes on-chain data + social sentiment + whale movements</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">⏰</div>
+                            <div class="title" data-lang="zh">不知道什么时候买</div>
+                            <div class="title" data-lang="en">Don't know when to buy</div>
+                            <div class="desc" data-lang="zh">→ AI 基于技术指标 + 市场情绪给出具体时机建议</div>
+                            <div class="desc" data-lang="en">→ AI gives timing advice based on technicals + market sentiment</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">😰</div>
+                            <div class="title" data-lang="zh">不知道会不会亏</div>
+                            <div class="title" data-lang="en">Don't know if I'll lose</div>
+                            <div class="desc" data-lang="zh">→ AI 风险评估 + Rug 预警 + 持仓分布分析</div>
+                            <div class="desc" data-lang="en">→ AI risk assessment + Rug alerts + holder distribution analysis</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🔧</div>
+                            <div class="title" data-lang="zh">操作太复杂</div>
+                            <div class="title" data-lang="en">Too complex to execute</div>
+                            <div class="desc" data-lang="zh">→ AI 自动选最优路径、设滑点、分批执行</div>
+                            <div class="desc" data-lang="en">→ AI auto-selects best route, sets slippage, batch executes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card yellow">
+                    <h2>
+                        <span data-lang="zh">🧠 产品功能架构</span>
+                        <span data-lang="en">🧠 Product Feature Architecture</span>
+                    </h2>
+
+                    <h3 data-lang="zh">Layer 1：信息层 — AI 帮你看懂</h3>
+                    <h3 data-lang="en">Layer 1: Information — AI Helps You Understand</h3>
+                    <ul class="feature-list">
+                        <li data-lang="zh"><strong>Token 智能分析</strong>：输入任意币，一句话总结「值不值得买」</li>
+                        <li data-lang="en"><strong>Token Smart Analysis</strong>: Enter any token, get one-line verdict on "worth buying or not"</li>
+                        <li data-lang="zh"><strong>链上透视</strong>：聪明钱流向、内部人买卖、巨鲸持仓变化</li>
+                        <li data-lang="en"><strong>On-chain X-ray</strong>: Smart money flow, insider trades, whale position changes</li>
+                        <li data-lang="zh"><strong>风险雷达</strong>：合约漏洞、Rug 风险评分、社交异常检测</li>
+                        <li data-lang="en"><strong>Risk Radar</strong>: Contract vulnerabilities, Rug risk score, social anomaly detection</li>
+                        <li data-lang="zh"><strong>实时舆情</strong>：Twitter/Telegram 情绪分析 + KOL 动向追踪</li>
+                        <li data-lang="en"><strong>Real-time Sentiment</strong>: Twitter/Telegram sentiment + KOL movement tracking</li>
+                    </ul>
+
+                    <h3 data-lang="zh">Layer 2：决策层 — AI 帮你判断</h3>
+                    <h3 data-lang="en">Layer 2: Decision — AI Helps You Decide</h3>
+                    <ul class="feature-list">
+                        <li data-lang="zh"><strong>个性化建议</strong>：基于你的持仓 + 风险偏好 + 市场状态，给出具体操作建议</li>
+                        <li data-lang="en"><strong>Personalized Advice</strong>: Based on your holdings + risk preference + market state, give specific action advice</li>
+                        <li data-lang="zh"><strong>仓位管理</strong>：「你现在应该卖掉 30%，理由是…」</li>
+                        <li data-lang="en"><strong>Position Management</strong>: "You should sell 30% now, because..."</li>
+                        <li data-lang="zh"><strong>时机提醒</strong>：「ETH 跌到 $2800 时建议加仓」</li>
+                        <li data-lang="en"><strong>Timing Alerts</strong>: "Suggest adding when ETH drops to $2800"</li>
+                        <li data-lang="zh"><strong>组合优化</strong>：「你的仓位过于集中 Meme，建议分散」</li>
+                        <li data-lang="en"><strong>Portfolio Optimization</strong>: "Your position is too Meme-heavy, suggest diversifying"</li>
+                    </ul>
+
+                    <h3 data-lang="zh">Layer 3：执行层 — AI 帮你做</h3>
+                    <h3 data-lang="en">Layer 3: Execution — AI Does It For You</h3>
+                    <ul class="feature-list">
+                        <li data-lang="zh"><strong>意图交易</strong>：「帮我买 1000U ETH，分 3 次，每跌 2% 买一次」</li>
+                        <li data-lang="en"><strong>Intent Trading</strong>: "Buy $1000 ETH for me, in 3 batches, buy each time it drops 2%"</li>
+                        <li data-lang="zh"><strong>智能路由</strong>：自动选择 Gas 最低、滑点最小的执行路径</li>
+                        <li data-lang="en"><strong>Smart Routing</strong>: Auto-select path with lowest gas and slippage</li>
+                        <li data-lang="zh"><strong>跨链执行</strong>：「把 Base 上的 USDC 换成 Solana 上的 SOL」</li>
+                        <li data-lang="en"><strong>Cross-chain Execution</strong>: "Swap USDC on Base to SOL on Solana"</li>
+                        <li data-lang="zh"><strong>条件单</strong>：止盈止损、价格触发、时间触发</li>
+                        <li data-lang="en"><strong>Conditional Orders</strong>: Take-profit/stop-loss, price triggers, time triggers</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card blue">
+                    <h2>
+                        <span data-lang="zh">🎮 杀手级场景：Meme 交易</span>
+                        <span data-lang="en">🎮 Killer Use Case: Meme Trading</span>
+                    </h2>
+
+                    <div class="core-box action">
+                        <span data-lang="zh">为什么先打 Meme？<br>信息最不对称 + 决策窗口最短 + 最需要 AI 速度 + BGW 用户重叠度高</span>
+                        <span data-lang="en">Why Meme First?<br>Highest info asymmetry + Shortest decision window + Most need for AI speed + High overlap with BGW users</span>
+                    </div>
+
+                    <h3 data-lang="zh">Meme AI 功能包</h3>
+                    <h3 data-lang="en">Meme AI Feature Pack</h3>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="icon">🔍</div>
+                            <div class="title" data-lang="zh">新币狙击</div>
+                            <div class="title" data-lang="en">New Token Sniper</div>
+                            <div class="desc" data-lang="zh">实时监控 Pump.fun / Moonshot，AI 评分筛选高潜力币</div>
+                            <div class="desc" data-lang="en">Real-time monitoring of Pump.fun / Moonshot, AI scoring for high-potential tokens</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🚨</div>
+                            <div class="title" data-lang="zh">Rug 预警</div>
+                            <div class="title" data-lang="en">Rug Alert</div>
+                            <div class="desc" data-lang="zh">开发者钱包异动、流动性撤离、合约权限变更实时告警</div>
+                            <div class="desc" data-lang="en">Real-time alerts for dev wallet moves, liquidity pulls, contract permission changes</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🐋</div>
+                            <div class="title" data-lang="zh">聪明钱追踪</div>
+                            <div class="title" data-lang="en">Smart Money Tracking</div>
+                            <div class="desc" data-lang="zh">标记并追踪历史胜率高的钱包，跟单提醒</div>
+                            <div class="desc" data-lang="en">Tag and track wallets with high win rates, copy-trade alerts</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📊</div>
+                            <div class="title" data-lang="zh">热度排行</div>
+                            <div class="title" data-lang="en">Trending Ranking</div>
+                            <div class="desc" data-lang="zh">社交热度 × 链上活跃度 × 持仓分布综合排名</div>
+                            <div class="desc" data-lang="en">Combined ranking: Social buzz × On-chain activity × Holder distribution</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">⚡</div>
+                            <div class="title" data-lang="zh">一键买入</div>
+                            <div class="title" data-lang="en">One-click Buy</div>
+                            <div class="desc" data-lang="zh">看到信号，一键买入，自动设置滑点和 Gas</div>
+                            <div class="desc" data-lang="en">See signal, one-click buy, auto-set slippage and gas</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🎯</div>
+                            <div class="title" data-lang="zh">AI 止盈建议</div>
+                            <div class="title" data-lang="en">AI Take-profit Advice</div>
+                            <div class="desc" data-lang="zh">「已涨 5x，建议先出 50%」</div>
+                            <div class="desc" data-lang="en">"Up 5x already, suggest taking 50% profit"</div>
+                        </div>
+                    </div>
+
+                    <div class="quote">
+                        <span data-lang="zh">口号：「Meme 交易，先问 BGW AI」</span>
+                        <span data-lang="en">Tagline: "Meme Trading? Ask BGW AI First"</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card purple">
+                    <h2>
+                        <span data-lang="zh">🗓️ 上线节奏</span>
+                        <span data-lang="en">🗓️ Launch Timeline</span>
+                    </h2>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="phase">Phase 1 · Month 1-2</div>
+                            <div class="title" data-lang="zh">MVP：Meme AI 分析</div>
+                            <div class="title" data-lang="en">MVP: Meme AI Analysis</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">Token 智能分析</span>
+                                <span class="tag" data-lang="en">Token Smart Analysis</span>
+                                <span class="tag" data-lang="zh">风险评分</span>
+                                <span class="tag" data-lang="en">Risk Scoring</span>
+                                <span class="tag" data-lang="zh">链上透视</span>
+                                <span class="tag" data-lang="en">On-chain X-ray</span>
+                                <span class="tag" data-lang="zh">对话入口</span>
+                                <span class="tag" data-lang="en">Chat Entry</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item p2">
+                            <div class="phase">Phase 2 · Month 3-4</div>
+                            <div class="title" data-lang="zh">进阶：决策辅助</div>
+                            <div class="title" data-lang="en">Advanced: Decision Support</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">个性化建议</span>
+                                <span class="tag" data-lang="en">Personalized Advice</span>
+                                <span class="tag" data-lang="zh">Rug 预警</span>
+                                <span class="tag" data-lang="en">Rug Alerts</span>
+                                <span class="tag" data-lang="zh">聪明钱追踪</span>
+                                <span class="tag" data-lang="en">Smart Money Track</span>
+                                <span class="tag" data-lang="zh">时机提醒</span>
+                                <span class="tag" data-lang="en">Timing Alerts</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item p3">
+                            <div class="phase">Phase 3 · Month 5-6</div>
+                            <div class="title" data-lang="zh">高阶：AI 执行</div>
+                            <div class="title" data-lang="en">Pro: AI Execution</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">意图交易</span>
+                                <span class="tag" data-lang="en">Intent Trading</span>
+                                <span class="tag" data-lang="zh">条件单</span>
+                                <span class="tag" data-lang="en">Conditional Orders</span>
+                                <span class="tag" data-lang="zh">跨链执行</span>
+                                <span class="tag" data-lang="en">Cross-chain Exec</span>
+                                <span class="tag" data-lang="zh">自动止盈止损</span>
+                                <span class="tag" data-lang="en">Auto TP/SL</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item p4">
+                            <div class="phase">Phase 4 · Month 7+</div>
+                            <div class="title" data-lang="zh">生态：AI 开放平台</div>
+                            <div class="title" data-lang="en">Ecosystem: AI Open Platform</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">策略市场</span>
+                                <span class="tag" data-lang="en">Strategy Market</span>
+                                <span class="tag" data-lang="zh">API 开放</span>
+                                <span class="tag" data-lang="en">API Access</span>
+                                <span class="tag" data-lang="zh">第三方 AI 接入</span>
+                                <span class="tag" data-lang="en">3rd Party AI Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card green">
+                    <h2>
+                        <span data-lang="zh">⚙️ 技术架构</span>
+                        <span data-lang="en">⚙️ Technical Architecture</span>
+                    </h2>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-lang="zh">模块</th>
+                                <th data-lang="en">Module</th>
+                                <th data-lang="zh">技术方案</th>
+                                <th data-lang="en">Tech Stack</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-lang="zh">LLM 推理</td>
+                                <td data-lang="en">LLM Inference</td>
+                                <td data-lang="zh">Claude API + 本地微调模型（交易特化）</td>
+                                <td data-lang="en">Claude API + Fine-tuned local model (trading-specialized)</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">链上数据</td>
+                                <td data-lang="en">On-chain Data</td>
+                                <td data-lang="zh">Dune + Flipside + 自建索引器</td>
+                                <td data-lang="en">Dune + Flipside + Self-built indexer</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">社交情绪</td>
+                                <td data-lang="en">Social Sentiment</td>
+                                <td data-lang="zh">Twitter API + Telegram Bot + LunarCrush</td>
+                                <td data-lang="en">Twitter API + Telegram Bot + LunarCrush</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">风险检测</td>
+                                <td data-lang="en">Risk Detection</td>
+                                <td data-lang="zh">GoPlus + 自研合约分析器</td>
+                                <td data-lang="en">GoPlus + Proprietary contract analyzer</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">执行引擎</td>
+                                <td data-lang="en">Execution Engine</td>
+                                <td data-lang="zh">BGW 现有 Swap + Bridge + 新增条件单模块</td>
+                                <td data-lang="en">BGW existing Swap + Bridge + New conditional order module</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">权限控制</td>
+                                <td data-lang="en">Permission Control</td>
+                                <td data-lang="zh">分级授权：只读 → 建议 → 受限执行 → 完全执行</td>
+                                <td data-lang="en">Tiered auth: Read-only → Suggest → Limited exec → Full exec</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Part B: Brand -->
+        <div class="part-divider">
+            <div class="container">
+                <div class="part-label">
+                    <span data-lang="zh">PART B · 品牌传播方案</span>
+                    <span data-lang="en">PART B · Brand & Marketing Plan</span>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="container">
+                <div class="section-card orange">
+                    <h2>
+                        <span data-lang="zh">🧠 心智占领策略</span>
+                        <span data-lang="en">🧠 Mind Share Strategy</span>
+                    </h2>
+
+                    <div class="highlight-box">
+                        <div class="big" data-lang="zh">目标心智</div>
+                        <div class="big" data-lang="en">Target Mind Share</div>
+                        <div class="sub" data-lang="zh">「交易之前，先问 BGW AI」</div>
+                        <div class="sub" data-lang="en">"Before Trading, Ask BGW AI First"</div>
+                    </div>
+
+                    <h3 data-lang="zh">四大心智锚点</h3>
+                    <h3 data-lang="en">Four Mental Anchors</h3>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="icon">🏷️</div>
+                            <div class="title" data-lang="zh">专属概念</div>
+                            <div class="title" data-lang="en">Owned Concept</div>
+                            <div class="desc" data-lang="zh"><strong>BGW TradeGPT</strong> — 独占性词汇，让用户说「我问问 TradeGPT」</div>
+                            <div class="desc" data-lang="en"><strong>BGW TradeGPT</strong> — Owned vocabulary, users say "Let me ask TradeGPT"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🎯</div>
+                            <div class="title" data-lang="zh">聚焦场景</div>
+                            <div class="title" data-lang="en">Focus Scenario</div>
+                            <div class="desc" data-lang="zh">先打透 <strong>Meme 交易</strong>，成为这个场景的代名词</div>
+                            <div class="desc" data-lang="en">Dominate <strong>Meme Trading</strong> first, become synonymous with it</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📸</div>
+                            <div class="title" data-lang="zh">传播时刻</div>
+                            <div class="title" data-lang="en">Viral Moments</div>
+                            <div class="desc" data-lang="zh">设计「可截图」的 AI 输出，让传播自然发生</div>
+                            <div class="desc" data-lang="en">Design "screenshot-worthy" AI outputs, let sharing happen naturally</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📰</div>
+                            <div class="title" data-lang="zh">持续输出</div>
+                            <div class="title" data-lang="en">Continuous Content</div>
+                            <div class="desc" data-lang="zh">每日 AI 观点 + 每周战绩 + 预警回顾，建立「AI 有洞察」的共识</div>
+                            <div class="desc" data-lang="en">Daily AI views + Weekly performance + Alert reviews, build "AI has insights" consensus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card pink">
+                    <h2>
+                        <span data-lang="zh">📸 可传播的「AI 时刻」设计</span>
+                        <span data-lang="en">📸 Designing Viral "AI Moments"</span>
+                    </h2>
+
+                    <p data-lang="zh">用户需要一个「哇」的瞬间，然后去传播。</p>
+                    <p data-lang="en">Users need a "wow" moment, then they share.</p>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="icon">🚨</div>
+                            <div class="title" data-lang="zh">预警截图</div>
+                            <div class="title" data-lang="en">Alert Screenshot</div>
+                            <div class="desc" data-lang="zh">「BGW AI 提前 10 分钟预警 Rug Pull，救了我 $5000」</div>
+                            <div class="desc" data-lang="en">"BGW AI warned me 10 min before Rug Pull, saved my $5000"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📈</div>
+                            <div class="title" data-lang="zh">收益晒单</div>
+                            <div class="title" data-lang="en">Profit Flex</div>
+                            <div class="desc" data-lang="zh">「AI 推荐的币 7 天涨了 500%」+ AI 分析截图</div>
+                            <div class="desc" data-lang="en">"AI-recommended token up 500% in 7 days" + AI analysis screenshot</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">💰</div>
+                            <div class="title" data-lang="zh">省钱证明</div>
+                            <div class="title" data-lang="en">Savings Proof</div>
+                            <div class="desc" data-lang="zh">「AI 帮我找到最优路由，省了 $200 Gas」</div>
+                            <div class="desc" data-lang="en">"AI found optimal route, saved me $200 in gas"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🎯</div>
+                            <div class="title" data-lang="zh">精准预测</div>
+                            <div class="title" data-lang="en">Accurate Prediction</div>
+                            <div class="desc" data-lang="zh">「昨天 AI 说等 $2800 加仓，今天真到了」</div>
+                            <div class="desc" data-lang="en">"Yesterday AI said wait for $2800, today it hit"</div>
+                        </div>
+                    </div>
+
+                    <div class="core-box action">
+                        <span data-lang="zh">设计原则：每个 AI 输出都要有「分享按钮」，截图要自带品牌水印</span>
+                        <span data-lang="en">Design Principle: Every AI output needs a "Share" button, screenshots must have brand watermark</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card blue">
+                    <h2>
+                        <span data-lang="zh">📅 内容矩阵</span>
+                        <span data-lang="en">📅 Content Matrix</span>
+                    </h2>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-lang="zh">内容类型</th>
+                                <th data-lang="en">Content Type</th>
+                                <th data-lang="zh">频率</th>
+                                <th data-lang="en">Frequency</th>
+                                <th data-lang="zh">渠道</th>
+                                <th data-lang="en">Channel</th>
+                                <th data-lang="zh">目的</th>
+                                <th data-lang="en">Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-lang="zh">TradeGPT 每日观点</td>
+                                <td data-lang="en">TradeGPT Daily View</td>
+                                <td data-lang="zh">每日 1 条</td>
+                                <td data-lang="en">Daily</td>
+                                <td>Twitter / TG</td>
+                                <td data-lang="zh">建立「AI 有洞察」认知</td>
+                                <td data-lang="en">Build "AI has insights" perception</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">AI 预警回顾</td>
+                                <td data-lang="en">AI Alert Review</td>
+                                <td data-lang="zh">每周 2-3 条</td>
+                                <td data-lang="en">2-3x/week</td>
+                                <td>Twitter / TG</td>
+                                <td data-lang="zh">证明 AI 预警有效</td>
+                                <td data-lang="en">Prove AI alerts work</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">本周 AI 战绩</td>
+                                <td data-lang="en">Weekly AI Performance</td>
+                                <td data-lang="zh">每周 1 条</td>
+                                <td data-lang="en">Weekly</td>
+                                <td>Twitter / Blog</td>
+                                <td data-lang="zh">量化 AI 价值</td>
+                                <td data-lang="en">Quantify AI value</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">用户晒单 UGC</td>
+                                <td data-lang="en">User Flex UGC</td>
+                                <td data-lang="zh">持续转发</td>
+                                <td data-lang="en">Ongoing RT</td>
+                                <td>Twitter</td>
+                                <td data-lang="zh">社会证明</td>
+                                <td data-lang="en">Social proof</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">深度教程</td>
+                                <td data-lang="en">Deep Tutorials</td>
+                                <td data-lang="zh">每周 1 条</td>
+                                <td data-lang="en">Weekly</td>
+                                <td>YouTube / Blog</td>
+                                <td data-lang="zh">教育 + SEO</td>
+                                <td data-lang="en">Education + SEO</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">KOL 合作体验</td>
+                                <td data-lang="en">KOL Collab Experience</td>
+                                <td data-lang="zh">每月 5-10 个</td>
+                                <td data-lang="en">5-10/month</td>
+                                <td>Twitter / YT</td>
+                                <td data-lang="zh">破圈 + 背书</td>
+                                <td data-lang="en">Reach + Endorsement</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card yellow">
+                    <h2>
+                        <span data-lang="zh">📣 传播节奏</span>
+                        <span data-lang="en">📣 Launch Cadence</span>
+                    </h2>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="phase" data-lang="zh">预热期 · 上线前 2 周</div>
+                            <div class="phase" data-lang="en">Pre-launch · 2 Weeks Before</div>
+                            <div class="title" data-lang="zh">悬念 + 期待</div>
+                            <div class="title" data-lang="en">Suspense + Anticipation</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">「交易要变了」悬念海报</span>
+                                <span class="tag" data-lang="en">"Trading is About to Change" teaser</span>
+                                <span class="tag" data-lang="zh">TradeGPT 概念视频</span>
+                                <span class="tag" data-lang="en">TradeGPT concept video</span>
+                                <span class="tag" data-lang="zh">Waitlist 开放</span>
+                                <span class="tag" data-lang="en">Waitlist opens</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item p2">
+                            <div class="phase" data-lang="zh">发布期 · 上线第 1 周</div>
+                            <div class="phase" data-lang="en">Launch · Week 1</div>
+                            <div class="title" data-lang="zh">集中爆发</div>
+                            <div class="title" data-lang="en">Concentrated Blast</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">CEO Twitter 发布</span>
+                                <span class="tag" data-lang="en">CEO Twitter announcement</span>
+                                <span class="tag" data-lang="zh">10+ KOL 同步体验</span>
+                                <span class="tag" data-lang="en">10+ KOL simultaneous experience</span>
+                                <span class="tag" data-lang="zh">媒体 PR（CoinDesk/TheBlock）</span>
+                                <span class="tag" data-lang="en">Media PR (CoinDesk/TheBlock)</span>
+                                <span class="tag" data-lang="zh">限时体验激励</span>
+                                <span class="tag" data-lang="en">Limited-time experience rewards</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item p3">
+                            <div class="phase" data-lang="zh">持续期 · 上线后</div>
+                            <div class="phase" data-lang="en">Sustaining · Post-launch</div>
+                            <div class="title" data-lang="zh">日常心智渗透</div>
+                            <div class="title" data-lang="en">Daily Mind Share Penetration</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">每日 AI 观点</span>
+                                <span class="tag" data-lang="en">Daily AI views</span>
+                                <span class="tag" data-lang="zh">预警回顾</span>
+                                <span class="tag" data-lang="en">Alert reviews</span>
+                                <span class="tag" data-lang="zh">用户 UGC 激励</span>
+                                <span class="tag" data-lang="en">User UGC incentives</span>
+                                <span class="tag" data-lang="zh">每周战绩榜</span>
+                                <span class="tag" data-lang="en">Weekly leaderboard</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card purple">
+                    <h2>
+                        <span data-lang="zh">🎯 KPI 指标</span>
+                        <span data-lang="en">🎯 KPIs</span>
+                    </h2>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-lang="zh">指标</th>
+                                <th data-lang="en">Metric</th>
+                                <th data-lang="zh">1个月</th>
+                                <th data-lang="en">Month 1</th>
+                                <th data-lang="zh">3个月</th>
+                                <th data-lang="en">Month 3</th>
+                                <th data-lang="zh">6个月</th>
+                                <th data-lang="en">Month 6</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-lang="zh">TradeGPT MAU</td>
+                                <td data-lang="en">TradeGPT MAU</td>
+                                <td>100K</td>
+                                <td>500K</td>
+                                <td>2M</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">AI 分析请求数</td>
+                                <td data-lang="en">AI Analysis Requests</td>
+                                <td>500K</td>
+                                <td>3M</td>
+                                <td>15M</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">AI 驱动交易额</td>
+                                <td data-lang="en">AI-driven Trading Volume</td>
+                                <td>$50M</td>
+                                <td>$300M</td>
+                                <td>$1B</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">Twitter「TradeGPT」提及</td>
+                                <td data-lang="en">Twitter "TradeGPT" Mentions</td>
+                                <td>5K</td>
+                                <td>30K</td>
+                                <td>100K</td>
+                            </tr>
+                            <tr>
+                                <td data-lang="zh">用户 NPS</td>
+                                <td data-lang="en">User NPS</td>
+                                <td>40+</td>
+                                <td>50+</td>
+                                <td>60+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-bottom: 80px;">
+            <div class="container">
+                <div class="conclusion">
+                    <p class="main" data-lang="zh">
+                        让用户形成条件反射：<br>
+                        「交易之前，先问 BGW AI」
+                    </p>
+                    <p class="main" data-lang="en">
+                        Build the user reflex:<br>
+                        "Before Trading, Ask BGW AI First"
+                    </p>
+                    <p class="sub" data-lang="zh">
+                        先打透 Meme 交易 → 创造 TradeGPT 专属概念 → 设计可截图传播 → 持续内容心智
+                    </p>
+                    <p class="sub" data-lang="en">
+                        Dominate Meme Trading → Create TradeGPT owned concept → Design viral screenshots → Sustain content mind share
+                    </p>
+                    <div class="cta-btn">
+                        <span data-lang="zh">打造交易 × AI 第一心智 🚀</span>
+                        <span data-lang="en">Build #1 Trade × AI Mind Share 🚀</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p class="confidential">🔒 CONFIDENTIAL · Bitget Wallet Internal Use Only</p>
+        </div>
+    </footer>
+
+    <script>
+        function setLang(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('bgw-trade-ai-lang', lang);
+        }
+        const savedLang = localStorage.getItem('bgw-trade-ai-lang');
+        if (savedLang) {
+            document.documentElement.lang = savedLang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', (savedLang === 'zh' && btn.textContent === '中文') || (savedLang === 'en' && btn.textContent === 'EN'));
+            });
+        }
+    </script>
+</body>
+</html>
