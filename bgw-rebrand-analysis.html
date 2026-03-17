@@ -128,12 +128,14 @@
         }
 
         h2 {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-400);
-            letter-spacing: 0.08em;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            letter-spacing: 0.05em;
             text-transform: uppercase;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--black);
         }
 
         h3 {
@@ -172,36 +174,42 @@
         }
 
         .summary-box {
-            background: var(--gray-50);
-            border-radius: 8px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 0;
             padding: 32px;
             margin: 32px 0;
         }
 
         .summary-box .verdict {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 28px;
+            font-weight: 700;
             color: var(--black);
             margin-bottom: 16px;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
 
         .summary-box .detail {
-            font-size: 15px;
-            color: var(--gray-600);
+            font-size: 16px;
+            color: var(--gray-700);
             line-height: 1.7;
         }
 
         .insight-box {
-            border-left: 3px solid var(--accent);
+            border-left: 3px solid var(--gray-300);
             padding: 20px 24px;
-            background: var(--gray-50);
+            background: transparent;
             margin: 24px 0;
-            border-radius: 0 8px 8px 0;
+            border-radius: 0;
+        }
+
+        .insight-box.highlight {
+            border-left-color: var(--accent);
+            background: var(--gray-50);
         }
 
         .insight-box.success { border-left-color: var(--success); }
-        .insight-box.warning { border-left-color: var(--warning); }
+        .insight-box.warning { border-left-color: var(--accent); }
         .insight-box.danger { border-left-color: var(--danger); }
 
         .insight-box .label {
@@ -210,12 +218,28 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
             margin-bottom: 8px;
-            color: var(--accent);
+            color: var(--gray-500);
         }
 
+        .insight-box.highlight .label { color: var(--accent); }
         .insight-box.success .label { color: var(--success); }
-        .insight-box.warning .label { color: var(--warning); }
+        .insight-box.warning .label { color: var(--gray-600); }
         .insight-box.danger .label { color: var(--danger); }
+        
+        /* Section Lead - 每个 section 的核心结论 */
+        .section-lead {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--black);
+            line-height: 1.5;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .section-lead strong {
+            color: var(--accent);
+        }
 
         .insight-box p { margin-bottom: 0; }
 
@@ -288,8 +312,8 @@
             border-radius: 8px;
         }
 
-        .case-card.success { border-top: 3px solid var(--success); }
-        .case-card.danger { border-top: 3px solid var(--danger); }
+        .case-card.success { border-top: 2px solid var(--gray-400); }
+        .case-card.danger { border-top: 2px solid var(--gray-400); }
 
         .case-card .company {
             font-size: 16px;
@@ -362,8 +386,8 @@
         }
 
         .arch-option.recommended {
-            background: var(--accent-light);
-            border: 1px solid var(--accent);
+            background: var(--white);
+            border: 2px solid var(--black);
         }
 
         .trigger-section {
@@ -483,8 +507,8 @@
             border-radius: 8px;
         }
 
-        .col-box.success { border-top: 3px solid var(--success); }
-        .col-box.danger { border-top: 3px solid var(--danger); }
+        .col-box.success { border-top: 2px solid var(--black); }
+        .col-box.danger { border-top: 2px solid var(--gray-400); }
 
         .col-box h4 {
             margin-top: 0;
@@ -673,12 +697,12 @@
             <div class="container">
                 <h2>02 — 品牌现状诊断</h2>
 
-                <div class="insight-box danger">
-                    <div class="label" data-lang="zh">品牌鸿沟</div>
-                    <div class="label" data-lang="en">Brand Gap</div>
-                    <p data-lang="zh"><strong>愿景（服务 40 亿普通人的消费级金融）与品牌印象（Crypto 交易所的附属钱包）存在根本性鸿沟。</strong></p>
-                    <p data-lang="en"><strong>Fundamental gap between vision (consumer finance for 4B people) and brand impression (exchange-affiliated crypto wallet).</strong></p>
-                </div>
+                <p class="section-lead" data-lang="zh">
+                    愿景是<strong>「服务 40 亿普通人的消费级金融」</strong>，但品牌印象是<strong>「交易所的附属钱包」</strong>——这是根本性鸿沟。
+                </p>
+                <p class="section-lead" data-lang="en">
+                    Vision is <strong>"consumer finance for 4B people"</strong>, but brand impression is <strong>"exchange-affiliated wallet"</strong>—this is a fundamental gap.
+                </p>
 
                 <table>
                     <tr>
@@ -822,15 +846,15 @@
             <div class="container">
                 <h2>04 — 不改名的隐性成本</h2>
 
-                <p data-lang="zh">「不改名」也有成本。以下是量化分析。</p>
-                <p data-lang="en">"Not rebranding" also has costs. Below is a quantified analysis.</p>
+                <p class="section-lead" data-lang="zh">
+                    维持现状也有代价：<strong>品牌税、合作机会损失、合规限制</strong>——这些隐性成本正在累积。
+                </p>
+                <p class="section-lead" data-lang="en">
+                    Status quo has costs: <strong>brand tax, partnership loss, regulatory restrictions</strong>—these hidden costs are accumulating.
+                </p>
 
-                <div class="insight-box danger">
-                    <div class="label" data-lang="zh">核心问题</div>
-                    <div class="label" data-lang="en">Core Issue</div>
-                    <p data-lang="zh">当品牌名与目标用户心智不匹配时，<strong>每一美元营销费用都在对抗这个不匹配</strong>。这是「品牌税」——你在为错误的品牌联想付费。</p>
-                    <p data-lang="en">When brand name doesn't match target user mindset, <strong>every marketing dollar fights this mismatch</strong>. This is "brand tax" — you're paying for wrong brand associations.</p>
-                </div>
+                <p data-lang="zh" style="color: var(--gray-600); margin-bottom: 24px;">当品牌名与目标用户心智不匹配时，每一美元营销费用都在对抗这个不匹配。这是「品牌税」——你在为错误的品牌联想付费。</p>
+                <p data-lang="en" style="color: var(--gray-600); margin-bottom: 24px;">When brand name doesn't match target user mindset, every marketing dollar fights this mismatch. This is "brand tax" — you're paying for wrong brand associations.</p>
 
                 <h3 data-lang="zh">获客成本（CAC）行业基准</h3>
                 <h3 data-lang="en">Customer Acquisition Cost (CAC) Industry Benchmarks</h3>
@@ -930,6 +954,28 @@
                         <td>2-3x 估值差异</td>
                     </tr>
                 </table>
+
+                <h3 data-lang="zh">合规牌照与监管限制</h3>
+                <h3 data-lang="en">Regulatory Compliance & License Restrictions</h3>
+
+                <div class="insight-box danger">
+                    <div class="label" data-lang="zh">🔶 推断 · 需内部合规团队确认</div>
+                    <div class="label" data-lang="en">🔶 Inference · Requires internal compliance team confirmation</div>
+                    <p data-lang="zh">
+                        Bitget 交易所在全球合规牌照申请过程中，已在<strong>多个关键市场受到限制</strong>（包括部分欧洲、北美区域）。由于 Bitget Wallet 与 Bitget 共用品牌，监管机构对两者的关联性认定导致：<br><br>
+                        • <strong>推广受限</strong>：BGW 在受限区域的推广受到直接制约，无法独立于母品牌运营<br>
+                        • <strong>合规审查关联</strong>：合作金融机构（银行/支付机构）的合规审查会将 BGW 与 Bitget 交易所视为同一主体<br>
+                        • <strong>PayFi 扩展障碍</strong>：在合规敏感度高的市场（EU、APAC主要市场），品牌绑定正在成为业务扩展的硬性障碍<br><br>
+                        <strong>这是「不改名」最具战略影响力的隐性成本之一，且随着各地监管趋严，该风险将持续放大。</strong>
+                    </p>
+                    <p data-lang="en">
+                        Bitget Exchange has faced <strong>restrictions in multiple key markets</strong> during global compliance license applications (including parts of Europe and North America). Since Bitget Wallet shares branding with Bitget, regulatory bodies' association between the two has resulted in:<br><br>
+                        • <strong>Promotion restrictions</strong>: BGW promotion in restricted regions is directly constrained, unable to operate independently from parent brand<br>
+                        • <strong>Compliance review linkage</strong>: Partner financial institutions (banks/payment providers) treat BGW and Bitget Exchange as a single entity in compliance reviews<br>
+                        • <strong>PayFi expansion barrier</strong>: In compliance-sensitive markets (EU, major APAC markets), brand association is becoming a hard barrier to business expansion<br><br>
+                        <strong>This is one of the most strategically significant hidden costs of "not rebranding," and the risk will continue to amplify as global regulations tighten.</strong>
+                    </p>
+                </div>
 
                 <div class="summary-box">
                     <div class="verdict">
