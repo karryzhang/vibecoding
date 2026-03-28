@@ -1379,6 +1379,14 @@ ul.styled li strong, ol.styled li strong { color: var(--text); }
           </div>
           <span class="channel-status status-ready">强烈推荐</span>
         </div>
+        <div class="channel-item">
+          <span class="channel-emoji">🐦</span>
+          <div class="channel-info">
+            <h4>飞书 / Lark</h4>
+            <p>字节跳动企业协作平台，原生支持，WebSocket 长连接无需公网 IP，支持群聊、私信、富媒体。企业/团队首选。</p>
+          </div>
+          <span class="channel-status status-ready">内置支持</span>
+        </div>
       </div>
     </section>
 
@@ -1906,6 +1914,190 @@ openclaw gateway status</pre>
       <div class="info-block tip" style="margin-top:16px;">
         <span class="info-icon">🆚</span>
         <p><strong>微信 vs Telegram：</strong>微信适合国内日常使用，无需翻墙，但受腾讯内容审查限制。Telegram 功能最完整、无审查，但国内需要 VPN。两个都可以同时开着，互不影响。</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 飞书 -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <span style="font-size:1.4rem;">🐦</span>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--text);">飞书 / Lark — 企业团队首选</h3>
+        <span style="font-size:.72rem;background:rgba(79,143,255,.15);color:var(--blue);border:1px solid rgba(79,143,255,.25);padding:2px 10px;border-radius:10px;font-weight:700;">内置支持 · 无需插件</span>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:16px;font-size:.87rem;line-height:1.8;">
+        飞书（Lark）是字节跳动旗下的企业协作平台，OpenClaw 官方原生支持飞书机器人，通过 WebSocket 长连接接入，<strong style="color:var(--text)">无需公网 URL、无需 webhook</strong>，国内直连，适合企业/团队使用。
+      </p>
+
+      <div class="concept-grid" style="margin-bottom:20px;">
+        <div class="concept-card">
+          <span class="concept-icon">✅</span>
+          <h3>无需公网 IP</h3>
+          <p>WebSocket 长连接，本机/内网服务器即可，不需要暴露端口。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">📎</span>
+          <h3>支持富媒体</h3>
+          <p>文字、图片、文件、音频、视频、贴纸全部支持，还有流式卡片输出。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">👥</span>
+          <h3>群聊 + 私信</h3>
+          <p>支持私信和群组话题，群聊 @ 提及响应，精细权限控制。</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">在飞书开放平台创建应用</div>
+            <div class="step-desc">
+              打开 <strong>open.feishu.cn/app</strong>（国际版 Lark 用 open.larksuite.com/app），登录后点击「创建企业自建应用」，填写名称和图标。
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>创建完成后，进入「凭证与基础信息」，复制 <strong>App ID</strong>（格式：<code>cli_xxx</code>）和 <strong>App Secret</strong>，妥善保存。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">配置权限（批量导入）</div>
+            <div class="step-desc">在应用「权限管理」中，点击「批量导入」，粘贴以下 JSON：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json — 批量导入权限</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"scopes"</span>: {
+    <span class="str">"tenant"</span>: [
+      <span class="str">"im:message"</span>,
+      <span class="str">"im:message:send_as_bot"</span>,
+      <span class="str">"im:message:readonly"</span>,
+      <span class="str">"im:message.p2p_msg:readonly"</span>,
+      <span class="str">"im:message.group_at_msg:readonly"</span>,
+      <span class="str">"im:resource"</span>,
+      <span class="str">"im:chat.members:bot_access"</span>,
+      <span class="str">"contact:user.employee_id:readonly"</span>,
+      <span class="str">"application:bot.menu:write"</span>
+    ]
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">启用机器人能力 + 配置事件订阅</div>
+            <ul class="styled">
+              <li>「应用能力」→「机器人」→ <strong>启用机器人</strong>，设置机器人名称</li>
+              <li>「事件订阅」→ 选择 <strong>「使用长连接接收事件（WebSocket）」</strong></li>
+              <li>添加事件：<strong><code>im.message.receive_v1</code></strong></li>
+            </ul>
+            <div class="info-block warn">
+              <span class="info-icon">⚠️</span>
+              <p>事件订阅要在 <strong>OpenClaw Gateway 运行时</strong>配置，否则长连接设置可能无法保存。建议先完成第 4 步启动 Gateway，再回来保存这里。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">配置 OpenClaw</div>
+            <div class="step-desc">编辑 <code>~/.openclaw/openclaw.json</code>：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"channels"</span>: {
+    <span class="str">"feishu"</span>: {
+      <span class="str">"enabled"</span>: <span class="kw">true</span>,
+      <span class="str">"dmPolicy"</span>: <span class="str">"pairing"</span>,
+      <span class="str">"accounts"</span>: {
+        <span class="str">"main"</span>: {
+          <span class="str">"appId"</span>: <span class="str">"cli_你的AppID"</span>,
+          <span class="str">"appSecret"</span>: <span class="str">"你的AppSecret"</span>,
+          <span class="str">"name"</span>: <span class="str">"我的AI助手"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>Lark 国际版用户额外添加：<code>"domain": "lark"</code></p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">发布应用并重启 Gateway</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>openclaw gateway restart</pre>
+            </div>
+            <div class="step-desc" style="margin-top:12px;">
+              回到飞书开放平台 →「版本管理与发布」→ 创建版本 → 提交审核（企业自建应用通常自动批准）。
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">🎉 发消息 + 配对</div>
+            <div class="step-desc">在飞书搜索你的机器人，发一条消息，机器人会返回配对码。终端执行：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 查看待配对列表</span>
+openclaw pairing list feishu
+
+<span class="cmt"># 批准（CODE 替换为机器人返回的验证码）</span>
+openclaw pairing approve feishu CODE</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✅</span>
+              <p>配对成功后正常聊天即可。群聊中需要 @ 机器人触发。常用命令：<code>/status</code>、<code>/reset</code>、<code>/model</code>（以文本形式发送，飞书不支持斜杠菜单）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:14px;">飞书群聊配置示例</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">json — 允许指定群，要求 @ 提及（推荐）</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre>{
+  <span class="str">"channels"</span>: {
+    <span class="str">"feishu"</span>: {
+      <span class="str">"groupPolicy"</span>: <span class="str">"open"</span>,
+      <span class="str">"groups"</span>: {
+        <span class="str">"oc_你的群组ID"</span>: { <span class="str">"requireMention"</span>: <span class="kw">true</span> }
+      }
+    }
+  }
+}</pre>
+      </div>
+      <div class="info-block info">
+        <span class="info-icon">ℹ️</span>
+        <p><strong>如何获取群组 ID：</strong>启动 Gateway 后在群里 @ 机器人，运行 <code>openclaw logs --follow</code> 查找 <code>chat_id</code>（格式为 <code>oc_xxx</code>）。</p>
       </div>
     </section>
 
