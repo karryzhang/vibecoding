@@ -1133,7 +1133,9 @@ ul.styled li strong, ol.styled li strong { color: var(--text); }
       <div class="divider"></div>
 
       <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:14px;">常见 AI 模型对比</h3>
-      <div class="channel-list">
+
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">🌏 海外模型（需要 VPN 或海外服务器）</div>
+      <div class="channel-list" style="margin-bottom:20px;">
         <div class="channel-item">
           <span class="channel-emoji">🟢</span>
           <div class="channel-info">
@@ -1160,9 +1162,29 @@ ul.styled li strong, ol.styled li strong { color: var(--text); }
         </div>
       </div>
 
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">🇨🇳 国产模型（无需 VPN，国内直连）</div>
+      <div class="channel-list">
+        <div class="channel-item">
+          <span class="channel-emoji">🐋</span>
+          <div class="channel-info">
+            <h4>DeepSeek（深度求索）</h4>
+            <p>国内最强开源模型，逻辑推理和代码能力出众，媲美 GPT-4。API 价格极低，国内可直连。访问：<strong>platform.deepseek.com</strong></p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">✨</span>
+          <div class="channel-info">
+            <h4>通义千问 Qwen（阿里云）</h4>
+            <p>阿里出品，中文理解极佳，长文本处理能力强，有免费额度。适合中文写作、分析场景。访问：<strong>dashscope.aliyuncs.com</strong></p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </div>
+      </div>
+
       <div class="info-block tip mt-4">
         <span class="info-icon">💡</span>
-        <p><strong>新手建议：</strong>先从 Claude 或 GPT-4 入手。OpenClaw 支持随时切换模型，不用担心选错。</p>
+        <p><strong>新手建议：</strong>国内用户优先试试 <strong>DeepSeek</strong>，无需 VPN，API 极便宜，能力强。有条件翻墙的话 Claude 是最佳选择。OpenClaw 支持随时切换，不用担心选错。</p>
       </div>
     </section>
 
@@ -1719,7 +1741,7 @@ openclaw auth login anthropic
           <div class="step-num">C</div>
           <div class="step-body">
             <div class="step-title">Gemini（Google）— 免费额度最多</div>
-            <div class="step-desc">前往 <code>aistudio.google.com</code> 获取免费 API Key：</div>
+            <div class="step-desc">前往 <code>aistudio.google.com</code> 获取免费 API Key（需 VPN）：</div>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">json</span>
@@ -1737,6 +1759,66 @@ openclaw auth login anthropic
     }
   }
 }</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">D</div>
+          <div class="step-body">
+            <div class="step-title">🇨🇳 DeepSeek — 国内直连，无需 VPN</div>
+            <div class="step-desc">前往 <code>platform.deepseek.com</code> 注册并创建 API Key，国内可直接访问：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json — 兼容 OpenAI 格式</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"agents"</span>: {
+    <span class="str">"defaults"</span>: {
+      <span class="str">"model"</span>: <span class="str">"openai/deepseek-chat"</span>,
+      <span class="str">"auth"</span>: {
+        <span class="str">"openai"</span>: {
+          <span class="str">"apiKey"</span>: <span class="str">"sk-你的DeepSeekKey"</span>,
+          <span class="str">"baseURL"</span>: <span class="str">"https://api.deepseek.com/v1"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">🐋</span>
+              <p><strong>DeepSeek 优势：</strong>价格极低（约 OpenAI 的 1/30），逻辑推理和代码能力媲美 GPT-4，国内服务器直连无需翻墙。新注册有免费额度。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">E</div>
+          <div class="step-body">
+            <div class="step-title">🇨🇳 通义千问 Qwen — 阿里云，中文最强</div>
+            <div class="step-desc">前往 <code>dashscope.aliyuncs.com</code> 开通服务，获取 API Key：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json — 兼容 OpenAI 格式</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"agents"</span>: {
+    <span class="str">"defaults"</span>: {
+      <span class="str">"model"</span>: <span class="str">"openai/qwen-plus"</span>,
+      <span class="str">"auth"</span>: {
+        <span class="str">"openai"</span>: {
+          <span class="str">"apiKey"</span>: <span class="str">"sk-你的QwenKey"</span>,
+          <span class="str">"baseURL"</span>: <span class="str">"https://dashscope.aliyuncs.com/compatible-mode/v1"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✨</span>
+              <p><strong>Qwen 优势：</strong>阿里云出品，中文理解和长文处理极佳，有免费额度。<code>qwen-plus</code> 性价比最高，<code>qwen-max</code> 能力更强。</p>
             </div>
           </div>
         </div>
