@@ -1426,6 +1426,92 @@ node --version</pre>
             </div>
           </div>
         </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">🪟 Windows 安装指南（WSL2 + Node）</div>
+            <div class="step-desc">
+              Windows 推荐通过 <strong>WSL2</strong>（Windows 子系统 Linux）运行 OpenClaw，体验和 Linux 完全一致，且官方强烈推荐。
+            </div>
+            <div class="info-block info">
+              <span class="info-icon">ℹ️</span>
+              <p><strong>为什么用 WSL2？</strong>OpenClaw 是 Node.js 程序，在 WSL2 的 Linux 环境里运行最稳定，避免 Windows 路径/权限等兼容性问题。</p>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">第一步：安装 WSL2</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">PowerShell（以管理员身份运行）</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 一键安装 WSL2 + Ubuntu（Windows 10/11）</span>
+wsl --install
+
+<span class="cmt"># 安装完成后重启电脑，然后打开「Ubuntu」应用</span>
+<span class="cmt"># 首次进入设置用户名和密码</span></pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>如果 <code>wsl --install</code> 报错，先运行：<code>wsl --update</code>，或在「控制面板 → 程序 → 启用或关闭 Windows 功能」里勾选「适用于 Linux 的 Windows 子系统」和「虚拟机平台」。</p>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">第二步：在 WSL2 里安装 Node.js</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash（Ubuntu 终端里执行）</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 安装 nvm</span>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+<span class="cmt"># 重新加载 shell 配置</span>
+source ~/.bashrc
+
+<span class="cmt"># 安装 Node 24</span>
+nvm install 24
+nvm use 24
+
+<span class="cmt"># 验证</span>
+node --version  <span class="cmt"># 显示 v24.x.x 即成功</span></pre>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">第三步：VPN 代理穿透到 WSL2</div>
+            <div class="step-desc">WSL2 默认走 Windows 宿主机的网络，但代理不会自动传入。需要手动配置：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash — 在 WSL2 终端里设置代理</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 获取 Windows 宿主机 IP（每次启动可能变化）</span>
+export HOST_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+
+<span class="cmt"># 设置代理（端口改为你的 Clash/VPN 监听端口，一般是 7890）</span>
+export http_proxy="http://$HOST_IP:7890"
+export https_proxy="http://$HOST_IP:7890"
+
+<span class="cmt"># 验证代理是否生效</span>
+curl -I https://api.telegram.org</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>把上面的 <code>export</code> 命令加到 <code>~/.bashrc</code> 末尾，就不用每次手动设置了。Clash 需要开启「允许局域网连接」选项。</p>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">推荐终端工具</div>
+            <div class="concept-grid" style="margin:8px 0;">
+              <div class="concept-card">
+                <span class="concept-icon">💻</span>
+                <h3>Windows Terminal</h3>
+                <p>微软官方终端，支持多标签，从 Microsoft Store 免费安装。比 cmd 好用 100 倍。</p>
+              </div>
+              <div class="concept-card">
+                <span class="concept-icon">⚡</span>
+                <h3>VS Code + WSL 扩展</h3>
+                <p>安装 VS Code 后装「WSL」扩展，可以直接在 Windows 里编辑 WSL 内的文件，体验极佳。</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="divider"></div>
