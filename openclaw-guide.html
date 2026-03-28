@@ -1367,6 +1367,14 @@ ul.styled li strong, ol.styled li strong { color: var(--text); }
           </div>
           <span class="channel-status status-plugin">macOS 限定</span>
         </div>
+        <div class="channel-item" style="border-color:rgba(0,230,184,.25);background:rgba(0,230,184,.03);">
+          <span class="channel-emoji">🐧</span>
+          <div class="channel-info">
+            <h4>微信 ClawBot <span style="font-size:.72rem;background:rgba(0,230,184,.15);color:var(--accent);padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;">2026 新上线</span></h4>
+            <p>腾讯官方插件，将微信直接变成 AI 助手入口。国内用户首选！目前灰度测试中，iOS 版本优先支持。</p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </div>
       </div>
     </section>
 
@@ -1760,6 +1768,140 @@ openclaw pairing approve telegram CODE</pre>
       <div class="info-block info">
         <span class="info-icon">ℹ️</span>
         <p><strong>如何获取你的 Telegram 用户 ID：</strong>启动 Gateway 后私信你的 Bot，然后运行 <code>openclaw logs --follow</code>，查找 <code>from.id</code> 字段即是你的 ID。</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- WeChat ClawBot -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <span style="font-size:1.4rem;">🐧</span>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--text);">微信 ClawBot — 国内用户首选</h3>
+        <span style="font-size:.72rem;background:rgba(0,230,184,.15);color:var(--accent);border:1px solid rgba(0,230,184,.25);padding:2px 10px;border-radius:10px;font-weight:700;">2026 新上线 · 灰度测试</span>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:16px;font-size:.87rem;line-height:1.8;">
+        2026 年 3 月，腾讯正式推出 <strong style="color:var(--text)">ClawBot</strong> 插件，将微信变成 OpenClaw 的操作入口。国内用户无需 Telegram，直接用微信就能和 AI 助手对话。
+      </p>
+
+      <div class="info-block warn">
+        <span class="info-icon">⚠️</span>
+        <p><strong>当前限制：</strong>ClawBot 处于灰度测试阶段，<strong>iOS 微信 8.0.70+</strong> 优先支持，Android 尚在陆续推送。如果「设置-插件」里没有 ClawBot 入口，重启几次微信或等待灰度覆盖。</p>
+      </div>
+
+      <div class="steps" style="margin-top:20px;">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">更新微信到最新版本</div>
+            <div class="step-desc">
+              App Store 搜索「微信」，更新到 <strong>8.0.70 或以上</strong>。<br />
+              更新后打开微信 → <strong>「我 → 设置 → 插件」</strong>，确认 ClawBot 入口已出现。
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>看不到「插件」入口？先重启微信，或等几天，灰度会逐步推送给所有用户。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">确认 OpenClaw 已安装并运行</div>
+            <div class="step-desc">ClawBot 是将微信绑定到<strong>本机运行的 OpenClaw</strong>，所以你的电脑需要先装好 OpenClaw。</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 确认 OpenClaw 已安装</span>
+openclaw --version
+
+<span class="cmt"># 确认 Gateway 正在运行</span>
+openclaw gateway status</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">安装微信 ClawBot 插件</div>
+            <div class="step-desc">在电脑终端运行腾讯提供的安装命令（无需单独下载，npx 会自动拉取）：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash — 在电脑终端运行</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>npx -y @tencent-weixin/openclaw-weixin-cli@latest install</pre>
+            </div>
+            <div class="info-block info">
+              <span class="info-icon">ℹ️</span>
+              <p>该命令会自动安装腾讯官方的微信-OpenClaw 桥接插件，并启动本地监听服务。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">扫码绑定微信账号</div>
+            <div class="step-desc">
+              命令运行后，终端会弹出一个 <strong>QR 二维码</strong>。<br />
+              拿出手机，打开微信 → <strong>「我 → 设置 → 插件 → ClawBot」</strong> → 点击「扫码绑定」，扫描终端里的二维码。
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✅</span>
+              <p>扫码成功后，微信会提示「ClawBot 绑定成功」。之后直接在微信给 <strong>「ClawBot」联系人</strong>发消息就能和 AI 对话了！</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">🎉 开始用微信聊 AI！</div>
+            <div class="step-desc">
+              在微信「ClawBot」对话框发消息，OpenClaw 会处理并回复。<br />
+              支持发文字、图片、语音（自动转文字）、文件。
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">试着发这些</span>
+              </div>
+              <pre>帮我总结一下今天的工作内容
+帮我写一封请假邮件
+分析一下这张截图（发图片）</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:14px;">⚠️ 微信 ClawBot 重要注意事项</h3>
+      <div class="concept-grid">
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">🔒</span>
+          <h3>腾讯安全审查</h3>
+          <p>微信会对传输内容进行安全审计，涉及敏感内容可能被屏蔽。AI 输出内容由你自己负责。</p>
+        </div>
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">📝</span>
+          <h3>不留存对话</h3>
+          <p>腾讯声明不存储对话内容，但会记录 IP 地址、设备信息和操作日志用于安全审计。</p>
+        </div>
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">👤</span>
+          <h3>仅限私聊</h3>
+          <p>目前只支持一对一私信，不支持群聊。AI 主动推送消息也暂不支持。</p>
+        </div>
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">💻</span>
+          <h3>电脑要保持开机</h3>
+          <p>ClawBot 依赖本地运行的 OpenClaw，电脑关机或 Gateway 停止则微信 AI 不可用。建议用海外服务器。</p>
+        </div>
+      </div>
+
+      <div class="info-block tip" style="margin-top:16px;">
+        <span class="info-icon">🆚</span>
+        <p><strong>微信 vs Telegram：</strong>微信适合国内日常使用，无需翻墙，但受腾讯内容审查限制。Telegram 功能最完整、无审查，但国内需要 VPN。两个都可以同时开着，互不影响。</p>
       </div>
     </section>
 
