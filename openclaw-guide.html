@@ -1015,6 +1015,10 @@ ul.styled li strong, ol.styled li strong { color: var(--text); }
         <span class="nav-icon">❓</span> 常见问题
         <span class="nav-num">10</span>
       </a>
+      <a class="nav-item" href="#s9" onclick="setTimeout(()=>document.querySelector('.next-grid').scrollIntoView({behavior:'smooth'}),100)">
+        <span class="nav-icon">🇨🇳</span> 中文资源
+        <span class="nav-num">附</span>
+      </a>
     </div>
   </nav>
 
@@ -2343,7 +2347,7 @@ tailscale up
 
       <div class="divider"></div>
 
-      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🎯 进一步学习</h3>
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🎯 官方资源</h3>
       <div class="next-grid">
         <a class="next-card" href="https://docs.openclaw.ai" target="_blank">
           <div class="ni">📚</div>
@@ -2367,9 +2371,109 @@ tailscale up
         </a>
       </div>
 
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:6px;">🇨🇳 中文学习资源</h3>
+      <p style="color:var(--muted);font-size:.8rem;margin-bottom:18px;">以下资源由中文社区整理，质量已验证 ✅</p>
+
+      <!-- B站视频 -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">📺 B站视频（从入门到精通）</div>
+      <div class="channel-list" style="margin-bottom:24px;">
+        <a class="channel-item" href="https://www.bilibili.com/video/BV1jEAaz3E6K/" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🎬</span>
+          <div class="channel-info">
+            <h4>一个视频搞懂 OpenClaw！— 林亦LYi</h4>
+            <p>全站播放量最高的入门视频（近 500 万播放），10 分钟讲清楚 OpenClaw 是什么、能干什么。完全零基础可看。</p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </a>
+        <a class="channel-item" href="https://www.bilibili.com/video/BV1TpAZzeEiZ/" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🎬</span>
+          <div class="channel-info">
+            <h4>保姆级全教程：安装+Skills实战+多Agent协作</h4>
+            <p>1 小时完整教学，从安装到 Skills 实战再到多 Agent 协作，2026 最新版本，全 B 站最细。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://www.bilibili.com/video/BV1mScqzqEDN/" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🎬</span>
+          <div class="channel-info">
+            <h4>OpenClaw 原理精讲与从零手搓 — 进阶必看</h4>
+            <p>深入讲解 Agent Skill、无限上下文记忆、自主迭代功能设计原理，适合想深入理解的进阶用户。</p>
+          </div>
+          <span class="channel-status status-plugin">进阶</span>
+        </a>
+      </div>
+
+      <!-- 图文教程 -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">📝 图文教程（收藏备用）</div>
+      <div class="channel-list" style="margin-bottom:24px;">
+        <a class="channel-item" href="https://www.runoob.com/ai-agent/openclaw-weixin.html" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🟢</span>
+          <div class="channel-info">
+            <h4>菜鸟教程 — OpenClaw 接入微信完整图文</h4>
+            <p>菜鸟教程官方出品，图文并茂，包含微信、飞书、Skills 使用，适合新手跟着一步步操作。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://zhuanlan.zhihu.com/p/2002370444339212951" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🔵</span>
+          <div class="channel-info">
+            <h4>知乎 — 我做了个 OpenClaw 入门站，7天教程+70篇资源</h4>
+            <p>社区整理最全的中文资源导航，含 7 天入门计划，全网相关教程汇总，适合系统学习。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://zhuanlan.zhihu.com/p/2019077006235554955" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🔵</span>
+          <div class="channel-info">
+            <h4>知乎 — 微信ClawBot插件，14亿人的AI入口！附Win踩坑</h4>
+            <p>专门讲微信 ClawBot 接入，包含 Windows 踩坑解决方案，国内用户必看。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://damodev.csdn.net/69a7a68d54b52172bc5ee3bb.html" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🟠</span>
+          <div class="channel-info">
+            <h4>CSDN — 云上及本地部署保姆级教程（2026 中文版）</h4>
+            <p>覆盖云服务器部署 + 本地部署两种方案，含国内环境优化配置，偏技术向。</p>
+          </div>
+          <span class="channel-status status-plugin">进阶</span>
+        </a>
+      </div>
+
+      <!-- GitHub 中文项目 -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">⭐ GitHub 中文开源项目</div>
+      <div class="channel-list" style="margin-bottom:8px;">
+        <a class="channel-item" href="https://github.com/xianyu110/awesome-openclaw-tutorial" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">📖</span>
+          <div class="channel-info">
+            <h4>awesome-openclaw-tutorial — 40万字中文教程</h4>
+            <p>GitHub 最全中文教程，15 章节 + 15 附录，涵盖安装、配置、实战案例和避坑指南，持续更新。</p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </a>
+        <a class="channel-item" href="https://github.com/jiulingyun/openclaw-cn" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🇨🇳</span>
+          <div class="channel-info">
+            <h4>openclaw-cn — 中文社区版（内置微信/钉钉/飞书/QQ）</h4>
+            <p>国内团队维护的中文分支，已内置钉钉、企业微信、飞书、QQ、微信，国内网络环境优化，开箱即用。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://github.com/ben4claw/openclaw-tutorial" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">📖</span>
+          <div class="channel-info">
+            <h4>openclaw-tutorial — 含 Skills 生态详解（1800+ 可用）</h4>
+            <p>详细介绍 49 个内置 Skills + 官方 93 个 + 社区 1715+ 个，含完整 Skills 使用指南。</p>
+          </div>
+          <span class="channel-status status-plugin">进阶</span>
+        </a>
+      </div>
+
       <div class="info-block tip" style="margin-top:28px;">
         <span class="info-icon">🦞</span>
-        <p><strong>快速回顾：</strong>理解 AI 基础 → 准备网络环境 → 安装 OpenClaw → 接入 Telegram Bot → 配置 AI 模型 → 开始聊天。就这么简单！遇到问题先看日志，90% 都能自己解决。</p>
+        <p><strong>学习路线建议：</strong>新手先看 B 站林亦LYi 的入门视频 → 跟着本页面动手安装 → 遇到问题查菜鸟教程或知乎 → 想深入研究看 GitHub 中文教程仓库。循序渐进，30 分钟就能用上！</p>
       </div>
     </section>
 
