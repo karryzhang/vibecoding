@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDD v3 | invest-pipeline v2 深度分析</title>
+<style>
+:root{--bg:#0b1120;--surface:rgba(18,26,46,.76);--border:rgba(255,255,255,.12);--text:#edf3ff;--muted:#9eabc7;--blue:#62b7ff;--purple:#8b7fff;--green:#34d39a;--yellow:#ffd56a;--red:#ff8c8c;--orange:#ffaa5c;--shadow:0 20px 60px rgba(0,0,0,.28)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','SF Pro Display',sans-serif;background:radial-gradient(circle at top left,rgba(98,183,255,.15),transparent 30%),radial-gradient(circle at top right,rgba(139,127,255,.15),transparent 24%),linear-gradient(180deg,#09111f 0%,#101830 58%,#0a1222 100%);color:var(--text);line-height:1.68;-webkit-font-smoothing:antialiased}
+.wrap{width:min(1180px,calc(100vw - 32px));margin:0 auto}
+.hero{padding:68px 0 28px}
+.hero-card,.card{background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.hero-card{border-radius:28px;padding:36px;position:relative;overflow:hidden}
+.hero-card::after{content:'';position:absolute;inset:auto -40px -70px auto;width:260px;height:260px;background:radial-gradient(circle,rgba(98,183,255,.24),transparent 68%)}
+.card{border-radius:24px;padding:24px}
+.eyebrow{display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#d7e6ff}
+h1{font-size:clamp(34px,6vw,66px);line-height:1.02;margin:18px 0 16px;letter-spacing:-.04em}
+h2{font-size:28px;margin:12px 0 18px;letter-spacing:-.03em}
+h3{font-size:20px;margin:0 0 12px;letter-spacing:-.02em}
+.hero p,.muted{color:var(--muted)}.hero p{max-width:900px;font-size:17px;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{padding:9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);font-size:13px;color:#dde6ff}
+.chip-green{border-color:rgba(52,211,154,.3);background:rgba(52,211,154,.1);color:var(--green)}
+.chip-yellow{border-color:rgba(255,213,106,.3);background:rgba(255,213,106,.1);color:var(--yellow)}
+.chip-red{border-color:rgba(255,140,140,.3);background:rgba(255,140,140,.1);color:var(--red)}
+.chip-purple{border-color:rgba(139,127,255,.3);background:rgba(139,127,255,.1);color:var(--purple)}
+.section{padding:18px 0 10px}
+.grid-2,.grid-3,.grid-4{display:grid;gap:18px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.summary{font-size:20px;font-weight:700;line-height:1.45}
+.metric{display:flex;flex-direction:column;gap:10px}
+.metric .value{font-size:40px;font-weight:800;letter-spacing:-.04em}
+.metric .label{color:var(--muted);font-size:14px}
+.bar{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+.bar>span{display:block;height:100%;border-radius:999px}
+.bar-green>span{background:linear-gradient(90deg,var(--green),#6ee7b7)}
+.bar-blue>span{background:linear-gradient(90deg,var(--blue),var(--purple))}
+.bar-yellow>span{background:linear-gradient(90deg,var(--yellow),var(--orange))}
+.bar-red>span{background:linear-gradient(90deg,var(--red),#ff6b6b)}
+.table{width:100%;border-collapse:collapse;font-size:14px}
+.table th,.table td{text-align:left;padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top}
+.table th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#cfdbfa}
+ul{margin:0;padding-left:18px}li+li{margin-top:8px}
+.callout{border-left:4px solid var(--blue);padding-left:16px;color:#d6e8ff;font-weight:700;margin:12px 0}
+.callout-green{border-left-color:var(--green)}
+.callout-yellow{border-left-color:var(--yellow)}
+.callout-red{border-left-color:var(--red)}
+.callout-purple{border-left-color:var(--purple)}
+.tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.03em}
+.tag-c{background:rgba(98,183,255,.15);color:var(--blue)}
+.tag-s{background:rgba(255,140,140,.15);color:var(--red)}
+.tag-q{background:rgba(255,213,106,.15);color:var(--yellow)}
+.verdict-box{background:linear-gradient(135deg,rgba(52,211,154,.12),rgba(98,183,255,.08));border:1.5px solid rgba(52,211,154,.25);border-radius:20px;padding:28px}
+.floor-box{background:linear-gradient(135deg,rgba(139,127,255,.12),rgba(98,183,255,.08));border:1.5px solid rgba(139,127,255,.25);border-radius:20px;padding:28px}
+.odds-box{background:linear-gradient(135deg,rgba(255,170,92,.1),rgba(255,213,106,.06));border:1.5px solid rgba(255,170,92,.2);border-radius:20px;padding:28px}
+.risk-c{background:linear-gradient(135deg,rgba(98,183,255,.08),rgba(139,127,255,.05));border:1.5px solid rgba(98,183,255,.2);border-radius:20px;padding:24px}
+.risk-s{background:linear-gradient(135deg,rgba(255,140,140,.08),rgba(255,100,100,.05));border:1.5px solid rgba(255,140,140,.2);border-radius:20px;padding:24px}
+.score-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.score-row:last-child{border-bottom:none}
+.score-dim{width:140px;font-size:13px;color:var(--muted);flex-shrink:0}
+.score-bar{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+.score-bar>span{display:block;height:100%;border-radius:999px}
+.score-val{width:60px;text-align:right;font-weight:800;font-size:15px}
+.nav{position:sticky;top:0;z-index:100;background:rgba(11,17,32,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);padding:10px 0;margin-bottom:8px}
+.nav-inner{display:flex;gap:8px;overflow-x:auto;padding:0 4px;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-link{padding:6px 14px;border-radius:999px;font-size:12px;color:var(--muted);text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:all .2s}
+.nav-link:hover{color:var(--text);border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.05)}
+.footer{padding:24px 0 50px;color:var(--muted);font-size:13px}
+@media (max-width:980px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.hero-card{padding:26px;border-radius:22px}.card{padding:20px;border-radius:20px}.summary{font-size:18px}.metric .value{font-size:34px}.score-dim{width:100px;font-size:12px}}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="wrap"><div class="nav-inner">
+  <a class="nav-link" href="#verdict">主判断</a>
+  <a class="nav-link" href="#data">最新数据</a>
+  <a class="nav-link" href="#trajectory">增速轨迹</a>
+  <a class="nav-link" href="#quality">质量评分 v2</a>
+  <a class="nav-link" href="#floor">价值地板</a>
+  <a class="nav-link" href="#buyzone">买入区间</a>
+  <a class="nav-link" href="#risk">风险分层</a>
+  <a class="nav-link" href="#odds">非对称赔率</a>
+  <a class="nav-link" href="#cross">交叉验证</a>
+  <a class="nav-link" href="#action">最终动作</a>
+</div></div></nav>
+
+<div class="wrap">
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="verdict">
+<div class="hero-card">
+  <div class="eyebrow">invest-pipeline v2 · PDD Holdings · 深度分析</div>
+  <h1>PDD Holdings<br>v3 深度评估</h1>
+  <p>用 v2 框架重新严谨分析。核心升级：财务堡垒独立评估、价值地板强制计算、增速轨迹分类、风险周期性/结构性分层、非对称赔率三场景分析。结论：PDD 是一家运营能力极强但治理严重不透明的公司，$604亿现金构成铁底，但市场给 Temu 定价为负——这才是核心矛盾。</p>
+  <div class="chips">
+    <span class="chip chip-green">结论：观察偏多 / 第一买点附近可建仓</span>
+    <span class="chip">当前价：US$105</span>
+    <span class="chip chip-purple">质量总分：7.8 / 10（v2 八维度）</span>
+    <span class="chip chip-yellow">价值地板：$51.7/股（铁底）</span>
+    <span class="chip chip-green">期望回报：+39%（通过芒格门槛）</span>
+  </div>
+</div>
+</section>
+
+<!-- ===== 主判断 ===== -->
+<section class="section">
+<h2>Step 0: 主判断先行</h2>
+<div class="grid-2">
+  <div class="verdict-box">
+    <h3>一句话主判断</h3>
+    <div class="summary">中国最强执行力电商平台+$604亿现金堡垒，但零资本回报+极低透明度=对股东的价值大打折扣。当前价格已部分反映悲观，非对称赔率有吸引力。</div>
+  </div>
+  <div class="card">
+    <h3>核心矛盾</h3>
+    <p><strong style="color:var(--yellow)">矛盾一：</strong>$604亿现金（市值43%）是"铁底"还是"死钱"？管理层从未分红、从未回购、从未说明资本配置计划。投资者拿着一个永远不打开的保险箱。</p>
+    <p style="margin-top:12px"><strong style="color:var(--yellow)">矛盾二：</strong>Temu 是下一个增长引擎还是利润黑洞？市场隐含给 Temu 的估值接近零甚至为负——如果 Temu 哪怕达到盈亏平衡，就是巨大的重估催化剂。但如果关税和监管摧毁 Temu 模式，PDD 就变成一个增长见顶的国内电商。</p>
+  </div>
+</div>
+<div class="card" style="margin-top:18px">
+  <h3>市场最可能看错什么？</h3>
+  <div class="callout callout-green">看错一：过度恐惧 Temu 的亏损，忽视了 $604 亿现金给予的几乎无限试错空间。PDD 不需要融资、不需要借债，可以亏 3 年 Temu 还有钱剩。</div>
+  <div class="callout callout-yellow" style="margin-top:12px">看错二：把增速放缓（55%→10%）简单等同于"不行了"。实际上这是主动投资 Temu + 基数效应的组合，国内拼多多主站的利润率仍然 40%+，核心业务依旧印钞。</div>
+</div>
+</section>
+
+<!-- ===== 最新数据 ===== -->
+<section class="section" id="data">
+<h2>Step 1: 最新市场数据</h2>
+<div class="grid-4">
+  <div class="card metric"><span class="label">当前股价</span><span class="value" style="color:var(--blue)">$105</span><div class="muted">USD · 2026-04-11</div></div>
+  <div class="card metric"><span class="label">FY2025 收入</span><span class="value">¥4,318亿</span><div class="muted">同比 +10%</div></div>
+  <div class="card metric"><span class="label">FY2025 净利润</span><span class="value">¥994亿</span><div class="muted">同比 -12%</div></div>
+  <div class="card metric"><span class="label">经营现金流</span><span class="value">¥1,207亿</span><div class="muted">~$167亿 · 极强</div></div>
+</div>
+<div class="grid-4" style="margin-top:18px">
+  <div class="card metric"><span class="label">总市值</span><span class="value">~$1,400亿</span><div class="muted">ADS × 价格</div></div>
+  <div class="card metric"><span class="label">现金及等价物</span><span class="value" style="color:var(--green)">$604亿</span><div class="muted">¥4,386亿 · 现金/市值=43%</div></div>
+  <div class="card metric"><span class="label">净现金头寸</span><span class="value" style="color:var(--green)">$530亿</span><div class="muted">扣除总负债 ¥2,223亿后</div></div>
+  <div class="card metric"><span class="label">PE (TTM)</span><span class="value">~10x</span><div class="muted">扣除现金后仅 ~5.8x</div></div>
+</div>
+<div class="grid-3" style="margin-top:18px">
+  <div class="card metric"><span class="label">52周高/低</span><span class="value" style="font-size:28px">$157 / $82</span><div class="muted">当前位于 28% 分位</div></div>
+  <div class="card metric"><span class="label">流通股数</span><span class="value" style="font-size:28px">13.99亿</span><div class="muted">ADS（1 ADS = 4 普通股）</div></div>
+  <div class="card metric"><span class="label">回购/分红</span><span class="value" style="font-size:28px;color:var(--red)">0%</span><div class="muted">从未回购、从未分红</div></div>
+</div>
+</section>
+
+<!-- ===== 一句话生意本质 ===== -->
+<section class="section">
+<h2>一句话生意本质</h2>
+<div class="card">
+  <div class="summary" style="font-size:22px">用极致供应链效率和社交裂变流量，把最便宜的商品卖给对价格最敏感的消费者。国内赚利润、海外 Temu 烧钱抢份额。</div>
+  <p class="muted" style="margin-top:12px">两条腿：拼多多主站（国内，利润奶牛，40%+ 营业利润率）+ Temu（海外，估计年收入 $150-180 亿，仍在亏损）。核心能力是把中国制造的成本优势通过平台效率传导给全球消费者。</p>
+</div>
+</section>
+
+<!-- ===== 增速轨迹 ===== -->
+<section class="section" id="trajectory">
+<h2>增速轨迹分析（v2 新增）</h2>
+<div class="grid-2">
+  <div class="card">
+    <h3>近 3 年增速变化</h3>
+    <table class="table">
+      <tr><th>年份</th><th>收入增速</th><th>净利润增速</th></tr>
+      <tr><td>FY2023</td><td style="color:var(--green)">+90%</td><td style="color:var(--green)">+90%</td></tr>
+      <tr><td>FY2024</td><td style="color:var(--green)">+55%</td><td style="color:var(--green)">+86%</td></tr>
+      <tr><td>FY2025</td><td style="color:var(--yellow)">+10%</td><td style="color:var(--red)">-12%</td></tr>
+    </table>
+    <div class="callout callout-red" style="margin-top:16px">增速从 90% → 55% → 10%，利润更是从增长转为下滑。表面看是断崖式减速。</div>
+  </div>
+  <div class="card">
+    <h3>减速原因分类</h3>
+    <div style="margin-bottom:16px">
+      <span class="tag tag-c" style="margin-right:6px">主动投资型 — 60%</span>
+      <p class="muted" style="margin-top:6px">Temu 大规模投入是利润下滑的主因。国内拼多多主站的营业利润率仍在 40%+ 水平，核心业务盈利能力未受损。这是管理层主动选择"用利润换海外增长"。</p>
+    </div>
+    <div style="margin-bottom:16px">
+      <span class="tag tag-c" style="margin-right:6px">基数效应型 — 30%</span>
+      <p class="muted" style="margin-top:6px">FY2023 基数极高（Temu 刚爆发 + 后疫情反弹），FY2025 回归正常化增速合理。绝对收入仍在增长。</p>
+    </div>
+    <div>
+      <span class="tag tag-q" style="margin-right:6px">结构性见顶型？— 10%</span>
+      <p class="muted" style="margin-top:6px">国内电商市场增速放缓，拼多多主站 GMV 增长可能已经接近天花板。这是需要持续监控但目前占比较小的因素。</p>
+    </div>
+  </div>
+</div>
+<div class="card" style="margin-top:18px">
+  <div class="callout callout-green">判断：主要是主动投资型减速，而非竞争挤压或结构性见顶。核心业务利润率未崩，不应因短期利润下滑而过度惩罚。但需要在 2-3 个季度内看到 Temu 亏损收窄的信号。</div>
+</div>
+</section>
+
+<!-- ===== 质量评分 v2 ===== -->
+<section class="section" id="quality">
+<h2>Step 2: 公司质量评分卡（v2 八维度）</h2>
+<div class="grid-2">
+  <div class="card">
+    <div class="metric" style="margin-bottom:20px"><span class="label">加权总分</span><span class="value" style="color:var(--purple)">7.8 / 10</span></div>
+    <div class="score-row">
+      <span class="score-dim">看得懂 (10%)</span>
+      <div class="score-bar bar-green"><span style="width:90%"></span></div>
+      <span class="score-val" style="color:var(--green)">9.0</span>
+    </div>
+    <div class="score-row">
+      <span class="score-dim">3年持有 (10%)</span>
+      <div class="score-bar bar-green"><span style="width:80%"></span></div>
+      <span class="score-val" style="color:var(--green)">8.0</span>
+    </div>
+    <div class="score-row">
+      <span class="score-dim">护城河 (15%)</span>
+      <div class="score-bar bar-green"><span style="width:82%"></span></div>
+      <span class="score-val" style="color:var(--green)">8.2</span>
+    </div>
+    <div class="score-row">
+      <span class="score-dim">现金流质量 (15%)</span>
+      <div class="score-bar bar-green"><span style="width:92%"></span></div>
+      <span class="score-val" style="color:var(--green)">9.2</span>
+    </div>
+    <div class="score-row">
+      <span class="score-dim">财务堡垒 (15%)</span>
+      <div class="score-bar bar-green"><span style="width:95%"></span></div>
+      <span class="score-val" style="color:var(--green)">9.5</span>
+    </div>
+    <div class="score-row">
+      <span class="score-dim">管理层 (10%)</span>
+      <div class="score-bar bar-green"><span style="width:85%"></span></div>
+      <span class="score-val" style="color:var(--green)">8.5</span>
+    </div>
+    <div class="score-row">
+      <span class="score-dim">治理透明度 (10%)</span>
+      <div class="score-bar bar-red"><span style="width:45%"></span></div>
+      <span class="score-val" style="color:var(--red)">4.5</span>
+    </div>
+    <div class="score-row">
+      <span class="score-dim">资本配置 (15%)</span>
+      <div class="score-bar bar-red"><span style="width:40%"></span></div>
+      <span class="score-val" style="color:var(--red)">4.0</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>评分解读</h3>
+    <p><strong style="color:var(--green)">运营面极强（8.5-9.5分区间）：</strong></p>
+    <ul>
+      <li><strong>现金流质量 9.2：</strong>¥1,207亿经营现金流，现金转化率超过120%，中国电商最强现金流机器之一。</li>
+      <li><strong>财务堡垒 9.5：</strong>现金/市值=43%，堡垒级。$604亿现金足够在零收入下运营3年以上。有息负债仅¥52亿，几乎无杠杆。</li>
+      <li><strong>护城河 8.2：</strong>低价心智深入人心，农产品直供+C2M模式形成成本优势，社交裂变带来低获客成本。</li>
+      <li><strong>管理层 8.5：</strong>黄铮虽已退休但体系能力极强，陈磊团队执行力一流，Temu 从 0 到 $150亿+ 收入仅用 2 年。</li>
+    </ul>
+    <p style="margin-top:16px"><strong style="color:var(--red)">治理面严重拖累（4.0-4.5分区间）：</strong></p>
+    <ul>
+      <li><strong>治理透明度 4.5：</strong>不披露 Temu 独立财务数据、不公布分部利润率、投资者沟通极少、VIE 结构增加不确定性。这是PDD最大的短板。</li>
+      <li><strong>资本配置 4.0：</strong>$604亿现金、0%回购率、0%分红率、零资本回报承诺。管理层从未说明这些钱要怎么花。如果永远不返还股东，这些现金对投资者的价值需要打折。</li>
+    </ul>
+    <div class="callout callout-yellow" style="margin-top:16px">这是一家"运营 A+ 但治理 D"的公司。v1 框架把这两面混在一起给了 7.5，v2 框架拆开后暴露了真正的问题：不是公司不赚钱，而是赚的钱股东拿不到。</div>
+  </div>
+</div>
+</section>
+
+<!-- ===== 价值地板 v2 ===== -->
+<section class="section" id="floor">
+<h2>Step 2.5: 价值地板（v2 新增）</h2>
+<div class="grid-2">
+  <div class="floor-box">
+    <h3 style="color:var(--purple)">净现金地板（铁底）</h3>
+    <div class="metric" style="margin:16px 0"><span class="value" style="color:var(--purple);font-size:52px">$51.7</span><span class="label">每股净现金</span></div>
+    <table class="table">
+      <tr><td>现金及短期投资</td><td style="text-align:right">¥4,386亿（$604亿）</td></tr>
+      <tr><td>减：总负债</td><td style="text-align:right">-¥2,223亿（$306亿）</td></tr>
+      <tr><td>减：有息负债（含内）</td><td style="text-align:right">仅 ¥52亿（$7.2亿）</td></tr>
+      <tr><td>= 净现金</td><td style="text-align:right;font-weight:800">~$298亿</td></tr>
+      <tr><td>÷ ADS 股数</td><td style="text-align:right">5.76亿 ADS</td></tr>
+      <tr><td><strong>= 每股净现金</strong></td><td style="text-align:right;font-weight:800;color:var(--purple)">~$51.7</td></tr>
+    </table>
+    <div class="callout callout-purple" style="margin-top:16px">这是"铁底"——即使 PDD 明天停止所有业务、遣散所有员工，仅清算现金扣除负债，每股值 $51.7。当前价格 $105，距铁底有约 51% 的缓冲。</div>
+  </div>
+  <div class="card">
+    <h3>分部估值（Sum of Parts）</h3>
+    <table class="table">
+      <tr><th>分部</th><th>估值逻辑</th><th>估值</th></tr>
+      <tr>
+        <td><strong>拼多多国内</strong></td>
+        <td>¥800亿+营业利润 × 12x</td>
+        <td style="color:var(--green);font-weight:800">$1,320-1,500亿</td>
+      </tr>
+      <tr>
+        <td><strong>现金净额</strong></td>
+        <td>$604亿现金 - $306亿负债</td>
+        <td style="color:var(--green);font-weight:800">~$298亿</td>
+      </tr>
+      <tr>
+        <td><strong>Temu</strong></td>
+        <td>$150-180亿收入，仍亏损</td>
+        <td style="color:var(--red);font-weight:800">市场定价 ≈ -$200亿?</td>
+      </tr>
+      <tr>
+        <td><strong>合计 SOTP</strong></td>
+        <td></td>
+        <td style="font-weight:800">$1,400-1,600亿</td>
+      </tr>
+      <tr>
+        <td><strong>当前市值</strong></td>
+        <td></td>
+        <td>~$1,400亿</td>
+      </tr>
+    </table>
+    <div class="callout callout-yellow" style="margin-top:16px">关键发现：市场隐含给 Temu 的估值接近零甚至为负。国内拼多多（$1,320-1,500亿）+ 净现金（$298亿）已经等于甚至超过当前市值。这意味着你"免费"获得了一个年收入 $150亿+ 的全球电商平台。</div>
+
+    <h3 style="margin-top:24px">熊市盈利地板</h3>
+    <p class="muted">假设收入砍 30%（¥3,023亿）、利润率压缩一半至 12%（¥363亿 ≈ $50亿），给 10x PE：</p>
+    <div class="metric" style="margin:12px 0"><span class="value" style="font-size:32px;color:var(--yellow)">$87/股</span><span class="label">熊市盈利地板（软底）</span></div>
+    <p class="muted">这是"软底"，依赖利润假设。但结合 $51.7 铁底，即使最坏情况下跌空间也有限。</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:18px">
+  <h3>安全边际汇总</h3>
+  <div class="grid-3">
+    <div class="metric" style="text-align:center"><span class="label">当前价格 vs 铁底</span><span class="value" style="color:var(--green)">+103%</span><span class="muted">距净现金地板 $51.7</span></div>
+    <div class="metric" style="text-align:center"><span class="label">当前价格 vs 软底</span><span class="value" style="color:var(--yellow)">+21%</span><span class="muted">距熊市盈利地板 $87</span></div>
+    <div class="metric" style="text-align:center"><span class="label">当前价格 vs SOTP</span><span class="value" style="color:var(--green)">-7~14%</span><span class="muted">SOTP 隐含 $107-122/股</span></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== 财报与估值 ===== -->
+<section class="section">
+<h2>Step 3: 财报与估值</h2>
+<div class="grid-2">
+  <div class="card">
+    <h3>收入质量</h3>
+    <p class="muted">FY2025 收入 ¥4,318亿，增 10%。增速虽大幅放缓，但绝对额仍在增长。Temu 贡献约 ¥1,100-1,300亿。国内主站增速趋稳。</p>
+    <h3 style="margin-top:16px">利润质量</h3>
+    <p class="muted">净利润 ¥994亿，降 12%。主因 Temu 投入。但经营现金流 ¥1,207亿仍远超净利润，说明利润质量（现金含量）很高。</p>
+  </div>
+  <div class="card">
+    <h3>估值判断</h3>
+    <table class="table">
+      <tr><td>PE (TTM)</td><td style="font-weight:700">~10x</td><td class="muted">中国电商中偏低</td></tr>
+      <tr><td>Ex-cash PE</td><td style="font-weight:700;color:var(--green)">~5.8x</td><td class="muted">扣掉现金后极便宜</td></tr>
+      <tr><td>FCF Yield</td><td style="font-weight:700;color:var(--green)">~12%</td><td class="muted">$167亿/$1,400亿</td></tr>
+      <tr><td>PS (TTM)</td><td style="font-weight:700">~2.3x</td><td class="muted">合理偏低</td></tr>
+    </table>
+    <div class="callout callout-green" style="margin-top:16px">估值不贵。10x PE 对一个仍在增长的平台来说是折价，扣除现金后 5.8x 更是极为便宜。问题不在估值，在于治理折价是否值得承受。</div>
+  </div>
+</div>
+</section>
+
+<!-- ===== K线结构 ===== -->
+<section class="section">
+<h2>Step 4: K线与价格结构</h2>
+<div class="grid-3">
+  <div class="card">
+    <h3>位置</h3>
+    <p class="muted">$105 处于 52 周区间（$82-$157）的 28% 分位，偏低位。距高点回撤 33%。</p>
+  </div>
+  <div class="card">
+    <h3>均线关系</h3>
+    <p class="muted">MA60 附近震荡，MA120 之下。中期趋势偏弱，但未破前低 $82。</p>
+  </div>
+  <div class="card">
+    <h3>支撑 / 阻力</h3>
+    <p class="muted">支撑：$95-100（前期平台）、$82（52周低）。阻力：$115-120（MA120 附近）、$130（心理关口）。</p>
+  </div>
+</div>
+</section>
+
+<!-- ===== 宏观修正 ===== -->
+<section class="section">
+<h2>Step 5: 宏观环境修正</h2>
+<div class="grid-2">
+  <div class="card">
+    <h3>当前宏观</h3>
+    <ul>
+      <li><strong>关税风险高企：</strong>美国对华关税不断升级，Temu 直接受影响（de minimis 免税取消风险）</li>
+      <li><strong>中概折价持续：</strong>地缘政治不确定性使中概股估值持续受压</li>
+      <li><strong>中国消费温和：</strong>国内消费复苏力度有限，拼多多主站受益于消费降级但增速放缓</li>
+      <li><strong>美联储立场偏鹰：</strong>高利率环境下资金偏好确定性，中概成长股不受待见</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="metric" style="text-align:center;margin-bottom:20px"><span class="label">宏观修正方向</span><span class="value" style="color:var(--red)">下调买点</span></div>
+    <div class="callout callout-red">关税 + 中概折价 + 不确定宏观 = 所有买点需要下移 10-15%。在不确定性消化之前，不应该在"公允价"附近建仓，必须要求额外的风险补偿。</div>
+  </div>
+</div>
+</section>
+
+<!-- ===== 买入区间 ===== -->
+<section class="section" id="buyzone">
+<h2>买入区间与理由</h2>
+<div class="grid-2">
+  <div class="card">
+    <table class="table">
+      <tr><td>当前价格</td><td style="font-weight:800">US$105</td></tr>
+      <tr><td>价值地板</td><td style="font-weight:800;color:var(--purple)">$51.7（铁底）/ $87（软底）</td></tr>
+      <tr><td>安全边际</td><td>距铁底 103% / 距软底 21%</td></tr>
+      <tr><td style="color:var(--green);font-weight:700">我的判断</td><td style="color:var(--green);font-weight:700">观察偏多 / 第一买点附近可试探建仓</td></tr>
+      <tr><td>观察区间</td><td>$100 - $110（等催化剂/风险释放）</td></tr>
+      <tr><td style="color:var(--blue)">第一买点</td><td style="color:var(--blue)">$92 - $100（关税冲击 + 情绪释放后）</td></tr>
+      <tr><td style="color:var(--green)">第二买点</td><td style="color:var(--green)">$82 - $90（接近52周低，好赔率）</td></tr>
+      <tr><td style="color:var(--purple);font-weight:700">理想重仓区</td><td style="color:var(--purple);font-weight:700">$65 - $80（需极端恐慌，距铁底仅30-55%）</td></tr>
+      <tr><td>宏观修正</td><td style="color:var(--red)">下调买点</td></tr>
+      <tr><td>若高于 $115</td><td>不追</td></tr>
+      <tr><td>建议仓位</td><td style="font-weight:700">当前可试探 3-5%，$92 以下加至 8-10%</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="callout">买点逻辑说明</div>
+    <p class="muted" style="margin-top:12px"><strong>为什么第一买点在 $92-100：</strong>这个区间反映了关税冲击后的合理折价。10x PE 对应约 $100，但考虑中概折价和 Temu 不确定性，需要再打 8-10% 折扣。</p>
+    <p class="muted" style="margin-top:12px"><strong>为什么理想重仓区在 $65-80：</strong>$65-80 意味着市值 $940-1,150亿。其中 $604亿是现金，剩下 $340-550亿 买一个年利润 $130亿+ 的国内电商帝国 + Temu 全球业务，赔率极好。但需要真正的恐慌才能到。</p>
+    <p class="muted" style="margin-top:12px"><strong>为什么当前 $105 可试探：</strong>扣除现金后 PE 仅 5.8x，FCF yield 12%，SOTP 隐含低估。如果 Temu 亏损收窄或管理层宣布回购，重估空间 50%+。用 3-5% 仓位试探，风险可控。</p>
+  </div>
+</div>
+</section>
+
+<!-- ===== 风险分层 v2 ===== -->
+<section class="section" id="risk">
+<h2>Step 6: 风险分层（v2 升级）</h2>
+<p class="muted" style="margin-bottom:18px">每个风险标注：<span class="tag tag-c">周期性 C</span> = 逆向加仓机会 · <span class="tag tag-s">结构性 S</span> = 减仓理由 · <span class="tag tag-q">不确定 ?</span> = 需持续监控</p>
+<div class="grid-2">
+  <div>
+    <h3 style="color:var(--blue);margin-bottom:14px">周期性风险（逆向机会）</h3>
+    <div class="risk-c" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong>关税与贸易摩擦</strong>
+        <span class="tag tag-c">C · 兑现概率 60%</span>
+      </div>
+      <p class="muted">de minimis 免税取消会直接冲击 Temu 美国业务。但 PDD 有资金扛过调整期，Temu 已在做半托管/本地仓转型。关税是周期性政策，最终会找到新平衡点。如果因关税恐慌跌到 $82 以下，反而是好买点。</p>
+    </div>
+    <div class="risk-c" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong>市场情绪恐慌 / 中概折价</strong>
+        <span class="tag tag-c">C · 兑现概率 50%</span>
+      </div>
+      <p class="muted">中概整体情绪低迷，资金外流，估值承压。这是系统性风险而非 PDD 独有。历史上每次中概恐慌后 12-18 个月都有明显反弹。</p>
+    </div>
+    <div class="risk-c">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong>短期利润压力</strong>
+        <span class="tag tag-c">C · 兑现中</span>
+      </div>
+      <p class="muted">Temu 投入导致利润下滑 12%。但这是主动投资而非竞争挤压，经营现金流仍然强劲。如果 Temu 投入回报可期，利润终将恢复。</p>
+    </div>
+  </div>
+  <div>
+    <h3 style="color:var(--red);margin-bottom:14px">结构性风险（减仓理由）</h3>
+    <div class="risk-s" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong>Temu 商业模式可持续性</strong>
+        <span class="tag tag-q">S? · 兑现概率 30%</span>
+      </div>
+      <p class="muted">如果关税+监管从根本上摧毁 Temu 的低价跨境模式（而不只是短期干扰），PDD 就失去了第二增长曲线，变成一个增长见顶的国内电商。这是"结构性还是周期性"目前最难判断的风险，标记为 S?。</p>
+    </div>
+    <div class="risk-s" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong>治理不透明</strong>
+        <span class="tag tag-s">S · 持续存在</span>
+      </div>
+      <p class="muted">不披露 Temu 独立数据、不公布资本配置计划、投资者沟通极少。这不是周期性的——这是公司文化和治理结构的问题，短期不会改变。它不会直接导致亏损，但会持续压缩估值倍数。</p>
+    </div>
+    <div class="risk-s">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong>零资本回报</strong>
+        <span class="tag tag-s">S · 持续存在</span>
+      </div>
+      <p class="muted">$604亿现金、0% 回购、0% 分红。如果管理层永远不返还资本，这些现金对股东的真实价值需要打 40-60% 的折扣。这是 PDD 和苹果/谷歌的根本区别——后者持续大规模回购。</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== 非对称赔率 v2 ===== -->
+<section class="section" id="odds">
+<h2>非对称赔率分析（v2 新增）</h2>
+<div class="odds-box">
+  <div class="grid-3">
+    <div>
+      <h3 style="color:var(--green)">牛市情景 (25%)</h3>
+      <div class="metric"><span class="value" style="font-size:36px;color:var(--green)">$180-200</span><span class="label">目标价 · 回报 +71~90%</span></div>
+      <p class="muted" style="margin-top:8px">Temu 盈亏平衡 + 管理层宣布回购/分红计划 + 中概情绪修复。国内 12x PE + Temu 给 1x PS（$150-180亿）+ 现金 → $200+。</p>
+    </div>
+    <div>
+      <h3 style="color:var(--blue)">基准情景 (50%)</h3>
+      <div class="metric"><span class="value" style="font-size:36px;color:var(--blue)">$130-150</span><span class="label">目标价 · 回报 +24~43%</span></div>
+      <p class="muted" style="margin-top:8px">Temu 亏损缓慢收窄、国内稳健增长、中概折价维持现状。市场逐步认可现金价值。12-18 个月回归 $130-150。</p>
+    </div>
+    <div>
+      <h3 style="color:var(--red)">熊市情景 (25%)</h3>
+      <div class="metric"><span class="value" style="font-size:36px;color:var(--red)">$80-95</span><span class="label">目标价 · 回报 -10~-24%</span></div>
+      <p class="muted" style="margin-top:8px">关税全面打击 Temu + 国内增长见顶 + 中概进一步折价。但有 $51.7 铁底支撑，极端下跌空间有限。</p>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2" style="margin-top:18px">
+  <div class="card">
+    <h3>期望回报计算</h3>
+    <table class="table">
+      <tr><td>牛市</td><td>25% × +80%</td><td style="font-weight:800;color:var(--green)">= +20.0%</td></tr>
+      <tr><td>基准</td><td>50% × +33%</td><td style="font-weight:800;color:var(--blue)">= +16.5%</td></tr>
+      <tr><td>熊市</td><td>25% × (-17%)</td><td style="font-weight:800;color:var(--red)">= -4.3%</td></tr>
+      <tr><td colspan="2" style="font-weight:800;font-size:18px">期望回报</td><td style="font-weight:800;font-size:18px;color:var(--green)">+32.3%</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>芒格准则检验</h3>
+    <table class="table">
+      <tr><td>期望回报 > 15%？</td><td style="font-weight:800;color:var(--green)">✓ 32.3% &gt; 15%</td></tr>
+      <tr><td>熊市亏损 < 25%？</td><td style="font-weight:800;color:var(--green)">✓ -17% &lt; 25%</td></tr>
+      <tr><td style="font-weight:800;color:var(--green)" colspan="2">通过芒格门槛 ✓</td></tr>
+    </table>
+    <div class="callout callout-green" style="margin-top:16px">赔率结构健康：赢面 75%（牛+基准），输了最多亏 17-24%，赢了可以赚 24-90%。期望回报 32%+ 显著超过门槛。这不是一个需要赌的标的，这是一个概率对你有利的标的。</div>
+  </div>
+</div>
+</section>
+
+<!-- ===== 交叉验证 ===== -->
+<section class="section" id="cross">
+<h2>Step 7: 四角度交叉验证（v2 升级）</h2>
+<div class="grid-2">
+  <div class="card">
+    <h3 style="color:var(--green)">A. 价值投资视角</h3>
+    <p class="muted">生意好。国内拼多多是中国最赚钱的电商平台之一，40%+ 营业利润率，现金流极强。护城河来自低价心智+供应链效率+社交裂变。管理层执行力 A+，但治理透明度 D。如果忽略治理问题，这是 8.5 分的公司；加上治理折扣，7.8 分。</p>
+    <p style="margin-top:12px"><strong>结论：<span style="color:var(--green)">偏多</span></strong>——核心业务质量支撑长期价值。</p>
+  </div>
+  <div class="card">
+    <h3 style="color:var(--blue)">B. 市场执行视角</h3>
+    <p class="muted">价格有吸引力。扣除现金 PE 仅 5.8x，FCF yield 12%。好消息（Temu 盈利）还没 price in，坏消息（关税+利润下滑）已经部分 price in。但 $105 不算极度恐慌价，最好的赔率在 $90 以下。当前可以试探，但不宜全仓。</p>
+    <p style="margin-top:12px"><strong>结论：<span style="color:var(--blue)">中性偏多</span></strong>——估值合理但不极端便宜。</p>
+  </div>
+  <div class="card">
+    <h3 style="color:var(--yellow)">C. 风控视角</h3>
+    <p class="muted">最容易判断错：① Temu 的亏损是暂时的投资还是结构性烧钱？如果 Temu 2 年内无法盈亏平衡，市场可能给更低估值。② 治理不透明意味着存在"信息不对称陷阱"——你不知道管理层在想什么。③ 关税如果从 "de minimis 取消" 升级到 "全面禁入"，Temu 估值从零变为负值。</p>
+    <p style="margin-top:12px"><strong>结论：<span style="color:var(--yellow)">谨慎</span></strong>——治理风险无法用低价完全补偿。</p>
+  </div>
+  <div class="card">
+    <h3 style="color:var(--purple)">D. 非对称赔率视角（v2 新增）</h3>
+    <p class="muted">赔率对投资者有利。期望回报 32.3%（远超 15% 门槛），熊市亏损约 17%（远低于 25% 红线）。铁底 $51.7 给了坚实保护，而牛市催化剂（Temu 盈利 + 回购）的上行空间巨大。即使对治理问题持谨慎态度，概率加权后的期望值仍然显著为正。</p>
+    <p style="margin-top:12px"><strong>结论：<span style="color:var(--green)">明确偏多</span></strong>——赔率结构是 PDD 最强的论据。</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:18px">
+  <h3>视角分歧与最终权衡</h3>
+  <div class="callout">价值+赔率 vs 风控：3:1 偏多，但风控视角的治理担忧不可忽视。</div>
+  <p class="muted" style="margin-top:12px">四个视角中，价值、赔率、市场执行三个偏多，只有风控偏谨慎。最终结论偏向多方的原因：① $604亿现金铁底使下行风险有硬约束；② 国内业务 5.8x ex-cash PE 足够便宜；③ 32% 期望回报远超门槛。但风控视角对治理的担忧意味着不应该重仓——用 3-5% 试探仓位去捕捉可能的 50%+ 重估，而不是 all-in。</p>
+</div>
+</section>
+
+<!-- ===== 证伪条件 ===== -->
+<section class="section">
+<h2>证伪条件</h2>
+<div class="grid-3">
+  <div class="card">
+    <h3 style="color:var(--red)">立即减仓信号</h3>
+    <ul>
+      <li>国内拼多多主站营业利润率跌破 30%（当前 40%+），说明核心业务护城河被侵蚀</li>
+      <li>管理层被曝重大财务造假或利益输送</li>
+      <li>连续 2 个季度经营现金流大幅缩水（跌破 ¥200亿/季）</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 style="color:var(--yellow)">密切关注信号</h3>
+    <ul>
+      <li>Temu 在 4 个季度内毫无亏损收窄迹象</li>
+      <li>de minimis 免税政策正式取消且 Temu 未能转型</li>
+      <li>管理层在连续 2 次财报会上拒绝讨论资本配置</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 style="color:var(--green)">上修信号</h3>
+    <ul>
+      <li>管理层宣布回购或分红计划 → 估值至少上修 15-20%</li>
+      <li>Temu 公布独立财务数据且显示盈亏平衡路径 → 重估 30%+</li>
+      <li>分部信息披露改善 → 治理折价缩小</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ===== 最终动作 ===== -->
+<section class="section" id="action">
+<h2>最终动作</h2>
+<div class="verdict-box">
+  <div class="grid-2" style="align-items:center">
+    <div>
+      <div class="metric"><span class="label">最终判断</span><span class="value" style="color:var(--green);font-size:36px">观察偏多 / 可试探建仓</span></div>
+    </div>
+    <div>
+      <table class="table" style="font-size:15px">
+        <tr><td>当前仓位建议</td><td style="font-weight:800">3-5% 试探仓</td></tr>
+        <tr><td>$92 以下加仓至</td><td style="font-weight:800">8-10%</td></tr>
+        <tr><td>$80 以下重仓至</td><td style="font-weight:800">12-15%</td></tr>
+        <tr><td>$115 以上</td><td style="font-weight:800;color:var(--red)">不追</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout callout-green" style="margin-top:20px">PDD 不是一个让人"安心重仓"的公司（治理太差），但它是一个"赔率极好"的公司（铁底+便宜+催化剂明确）。正确的做法不是回避，而是用合理的仓位去捕捉非对称回报。3-5% 试探，等催化剂兑现再加仓。</div>
+</div>
+</section>
+
+<div class="card" style="margin-top:18px;text-align:center">
+  <p class="muted" style="font-size:12px">置信度标注：商业质量判断 → 高信心 · 买点区间 → 中高信心 · Temu 盈利时间表 → 低信心 · 管理层行为预测 → 极低信心</p>
+</div>
+
+<div class="footer">
+  <p>invest-pipeline v2 框架分析 · 数据基于 2026-04-11 可得市场价格与公开业绩披露 · 以上不构成投资建议</p>
+  <p style="margin-top:8px"><a href="portfolio-9-compare.html" style="color:var(--blue);text-decoration:none">← 返回 9 公司总对比</a></p>
+</div>
+
+</div>
+</body>
+</html>
