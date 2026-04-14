@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitget Wallet AI 智能助手方案</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #FF6B9D;
+            --yellow: #FFE156;
+            --blue: #4ECDC4;
+            --purple: #9B5DE5;
+            --orange: #FF9F1C;
+            --green: #00F5D4;
+            --red: #FF6B6B;
+            --black: #1A1A2E;
+            --white: #FFFEF9;
+            --cream: #FFF8E7;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+            background: var(--cream);
+            color: var(--black);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        .memphis-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .shape { position: absolute; opacity: 0.12; }
+        .circle { border-radius: 50%; border: 8px solid; }
+        .triangle { width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 70px solid; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            background: var(--black);
+            border-radius: 30px;
+            padding: 4px;
+            box-shadow: 4px 4px 0 var(--purple);
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 26px;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: var(--yellow);
+            color: var(--black);
+        }
+
+        header {
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--pink);
+            border: 3px solid var(--black);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--black);
+            transform: rotate(-2deg);
+        }
+
+        h1 {
+            font-size: clamp(36px, 7vw, 64px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0 var(--yellow), 8px 8px 0 var(--pink);
+        }
+
+        .subtitle {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            background: var(--blue);
+            display: inline-block;
+            padding: 8px 24px;
+            border: 3px solid var(--black);
+            transform: rotate(1deg);
+        }
+
+        section { padding: 50px 0; }
+
+        .section-card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 8px 8px 0 var(--black);
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            top: -15px; right: -15px;
+            border: 3px solid var(--black);
+        }
+
+        .section-card.pink::before { background: var(--pink); }
+        .section-card.yellow::before { background: var(--yellow); }
+        .section-card.blue::before { background: var(--blue); }
+        .section-card.purple::before { background: var(--purple); }
+        .section-card.green::before { background: var(--green); }
+        .section-card.orange::before { background: var(--orange); }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: inline-block;
+            background: var(--yellow);
+            padding: 8px 20px;
+            border: 3px solid var(--black);
+            transform: rotate(-1deg);
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 28px 0 16px;
+            color: var(--black);
+        }
+
+        h4 {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 20px 0 12px;
+            padding: 6px 14px;
+            background: var(--cream);
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        p { margin-bottom: 14px; }
+
+        strong { background: var(--yellow); padding: 0 4px; }
+
+        .core-box {
+            font-size: 17px;
+            font-weight: 600;
+            padding: 24px;
+            background: repeating-linear-gradient(45deg, var(--cream), var(--cream) 10px, var(--white) 10px, var(--white) 20px);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .core-box.insight { border-left: 8px solid var(--purple); }
+        .core-box.action { border-left: 8px solid var(--green); }
+        .core-box.warning { border-left: 8px solid var(--orange); }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .card-grid.three {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 6px 6px 0 var(--black);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--black); }
+
+        .card:nth-child(1) { border-color: var(--pink); box-shadow: 6px 6px 0 var(--pink); }
+        .card:nth-child(2) { border-color: var(--blue); box-shadow: 6px 6px 0 var(--blue); }
+        .card:nth-child(3) { border-color: var(--purple); box-shadow: 6px 6px 0 var(--purple); }
+        .card:nth-child(4) { border-color: var(--orange); box-shadow: 6px 6px 0 var(--orange); }
+        .card:nth-child(5) { border-color: var(--green); box-shadow: 6px 6px 0 var(--green); }
+        .card:nth-child(6) { border-color: var(--yellow); box-shadow: 6px 6px 0 var(--yellow); }
+
+        .card .icon { font-size: 36px; margin-bottom: 12px; }
+        .card .title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+        .card .desc { font-size: 14px; opacity: 0.85; }
+
+        .feature-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            padding-left: 32px;
+            position: relative;
+            border-bottom: 2px dashed var(--black);
+        }
+
+        .feature-list li:last-child { border-bottom: none; }
+
+        .feature-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--purple);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* Evolution Steps */
+        .evolution {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 32px 0;
+            position: relative;
+        }
+
+        .evolution::before {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 40px;
+            bottom: 40px;
+            width: 6px;
+            background: repeating-linear-gradient(0deg, var(--blue) 0px, var(--blue) 15px, var(--purple) 15px, var(--purple) 30px, var(--green) 30px, var(--green) 45px);
+            border-radius: 3px;
+        }
+
+        .evolution-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            padding: 20px 0;
+        }
+
+        .evolution-step .number {
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
+            background: var(--blue);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .evolution-step:nth-child(2) .number { background: var(--purple); color: var(--white); }
+        .evolution-step:nth-child(3) .number { background: var(--green); }
+
+        .evolution-step .content {
+            flex: 1;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .evolution-step .phase {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--black);
+            background: var(--blue);
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .evolution-step:nth-child(2) .phase { background: var(--purple); color: var(--white); }
+        .evolution-step:nth-child(3) .phase { background: var(--green); }
+
+        .evolution-step .title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+        .evolution-step .tagline { font-size: 15px; color: var(--purple); font-weight: 600; margin-bottom: 8px; }
+        .evolution-step .desc { font-size: 14px; opacity: 0.8; }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 32px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0; bottom: 0;
+            width: 8px;
+            background: repeating-linear-gradient(0deg, var(--blue) 0px, var(--blue) 20px, var(--purple) 20px, var(--purple) 40px, var(--green) 40px, var(--green) 60px);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 28px;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px; top: 24px;
+            width: 24px; height: 24px;
+            background: var(--blue);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+        }
+
+        .timeline-item.p2::before { background: var(--purple); }
+        .timeline-item.p3::before { background: var(--green); }
+        .timeline-item.p4::before { background: var(--orange); }
+
+        .timeline-item .phase {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--black);
+            background: var(--blue);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px solid var(--black);
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .timeline-item.p2 .phase { background: var(--purple); color: var(--white); }
+        .timeline-item.p3 .phase { background: var(--green); }
+        .timeline-item.p4 .phase { background: var(--orange); }
+
+        .timeline-item .title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .tag {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: var(--cream);
+            border: 2px solid var(--black);
+            border-radius: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 24px 0;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .data-table th, .data-table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 2px solid var(--black);
+        }
+
+        .data-table th {
+            font-size: 13px;
+            font-weight: 700;
+            background: var(--yellow);
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+
+        .data-table td { font-size: 14px; }
+
+        .highlight-box {
+            background: var(--purple);
+            color: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 24px 0;
+            text-align: center;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .highlight-box .big { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .highlight-box .sub { font-size: 16px; opacity: 0.9; }
+
+        .quote {
+            font-size: 18px;
+            font-weight: 600;
+            padding: 24px;
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            margin: 24px 0;
+            transform: rotate(-0.5deg);
+            position: relative;
+            text-align: center;
+        }
+
+        .quote::before {
+            content: '"';
+            position: absolute;
+            top: 8px; left: 16px;
+            font-size: 48px;
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
+        .part-divider {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .part-label {
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 12px 32px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 30px;
+            box-shadow: 6px 6px 0 var(--purple);
+        }
+
+        /* Mock UI */
+        .mock-ui { color: #ffffff;
+            background: #1a1a2e;
+            border: 4px solid var(--black);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 24px 0;
+            color: var(--white);
+            font-size: 14px;
+        }
+
+        .mock-ui .mock-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mock-ui .mock-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .mock-ui .mock-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #ffffff;
+        }
+
+        .mock-ui .mock-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            margin-left: auto;
+            color: #ffffff;
+        }
+
+        .mock-ui .mock-content {
+            line-height: 1.6;
+        }
+
+        .mock-ui .mock-highlight {
+            background: rgba(78, 205, 196, 0.4);
+            color: #ffffff;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .mock-ui .mock-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--blue);
+            color: var(--black);
+            border-radius: 10px;
+            font-weight: 700;
+            margin-top: 16px;
+            margin-right: 8px;
+        }
+
+        .mock-ui .mock-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+        }
+
+        .mock-ui .mock-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .mock-ui .mock-status.green { background: rgba(0, 245, 212, 0.3); color: #00F5D4; }
+        .mock-ui .mock-status.yellow { background: rgba(255, 225, 86, 0.3); color: #FFE156; }
+        .mock-ui .mock-status.red { background: rgba(255, 107, 107, 0.3); color: #FF6B6B; }
+
+        .mock-ui p { color: #ffffff; }
+        .mock-ui .mock-content p { color: rgba(255,255,255,0.95); }
+
+        .conclusion {
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            border-radius: 24px;
+            padding: 48px 40px;
+            margin: 32px 0;
+            text-align: center;
+            box-shadow: 10px 10px 0 var(--black);
+            position: relative;
+        }
+
+        .conclusion::before { content: '★'; position: absolute; top: 20px; left: 30px; font-size: 36px; color: var(--pink); }
+        .conclusion::after { content: '★'; position: absolute; bottom: 20px; right: 30px; font-size: 36px; color: var(--blue); }
+
+        .conclusion .main { font-size: 22px; font-weight: 700; line-height: 1.5; margin-bottom: 16px; }
+        .conclusion .sub { font-size: 18px; font-weight: 500; }
+
+        .cta-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 36px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            background: var(--purple);
+            border: 4px solid var(--black);
+            border-radius: 30px;
+            box-shadow: 6px 6px 0 var(--black);
+            transform: rotate(-2deg);
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .confidential {
+            font-size: 14px;
+            color: var(--white);
+            background: var(--red);
+            padding: 8px 20px;
+            border: 3px solid var(--black);
+            border-radius: 20px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        @media (max-width: 640px) {
+            header { padding: 80px 0 40px; }
+            section { padding: 30px 0; }
+            .section-card { padding: 24px; }
+            h2 { font-size: 22px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .timeline { padding-left: 32px; }
+            .timeline::before { left: 8px; width: 6px; }
+            .timeline-item::before { left: -28px; width: 18px; height: 18px; }
+            .lang-toggle { top: 12px; right: 12px; }
+            .lang-btn { padding: 6px 12px; font-size: 12px; }
+            .evolution::before { left: 24px; }
+            .evolution-step { gap: 16px; }
+            .evolution-step .number { width: 48px; height: 48px; min-width: 48px; font-size: 20px; }
+        }
+
+        [data-lang="en"] { display: none; }
+        html[lang="en"] [data-lang="zh"] { display: none; }
+        html[lang="en"] [data-lang="en"] { display: block; }
+        html[lang="en"] span[data-lang="en"],
+        html[lang="en"] div[data-lang="en"],
+        html[lang="en"] li[data-lang="en"],
+        html[lang="en"] p[data-lang="en"],
+        html[lang="en"] td[data-lang="en"],
+        html[lang="en"] th[data-lang="en"] { display: table-cell; }
+        html[lang="en"] span[data-lang="en"] { display: inline; }
+        html[lang="en"] div[data-lang="en"] { display: block; }
+        html[lang="en"] li[data-lang="en"] { display: list-item; }
+        html[lang="en"] p[data-lang="en"] { display: block; }
+    </style>
+</head>
+<body>
+    <div class="memphis-bg">
+        <div class="shape circle" style="width: 100px; height: 100px; border-color: var(--pink); top: 8%; left: 5%;"></div>
+        <div class="shape circle" style="width: 70px; height: 70px; border-color: var(--blue); top: 25%; right: 8%;"></div>
+        <div class="shape triangle" style="border-bottom-color: var(--yellow); top: 45%; left: 3%; transform: rotate(15deg);"></div>
+        <div class="shape triangle" style="border-bottom-color: var(--purple); top: 65%; right: 5%; transform: rotate(-20deg);"></div>
+        <div class="shape circle" style="width: 60px; height: 60px; border-color: var(--green); bottom: 15%; left: 8%;"></div>
+        <div class="shape circle" style="width: 90px; height: 90px; border-color: var(--orange); bottom: 8%; right: 12%;"></div>
+    </div>
+
+    <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="badge">
+                <span data-lang="zh">🎯 完整产品 × 品牌方案</span>
+                <span data-lang="en">🎯 Complete Product × Brand Plan</span>
+            </div>
+            <h1>
+                <span data-lang="zh">Bitget Wallet 智能助手</span>
+                <span data-lang="en">Bitget Wallet AI</span>
+            </h1>
+            <p class="subtitle">
+                <span data-lang="zh">从看懂到做好，全程陪你</span>
+                <span data-lang="en">From Understanding to Execution, With You All the Way</span>
+            </p>
+            <p style="font-size: 14px; opacity: 0.7;">2026-03-16 · v2.0</p>
+        </div>
+    </header>
+
+    <main>
+        <!-- Core Concept -->
+        <section>
+            <div class="container">
+                <div class="section-card pink">
+                    <h2>
+                        <span data-lang="zh">🎯 核心理念</span>
+                        <span data-lang="en">🎯 Core Philosophy</span>
+                    </h2>
+
+                    <div class="highlight-box">
+                        <div class="big" data-lang="zh">不是替你做，是陪你做</div>
+                        <div class="big" data-lang="en">Not Doing For You, But With You</div>
+                        <div class="sub" data-lang="zh">信任是用户自己一步步给出去的，不是产品强加的</div>
+                        <div class="sub" data-lang="en">Trust is given by users step by step, not imposed by the product</div>
+                    </div>
+
+                    <h3 data-lang="zh">渐进式信任模型</h3>
+                    <h3 data-lang="en">Progressive Trust Model</h3>
+
+                    <div class="evolution">
+                        <div class="evolution-step">
+                            <div class="number">1</div>
+                            <div class="content">
+                                <div class="phase" data-lang="zh">看懂层</div>
+                                <div class="phase" data-lang="en">Understanding</div>
+                                <div class="title" data-lang="zh">🔍 AI 帮你看懂</div>
+                                <div class="title" data-lang="en">🔍 AI Helps You Understand</div>
+                                <div class="tagline" data-lang="zh">「交易前，先问智能助手」</div>
+                                <div class="tagline" data-lang="en">"Before trading, ask AI Assistant"</div>
+                                <div class="desc" data-lang="zh">AI 分析数据、识别风险、解读市场 → 你自己做决定</div>
+                                <div class="desc" data-lang="en">AI analyzes data, identifies risks, interprets market → You decide</div>
+                            </div>
+                        </div>
+                        <div class="evolution-step">
+                            <div class="number">2</div>
+                            <div class="content">
+                                <div class="phase" data-lang="zh">建议层</div>
+                                <div class="phase" data-lang="en">Advisory</div>
+                                <div class="title" data-lang="zh">💡 AI 帮你想好</div>
+                                <div class="title" data-lang="en">💡 AI Helps You Decide</div>
+                                <div class="tagline" data-lang="zh">「不确定？智能助手给你建议」</div>
+                                <div class="tagline" data-lang="en">"Uncertain? AI Assistant gives advice"</div>
+                                <div class="desc" data-lang="zh">AI 根据你的持仓和偏好，给出具体建议 → 你点击确认</div>
+                                <div class="desc" data-lang="en">AI gives specific advice based on your holdings → You confirm</div>
+                            </div>
+                        </div>
+                        <div class="evolution-step">
+                            <div class="number">3</div>
+                            <div class="content">
+                                <div class="phase" data-lang="zh">执行层</div>
+                                <div class="phase" data-lang="en">Execution</div>
+                                <div class="title" data-lang="zh">⚡ AI 帮你做好</div>
+                                <div class="title" data-lang="en">⚡ AI Helps You Execute</div>
+                                <div class="tagline" data-lang="zh">「说一句，智能助手帮你搞定」</div>
+                                <div class="tagline" data-lang="en">"One sentence, AI Assistant handles it"</div>
+                                <div class="desc" data-lang="zh">你说意图，AI 在授权范围内执行 → 你随时监控和叫停</div>
+                                <div class="desc" data-lang="en">You state intent, AI executes within scope → You monitor and can stop</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="core-box insight">
+                        <span data-lang="zh"><strong>设计原则</strong>：用户在每一次交互中，都感受到 AI「在陪我」而不是「在替我做主」。每升一级都是用户主动解锁。</span>
+                        <span data-lang="en"><strong>Design Principle</strong>: In every interaction, users feel AI is "with me" not "deciding for me." Each level is user-unlocked.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Part A -->
+        <div class="part-divider">
+            <div class="container">
+                <div class="part-label">
+                    <span data-lang="zh">PART A · 产品体验设计</span>
+                    <span data-lang="en">PART A · Product Experience Design</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Entry Design -->
+        <section>
+            <div class="container">
+                <div class="section-card yellow">
+                    <h2>
+                        <span data-lang="zh">🚪 入口设计：让用户自然「先问」</span>
+                        <span data-lang="en">🚪 Entry Design: Make Users Naturally "Ask First"</span>
+                    </h2>
+
+                    <p data-lang="zh"><strong>核心问题</strong>：用户打开钱包第一反应是「交易」，不是「问 AI」</p>
+                    <p data-lang="en"><strong>Core Problem</strong>: Users' first instinct is "trade," not "ask AI"</p>
+
+                    <h3 data-lang="zh">方案 A：交易前置引导</h3>
+                    <h3 data-lang="en">Solution A: Pre-trade Guidance</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-header">
+                            <div class="mock-avatar">🔄</div>
+                            <div class="mock-name">Swap</div>
+                            <div class="mock-badge" data-lang="zh">新币检测</div>
+                            <div class="mock-badge" data-lang="en">New Token Detected</div>
+                        </div>
+                        <div class="mock-content">
+                            <p data-lang="zh">⚠️ <strong>WOJAK</strong> 是一个较新的代币，风险可能较高</p>
+                            <p data-lang="en">⚠️ <strong>WOJAK</strong> is a newer token with potentially higher risk</p>
+                            <p data-lang="zh" style="opacity: 0.7; font-size: 13px;">要先看看 智能助手怎么说吗？</p>
+                            <p data-lang="en" style="opacity: 0.7; font-size: 13px;">Want to see what AI thinks first?</p>
+                            <div>
+                                <span class="mock-btn" data-lang="zh">查看分析</span>
+                                <span class="mock-btn" data-lang="en">View Analysis</span>
+                                <span class="mock-btn secondary" data-lang="zh">直接交易</span>
+                                <span class="mock-btn secondary" data-lang="en">Trade Anyway</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p data-lang="zh" style="font-size: 14px; opacity: 0.7;">不是强制，而是自然引导。用户可以跳过。</p>
+                    <p data-lang="en" style="font-size: 14px; opacity: 0.7;">Not mandatory, but natural guidance. Users can skip.</p>
+
+                    <h3 data-lang="zh">方案 B：搜索即分析</h3>
+                    <h3 data-lang="en">Solution B: Search = Analysis</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-header">
+                            <div class="mock-avatar">🔍</div>
+                            <div class="mock-name" data-lang="zh">搜索代币</div>
+                            <div class="mock-name" data-lang="en">Search Token</div>
+                        </div>
+                        <div class="mock-content">
+                            <p style="margin-bottom: 12px;"><strong>PEPE</strong></p>
+                            <p>
+                                <span class="mock-status yellow">🟡 中等风险</span>
+                            </p>
+                            <p data-lang="zh" style="font-size: 13px; margin-top: 8px;">聪明钱近24h净流出 · 持仓集中度偏高</p>
+                            <p data-lang="en" style="font-size: 13px; margin-top: 8px;">Smart money net outflow 24h · High holder concentration</p>
+                            <div>
+                                <span class="mock-btn" data-lang="zh">查看完整分析</span>
+                                <span class="mock-btn" data-lang="en">View Full Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p data-lang="zh" style="font-size: 14px; opacity: 0.7;">搜索框下方直接显示 AI 一句话总结，搜索 = 问 AI。</p>
+                    <p data-lang="en" style="font-size: 14px; opacity: 0.7;">AI one-liner summary shows directly below search. Search = Ask AI.</p>
+
+                    <h3 data-lang="zh">方案 C：持仓页嵌入</h3>
+                    <h3 data-lang="en">Solution C: Portfolio Integration</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-header">
+                            <div class="mock-avatar">💰</div>
+                            <div class="mock-name" data-lang="zh">我的持仓</div>
+                            <div class="mock-name" data-lang="en">My Holdings</div>
+                        </div>
+                        <div class="mock-content">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span><strong>ETH</strong> · $2,450</span>
+                                <span class="mock-status green">🟢 健康</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span><strong>PEPE</strong> · $320</span>
+                                <span class="mock-status yellow">🟡 注意</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+                                <span><strong>XXX</strong> · $85</span>
+                                <span class="mock-status red">🔴 预警</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p data-lang="zh" style="font-size: 14px; opacity: 0.7;">每个持仓旁边显示 AI 状态标，点击查看详细分析。持仓 = AI 监控中。</p>
+                    <p data-lang="en" style="font-size: 14px; opacity: 0.7;">AI status badge next to each holding. Click to view analysis. Holdings = AI Monitored.</p>
+
+                    <h3 data-lang="zh">方案 D：Meme 币 AI 解读</h3>
+                    <h3 data-lang="en">Solution D: Meme Coin AI Analysis</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-header">
+                            <div class="mock-avatar">🐸</div>
+                            <div class="mock-name">PEPE/USDT</div>
+                            <div class="mock-badge">Meme</div>
+                        </div>
+                        <div class="mock-content">
+                            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 12px; text-align: center;">
+                                <p style="font-size: 12px; opacity: 0.6; margin-bottom: 8px;">📈 K线图区域</p>
+                                <div style="display: flex; justify-content: center; gap: 2px; height: 40px; align-items: flex-end;">
+                                    <div style="width: 8px; height: 20px; background: var(--green);"></div>
+                                    <div style="width: 8px; height: 35px; background: var(--green);"></div>
+                                    <div style="width: 8px; height: 25px; background: var(--red);"></div>
+                                    <div style="width: 8px; height: 30px; background: var(--green);"></div>
+                                    <div style="width: 8px; height: 15px; background: var(--red);"></div>
+                                    <div style="width: 8px; height: 40px; background: var(--green);"></div>
+                                    <div style="width: 8px; height: 28px; background: var(--green);"></div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(155, 93, 229, 0.2); border-radius: 8px; padding: 12px; border-left: 3px solid var(--purple);">
+                                <p style="font-size: 13px; margin-bottom: 10px;">
+                                    <span data-lang="zh">🤖 <strong>AI 智能解读</strong></span>
+                                    <span data-lang="en">🤖 <strong>AI Insights</strong></span>
+                                </p>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+                                    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="zh">📖 叙事热度</p>
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="en">📖 Narrative</p>
+                                        <p style="color: var(--green);" data-lang="zh">🔥 Frog Season 回归</p>
+                                        <p style="color: var(--green);" data-lang="en">🔥 Frog Season Revival</p>
+                                    </div>
+                                    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="zh">🛡️ 安全评分</p>
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="en">🛡️ Security</p>
+                                        <p style="color: var(--green);">92/100 ✓</p>
+                                    </div>
+                                    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="zh">👀 KOL 关注</p>
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="en">👀 KOL Watch</p>
+                                        <p data-lang="zh">12 位近 24h 提及</p>
+                                        <p data-lang="en">12 mentions in 24h</p>
+                                    </div>
+                                    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="zh">💎 持仓质量</p>
+                                        <p style="opacity: 0.7; margin-bottom: 4px;" data-lang="en">💎 Holder Quality</p>
+                                        <p data-lang="zh" style="color: var(--yellow);">聪明钱净流入 ↑</p>
+                                        <p data-lang="en" style="color: var(--yellow);">Smart $ inflow ↑</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 12px;">
+                                <span class="mock-btn" data-lang="zh">完整分析报告</span>
+                                <span class="mock-btn" data-lang="en">Full Analysis Report</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p data-lang="zh" style="font-size: 14px; opacity: 0.7;">K线页嵌入 AI 多维解读：叙事 + 安全 + KOL + 持仓质量。看行情 = 看 AI 洞察。</p>
+                    <p data-lang="en" style="font-size: 14px; opacity: 0.7;">AI multi-dimensional analysis: Narrative + Security + KOL + Holder Quality. Viewing charts = AI insights.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Progression -->
+        <section>
+            <div class="container">
+                <div class="section-card blue">
+                    <h2>
+                        <span data-lang="zh">🔓 信任进阶：用户主动解锁</span>
+                        <span data-lang="en">🔓 Trust Progression: User-Initiated Unlock</span>
+                    </h2>
+
+                    <p data-lang="zh"><strong>核心体验</strong>：每升一级，用户要「主动做一个动作」，有仪式感。</p>
+                    <p data-lang="en"><strong>Core Experience</strong>: Each level requires a deliberate user action, creating ritual.</p>
+
+                    <h3 data-lang="zh">Level 1 → Level 2 解锁</h3>
+                    <h3 data-lang="en">Level 1 → Level 2 Unlock</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-header">
+                            <div class="mock-avatar">🎉</div>
+                            <div class="mock-name"><span data-lang="zh">智能助手</span><span data-lang="en">AI</span></div>
+                        </div>
+                        <div class="mock-content">
+                            <p data-lang="zh"><strong>你已经用智能助手分析了 20 次！</strong></p>
+                            <p data-lang="en"><strong>You've used AI analysis 20 times!</strong></p>
+                            <p data-lang="zh" style="font-size: 13px; opacity: 0.8; margin-top: 8px;">要开启<span class="mock-highlight">个性化建议</span>吗？智能助手 会根据你的持仓给出更具体的建议。</p>
+                            <p data-lang="en" style="font-size: 13px; opacity: 0.8; margin-top: 8px;">Enable <span class="mock-highlight">personalized advice</span>? AI will give specific advice based on your holdings.</p>
+                            <div>
+                                <span class="mock-btn" data-lang="zh">开启</span>
+                                <span class="mock-btn" data-lang="en">Enable</span>
+                                <span class="mock-btn secondary" data-lang="zh">暂不</span>
+                                <span class="mock-btn secondary" data-lang="en">Not Now</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 data-lang="zh">Level 2 → Level 3 解锁</h3>
+                    <h3 data-lang="en">Level 2 → Level 3 Unlock</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-header">
+                            <div class="mock-avatar">⚡</div>
+                            <div class="mock-name"><span data-lang="zh">智能助手</span><span data-lang="en">AI</span></div>
+                        </div>
+                        <div class="mock-content">
+                            <p data-lang="zh"><strong>你已经按智能助手建议操作了 10 次！</strong></p>
+                            <p data-lang="en"><strong>You've followed AI advice 10 times!</strong></p>
+                            <p data-lang="zh" style="font-size: 13px; opacity: 0.8; margin-top: 8px;">要开启<span class="mock-highlight">智能执行</span>吗？下次可以说「帮我买」，智能助手 在你授权范围内执行。</p>
+                            <p data-lang="en" style="font-size: 13px; opacity: 0.8; margin-top: 8px;">Enable <span class="mock-highlight">smart execution</span>? Next time say "buy for me," AI executes within your limits.</p>
+                            <div>
+                                <span class="mock-btn" data-lang="zh">了解详情</span>
+                                <span class="mock-btn" data-lang="en">Learn More</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 data-lang="zh">执行层授权设置</h4>
+                    <h4 data-lang="en">Execution Layer Authorization</h4>
+
+                    <div class="mock-ui">
+                        <div class="mock-header">
+                            <div class="mock-avatar">⚙️</div>
+                            <div class="mock-name" data-lang="zh">智能执行设置</div>
+                            <div class="mock-name" data-lang="en">Smart Execution Settings</div>
+                        </div>
+                        <div class="mock-content">
+                            <div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span data-lang="zh">单笔上限</span>
+                                <span data-lang="en">Per-trade Limit</span>
+                                <span style="float: right; color: var(--blue);">500 USDC</span>
+                            </div>
+                            <div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span data-lang="zh">每日上限</span>
+                                <span data-lang="en">Daily Limit</span>
+                                <span style="float: right; color: var(--blue);">2,000 USDC</span>
+                            </div>
+                            <div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span data-lang="zh">可操作币种</span>
+                                <span data-lang="en">Allowed Tokens</span>
+                                <span style="float: right; color: var(--blue);">ETH, USDC, SOL</span>
+                            </div>
+                            <div style="padding: 8px 0;">
+                                <span data-lang="zh">执行前确认</span>
+                                <span data-lang="en">Confirm Before Execute</span>
+                                <span style="float: right; color: var(--green);">✓ 开启</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual System -->
+        <section>
+            <div class="container">
+                <div class="section-card purple">
+                    <h2>
+                        <span data-lang="zh">🎨 视觉系统：三层差异化</span>
+                        <span data-lang="en">🎨 Visual System: Three-Layer Differentiation</span>
+                    </h2>
+
+                    <p data-lang="zh">用户一眼就能分辨「这是分析」还是「这是可以执行的」。</p>
+                    <p data-lang="en">Users can instantly tell "this is analysis" vs "this is actionable."</p>
+
+                    <div class="card-grid three">
+                        <div class="card" style="border-color: var(--blue); box-shadow: 6px 6px 0 var(--blue);">
+                            <div class="icon">🔍</div>
+                            <div class="title" data-lang="zh">看懂层</div>
+                            <div class="title" data-lang="en">Understanding</div>
+                            <div class="desc">
+                                <span data-lang="zh">主色：蓝色<br>图标：放大镜<br>交互：展示型，只读</span>
+                                <span data-lang="en">Color: Blue<br>Icon: Magnifier<br>Interaction: Display, read-only</span>
+                            </div>
+                        </div>
+                        <div class="card" style="border-color: var(--purple); box-shadow: 6px 6px 0 var(--purple);">
+                            <div class="icon">💡</div>
+                            <div class="title" data-lang="zh">建议层</div>
+                            <div class="title" data-lang="en">Advisory</div>
+                            <div class="desc">
+                                <span data-lang="zh">主色：紫色<br>图标：灯泡<br>交互：引导型，有 CTA</span>
+                                <span data-lang="en">Color: Purple<br>Icon: Lightbulb<br>Interaction: Guided, with CTA</span>
+                            </div>
+                        </div>
+                        <div class="card" style="border-color: var(--green); box-shadow: 6px 6px 0 var(--green);">
+                            <div class="icon">⚡</div>
+                            <div class="title" data-lang="zh">执行层</div>
+                            <div class="title" data-lang="en">Execution</div>
+                            <div class="desc">
+                                <span data-lang="zh">主色：绿色<br>图标：闪电<br>交互：行动型，一键确认</span>
+                                <span data-lang="en">Color: Green<br>Icon: Lightning<br>Interaction: Action, one-click confirm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dialogue Design -->
+        <section>
+            <div class="container">
+                <div class="section-card green">
+                    <h2>
+                        <span data-lang="zh">💬 对话设计：角色感知</span>
+                        <span data-lang="en">💬 Dialogue Design: Role Perception</span>
+                    </h2>
+
+                    <h3 data-lang="zh">Level 1 对话风格（顾问）</h3>
+                    <h3 data-lang="en">Level 1 Dialogue Style (Advisor)</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-content">
+                            <p style="color: var(--blue); margin-bottom: 8px;">👤 PEPE 怎么样？</p>
+                            <p data-lang="zh">🔍 <strong>智能助手</strong>：PEPE 目前风险中等。链上数据显示聪明钱近24h净流出 $2.3M，持仓集中度偏高（前10地址占 45%）。社交热度仍在上升。</p>
+                            <p data-lang="en">🔍 <strong>AI</strong>: PEPE currently medium risk. On-chain data shows smart money net outflow $2.3M in 24h, high holder concentration (top 10 addresses hold 45%). Social buzz still rising.</p>
+                        </div>
+                    </div>
+                    <p data-lang="zh" style="font-size: 14px; opacity: 0.7;">只给信息，不给操作建议。</p>
+                    <p data-lang="en" style="font-size: 14px; opacity: 0.7;">Information only, no action advice.</p>
+
+                    <h3 data-lang="zh">Level 2 对话风格（助手）</h3>
+                    <h3 data-lang="en">Level 2 Dialogue Style (Assistant)</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-content">
+                            <p style="color: var(--purple); margin-bottom: 8px;">👤 PEPE 怎么样？</p>
+                            <p data-lang="zh">💡 <strong>智能助手</strong>：PEPE 目前风险中等...（分析同上）</p>
+                            <p data-lang="en">💡 <strong>AI</strong>: PEPE currently medium risk... (same analysis)</p>
+                            <p data-lang="zh" style="background: rgba(155, 93, 229, 0.2); padding: 12px; border-radius: 8px; margin-top: 12px;"><strong>💡 建议</strong>：考虑到你目前 Meme 仓位已占 40%，如果要买建议控制在总仓位 5% 以内。</p>
+                            <p data-lang="en" style="background: rgba(155, 93, 229, 0.2); padding: 12px; border-radius: 8px; margin-top: 12px;"><strong>💡 Advice</strong>: Given your Meme position is already 40%, if buying, suggest keeping it under 5% of total.</p>
+                        </div>
+                    </div>
+                    <p data-lang="zh" style="font-size: 14px; opacity: 0.7;">给出针对用户的具体建议。</p>
+                    <p data-lang="en" style="font-size: 14px; opacity: 0.7;">Gives specific advice tailored to user.</p>
+
+                    <h3 data-lang="zh">Level 3 对话风格（伙伴）</h3>
+                    <h3 data-lang="en">Level 3 Dialogue Style (Partner)</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-content">
+                            <p style="color: var(--green); margin-bottom: 8px;">👤 帮我买 200U PEPE</p>
+                            <p data-lang="zh">⚡ <strong>智能助手</strong>：收到。我会用你设置的滑点（3%）在 Solana 上买入。</p>
+                            <p data-lang="en">⚡ <strong>AI</strong>: Got it. I'll buy on Solana using your set slippage (3%).</p>
+                            <div data-lang="zh" style="background: rgba(0, 245, 212, 0.2); padding: 12px; border-radius: 8px; margin-top: 12px;">
+                                <p><strong>📋 执行计划</strong></p>
+                                <p style="font-size: 13px;">200 USDC → PEPE<br>预计到账：约 12.5M PEPE<br>Gas 费：~$0.02</p>
+                            </div>
+                            <div data-lang="en" style="background: rgba(0, 245, 212, 0.2); padding: 12px; border-radius: 8px; margin-top: 12px;">
+                                <p><strong>📋 Execution Plan</strong></p>
+                                <p style="font-size: 13px;">200 USDC → PEPE<br>Expected: ~12.5M PEPE<br>Gas: ~$0.02</p>
+                            </div>
+                            <div style="margin-top: 12px;">
+                                <span class="mock-btn" data-lang="zh">确认执行</span>
+                                <span class="mock-btn" data-lang="en">Confirm</span>
+                                <span class="mock-btn secondary" data-lang="zh">修改</span>
+                                <span class="mock-btn secondary" data-lang="en">Edit</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p data-lang="zh" style="font-size: 14px; opacity: 0.7;">可以执行，但仍需用户确认。</p>
+                    <p data-lang="en" style="font-size: 14px; opacity: 0.7;">Can execute, but still requires user confirmation.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Visualization -->
+        <section>
+            <div class="container">
+                <div class="section-card orange">
+                    <h2>
+                        <span data-lang="zh">📊 信任可视化：让用户看到价值</span>
+                        <span data-lang="en">📊 Trust Visualization: Let Users See Value</span>
+                    </h2>
+
+                    <h3 data-lang="zh">AI 陪伴指标</h3>
+                    <h3 data-lang="en">AI Companion Metrics</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-content" style="text-align: center;">
+                            <p style="font-size: 24px; margin-bottom: 16px;">🤖</p>
+                            <p data-lang="zh"><strong>智能助手 已陪伴你 47 天</strong></p>
+                            <p data-lang="en"><strong>AI has been with you for 47 days</strong></p>
+                            <div style="display: flex; justify-content: space-around; margin-top: 20px; text-align: center;">
+                                <div>
+                                    <p style="font-size: 24px; font-weight: 700; color: var(--blue);">156</p>
+                                    <p data-lang="zh" style="font-size: 12px; opacity: 0.7;">分析次数</p>
+                                    <p data-lang="en" style="font-size: 12px; opacity: 0.7;">Analyses</p>
+                                </div>
+                                <div>
+                                    <p style="font-size: 24px; font-weight: 700; color: var(--red);">3</p>
+                                    <p data-lang="zh" style="font-size: 12px; opacity: 0.7;">风险预警</p>
+                                    <p data-lang="en" style="font-size: 12px; opacity: 0.7;">Risk Alerts</p>
+                                </div>
+                                <div>
+                                    <p style="font-size: 24px; font-weight: 700; color: var(--purple);">12</p>
+                                    <p data-lang="zh" style="font-size: 12px; opacity: 0.7;">采纳建议</p>
+                                    <p data-lang="en" style="font-size: 12px; opacity: 0.7;">Advice Taken</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 data-lang="zh">价值量化</h3>
+                    <h3 data-lang="en">Value Quantification</h3>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="icon">🛡️</div>
+                            <div class="title" data-lang="zh">避开的潜在损失</div>
+                            <div class="title" data-lang="en">Potential Loss Avoided</div>
+                            <div class="desc" style="font-size: 24px; font-weight: 700; color: var(--green);">$1,240</div>
+                            <div class="desc" data-lang="zh" style="font-size: 12px;">基于预警 Token 的后续跌幅</div>
+                            <div class="desc" data-lang="en" style="font-size: 12px;">Based on alerted tokens' subsequent drops</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📈</div>
+                            <div class="title" data-lang="zh">建议带来的收益</div>
+                            <div class="title" data-lang="en">Gains from Advice</div>
+                            <div class="desc" style="font-size: 24px; font-weight: 700; color: var(--blue);">$320</div>
+                            <div class="desc" data-lang="zh" style="font-size: 12px;">基于采纳建议的实际收益</div>
+                            <div class="desc" data-lang="en" style="font-size: 12px;">Based on actual gains from followed advice</div>
+                        </div>
+                    </div>
+
+                    <h3 data-lang="zh">成长历程</h3>
+                    <h3 data-lang="en">Growth Journey</h3>
+
+                    <div class="mock-ui">
+                        <div class="mock-content">
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0;">
+                                <span style="width: 24px; height: 24px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center;">✓</span>
+                                <span data-lang="zh"><strong>看懂阶段</strong> · 已完成</span>
+                                <span data-lang="en"><strong>Understanding</strong> · Complete</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0;">
+                                <span style="width: 24px; height: 24px; background: var(--purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">→</span>
+                                <span data-lang="zh"><strong>建议阶段</strong> · 进行中（再采纳 3 条建议解锁执行）</span>
+                                <span data-lang="en"><strong>Advisory</strong> · In Progress (3 more advice to unlock execution)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; opacity: 0.5;">
+                                <span style="width: 24px; height: 24px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">🔒</span>
+                                <span data-lang="zh"><strong>执行阶段</strong> · 待解锁</span>
+                                <span data-lang="en"><strong>Execution</strong> · Locked</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Part B: Brand -->
+        <div class="part-divider">
+            <div class="container">
+                <div class="part-label">
+                    <span data-lang="zh">PART B · 品牌传播方案</span>
+                    <span data-lang="en">PART B · Brand & Marketing Plan</span>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="container">
+                <div class="section-card pink">
+                    <h2>
+                        <span data-lang="zh">🧠 心智演进策略</span>
+                        <span data-lang="en">🧠 Mind Share Evolution Strategy</span>
+                    </h2>
+
+                    <p data-lang="zh"><strong>关键原则</strong>：每个阶段的传播口号要匹配当前已上线的功能。</p>
+                    <p data-lang="en"><strong>Key Principle</strong>: Each phase's messaging must match currently live features.</p>
+
+                    <div class="card-grid three">
+                        <div class="card" style="border-color: var(--blue); box-shadow: 6px 6px 0 var(--blue);">
+                            <div class="icon">🔍</div>
+                            <div class="title" data-lang="zh">Phase 1 心智</div>
+                            <div class="title" data-lang="en">Phase 1 Mind Share</div>
+                            <div class="desc" data-lang="zh">「交易前，先问智能助手」<br><br>定位：<strong>交易顾问</strong></div>
+                            <div class="desc" data-lang="en">"Before trading, ask AI Assistant"<br><br>Position: <strong>Trading Advisor</strong></div>
+                        </div>
+                        <div class="card" style="border-color: var(--purple); box-shadow: 6px 6px 0 var(--purple);">
+                            <div class="icon">💡</div>
+                            <div class="title" data-lang="zh">Phase 2 心智</div>
+                            <div class="title" data-lang="en">Phase 2 Mind Share</div>
+                            <div class="desc" data-lang="zh">「不确定？智能助手帮你想」<br><br>定位：<strong>交易助手</strong></div>
+                            <div class="desc" data-lang="en">"Uncertain? AI Assistant helps you think"<br><br>Position: <strong>Trading Assistant</strong></div>
+                        </div>
+                        <div class="card" style="border-color: var(--green); box-shadow: 6px 6px 0 var(--green);">
+                            <div class="icon">⚡</div>
+                            <div class="title" data-lang="zh">Phase 3 心智</div>
+                            <div class="title" data-lang="en">Phase 3 Mind Share</div>
+                            <div class="desc" data-lang="zh">「说一句，智能助手 搞定」<br><br>定位：<strong>交易伙伴</strong></div>
+                            <div class="desc" data-lang="en">"One sentence, AI Assistant handles it"<br><br>Position: <strong>Trading Partner</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card blue">
+                    <h2>
+                        <span data-lang="zh">📸 可传播的「AI 时刻」</span>
+                        <span data-lang="en">📸 Viral "AI Moments"</span>
+                    </h2>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="icon">🚨</div>
+                            <div class="title" data-lang="zh">预警截图</div>
+                            <div class="title" data-lang="en">Alert Screenshot</div>
+                            <div class="desc" data-lang="zh">「智能助手 提前预警 Rug，救了我」</div>
+                            <div class="desc" data-lang="en">"AI warned me before Rug, saved me"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🎯</div>
+                            <div class="title" data-lang="zh">精准分析</div>
+                            <div class="title" data-lang="en">Accurate Analysis</div>
+                            <div class="desc" data-lang="zh">「智能助手 说的风险点应验了」</div>
+                            <div class="desc" data-lang="en">"AI's risk warning came true"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">💡</div>
+                            <div class="title" data-lang="zh">洞察截图</div>
+                            <div class="title" data-lang="en">Insight Screenshot</div>
+                            <div class="desc" data-lang="zh">「智能助手 发现聪明钱在买」</div>
+                            <div class="desc" data-lang="en">"AI spotted smart money buying"</div>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📊</div>
+                            <div class="title" data-lang="zh">分析报告</div>
+                            <div class="title" data-lang="en">Analysis Report</div>
+                            <div class="desc" data-lang="zh">一页总结，适合分享</div>
+                            <div class="desc" data-lang="en">One-page summary, share-ready</div>
+                        </div>
+                    </div>
+
+                    <div class="core-box action">
+                        <span data-lang="zh">设计原则：每个 AI 输出都有「分享」按钮，截图自带 Bitget Wallet 智能助手 水印</span>
+                        <span data-lang="en">Design Principle: Every AI output has "Share" button, screenshots include Bitget Wallet AI watermark</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-card yellow">
+                    <h2>
+                        <span data-lang="zh">🗓️ 上线节奏</span>
+                        <span data-lang="en">🗓️ Launch Timeline</span>
+                    </h2>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="phase">Phase 1 · Month 1-2</div>
+                            <div class="title" data-lang="zh">看懂层 MVP + 心智「先问」</div>
+                            <div class="title" data-lang="en">Understanding Layer MVP + "Ask First" Mind Share</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">Token 分析</span>
+                                <span class="tag" data-lang="en">Token Analysis</span>
+                                <span class="tag" data-lang="zh">风险评分</span>
+                                <span class="tag" data-lang="en">Risk Scoring</span>
+                                <span class="tag" data-lang="zh">搜索即分析</span>
+                                <span class="tag" data-lang="en">Search=Analysis</span>
+                                <span class="tag" data-lang="zh">每日洞察内容</span>
+                                <span class="tag" data-lang="en">Daily Insights Content</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item p2">
+                            <div class="phase">Phase 2 · Month 3-4</div>
+                            <div class="title" data-lang="zh">建议层 + 心智「帮你想」</div>
+                            <div class="title" data-lang="en">Advisory Layer + "Helps You Think" Mind Share</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">个性化建议</span>
+                                <span class="tag" data-lang="en">Personalized Advice</span>
+                                <span class="tag" data-lang="zh">Level 2 解锁流程</span>
+                                <span class="tag" data-lang="en">Level 2 Unlock Flow</span>
+                                <span class="tag" data-lang="zh">建议采纳追踪</span>
+                                <span class="tag" data-lang="en">Advice Tracking</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item p3">
+                            <div class="phase">Phase 3 · Month 5-6</div>
+                            <div class="title" data-lang="zh">执行层 Beta + 心智「帮你做」</div>
+                            <div class="title" data-lang="en">Execution Layer Beta + "Does It For You" Mind Share</div>
+                            <div class="tag-list">
+                                <span class="tag" data-lang="zh">意图执行</span>
+                                <span class="tag" data-lang="en">Intent Execution</span>
+                                <span class="tag" data-lang="zh">权限控制</span>
+                                <span class="tag" data-lang="en">Permission Control</span>
+                                <span class="tag" data-lang="zh">执行结果追踪</span>
+                                <span class="tag" data-lang="en">Execution Tracking</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-bottom: 80px;">
+            <div class="container">
+                <div class="conclusion">
+                    <p class="main" data-lang="zh">
+                        Bitget Wallet 智能助手<br>
+                        不是替你做，是陪你做
+                    </p>
+                    <p class="main" data-lang="en">
+                        Bitget Wallet 智能助手<br>
+                        Not Doing For You, But With You
+                    </p>
+                    <p class="sub" data-lang="zh">
+                        从看懂 → 到建议 → 到执行<br>
+                        让用户在每一步都感受到「AI 在陪我」
+                    </p>
+                    <p class="sub" data-lang="en">
+                        From Understanding → To Advice → To Execution<br>
+                        Let users feel "AI is with me" at every step
+                    </p>
+                    <div class="cta-btn">
+                        <span data-lang="zh">渐进式赢得信任 🤝</span>
+                        <span data-lang="en">Progressively Earn Trust 🤝</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p class="confidential">🔒 CONFIDENTIAL · Bitget Wallet Internal Use Only</p>
+        </div>
+    </footer>
+
+    <script>
+        function setLang(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('bgw-trade-ai-lang', lang);
+        }
+        const savedLang = localStorage.getItem('bgw-trade-ai-lang');
+        if (savedLang) {
+            document.documentElement.lang = savedLang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', (savedLang === 'zh' && btn.textContent === '中文') || (savedLang === 'en' && btn.textContent === 'EN'));
+            });
+        }
+    </script>
+</body>
+</html>

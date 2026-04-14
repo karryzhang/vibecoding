@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitget Wallet Skill — AI Agent On-Chain Infrastructure</title>
+<meta name="description" content="Bitget Wallet Skill — The only AI agent skill for gasless, cross-chain swap and bridge across 7+ chains in one API call. Open source, 50+ DEX aggregated.">
+<link rel="canonical" href="https://vibecoding-karry.vercel.app/bitget-wallet-skill.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bitget Wallet Skill — AI Agent On-Chain Infrastructure">
+<meta property="og:description" content="Give your AI agent the power to swap, bridge, and track markets across 7+ chains — gasless, effortless, one API call.">
+<meta property="og:url" content="https://vibecoding-karry.vercel.app/bitget-wallet-skill.html">
+<meta property="og:image" content="https://vibecoding-karry.vercel.app/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Bitget Wallet Skill">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bitget Wallet Skill — AI Agent On-Chain Infrastructure">
+<meta name="twitter:description" content="Gasless swap & cross-chain bridge for AI agents. 7+ chains, 50+ DEX, one API call. Open source.">
+<meta name="twitter:image" content="https://vibecoding-karry.vercel.app/og-card.jpg">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Bitget Wallet Skill",
+  "url": "https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill",
+  "description": "AI agent skill for gasless, cross-chain swap and bridge across 7+ chains.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web",
+  "isAccessibleForFree": true,
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "codeRepository": "https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill"
+}
+</script>
+
+<!-- Keywords -->
+<meta name="keywords" content="Bitget Wallet, AI Agent, Swap, Cross-Chain, Bridge, Gasless, EIP-7702, DeFi, Web3, DEX Aggregator, MCP, Skill">
+<meta name="robots" content="index, follow">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #080c14;
+  --bg-secondary: #0f1623;
+  --accent: #00E6B8;
+  --accent-light: #2EECC8;
+  --accent-blue: #4F8FFF;
+  --accent-purple: #8B5CF6;
+  --accent-glow: rgba(0, 230, 184, 0.18);
+  --accent-glow-strong: rgba(0, 230, 184, 0.35);
+  --text-primary: #F0F6FC;
+  --text-secondary: #A0AECB;
+  --text-muted: #7B8BA5;
+  --card-bg: rgba(255, 255, 255, 0.035);
+  --card-bg-elevated: rgba(255, 255, 255, 0.06);
+  --card-bg-sunken: rgba(255, 255, 255, 0.018);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-hover-border: rgba(0, 230, 184, 0.3);
+  --card-top-light: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --code-bg: #060a10;
+  --success: var(--accent);
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --max-width: 1200px;
+  --section-gap: 120px;
+  --section-gap-mobile: 80px;
+  --ease-out-expo: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: 'kern', 'liga', 'calt';
+  background: var(--bg-primary);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -5%, rgba(0, 230, 184, 0.07) 0%, transparent 60%),
+    radial-gradient(circle 600px at 15% 30%, rgba(79, 143, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle 500px at 85% 25%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+    radial-gradient(circle 800px at 50% 80%, rgba(0, 230, 184, 0.03) 0%, transparent 50%);
+  color: var(--text-primary);
+  line-height: 1.75;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Mouse glow follower */
+.mouse-glow {
+  position: fixed; width: 500px; height: 500px;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+  background: radial-gradient(circle, rgba(0,230,184,0.06) 0%, rgba(79,143,255,0.03) 30%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: left 0.3s ease-out, top 0.3s ease-out;
+  will-change: left, top;
+}
+
+/* Subtle noise grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top:0;right:0;bottom:0;left:0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat; background-size: 256px 256px;
+  background-size: 256px 256px;
+}
+
+/* ---- Utility ---- */
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+.section { padding: var(--section-gap) 0; position: relative; }
+.section-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.04em;
+  position: relative;
+  padding-left: 20px;
+  text-shadow: 0 0 60px rgba(0, 230, 184, 0.1);
+}
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-blue), var(--accent-purple));
+}
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  max-width: 560px;
+  margin-bottom: 48px;
+  line-height: 1.75;
+  padding-left: 20px;
+}
+.accent { color: var(--accent); }
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Fade-in animation ---- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s var(--ease-out-expo);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Directional slide animations ---- */
+.slide-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.slide-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.slide-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---- Stagger delays for children ---- */
+.stagger-1 { transition-delay: 0ms !important; }
+.stagger-2 { transition-delay: 100ms !important; }
+.stagger-3 { transition-delay: 200ms !important; }
+.stagger-4 { transition-delay: 300ms !important; }
+
+/* ---- Nav ---- */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10, 14, 23, 0.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--card-border);
+  transition: background 0.4s, box-shadow 0.4s;
+}
+.nav.scrolled {
+  background: rgba(10, 14, 23, 0.92);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+}
+.nav-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo .dot {
+  width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--accent), 0 0 24px rgba(0, 230, 184, 0.33);
+  animation: dotPulse 3s ease-in-out infinite;
+}
+@keyframes dotPulse { 0%,100%{box-shadow:0 0 12px var(--accent),0 0 24px rgba(0,212,170,0.3)} 50%{box-shadow:0 0 16px var(--accent),0 0 32px rgba(0,212,170,0.4)} }
+.nav-links {
+  display: flex; gap: 24px; margin-left: auto; margin-right: 24px;
+}
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-size: 0.82rem; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--accent); }
+.nav-links a.active { border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .core-card, .cap-item, .adv-card, .cost-card, .stat-card {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .adv-compare { position: relative; }
+  .adv-compare::before {
+    content: 'VS';
+    display: block; text-align: center; padding: 8px 0;
+    font-size: 0.75rem; font-weight: 800; color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+}
+.lang-toggle {
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.lang-btn {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+  position: relative;
+}
+.lang-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.lang-btn.active {
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+.lang-btn.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+.lang-btn:hover:not(.active) { color: var(--text-secondary); }
+
+/* ---- Hero ---- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 80px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -150px; right: -150px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(0, 230, 184, 0.12) 0%, rgba(79, 143, 255, 0.04) 40%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -120px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, rgba(0, 230, 184, 0.03) 50%, transparent 70%);
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+.hero-text { flex: 1 1 60%; min-width: 0; }
+.hero-visual { flex: 0 0 40%; display: flex; justify-content: center; align-items: center; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background: linear-gradient(135deg, rgba(0,212,170,0.12), rgba(59,130,246,0.08));
+  border: 1px solid rgba(0, 230, 184, 0.28);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 24px;
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(0,212,170,0.1), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.hero-badge .pulse {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,212,170,0.2); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 6px transparent; }
+}
+.hero h1 {
+  font-size: clamp(2.8rem, 7vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 12px;
+}
+.hero-tagline {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.hero-tagline .gradient-text {
+  font-weight: 700;
+}
+.hero-desc {
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  color: var(--text-muted);
+  max-width: 560px;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+.hero-stats-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* ---- Orbital Ring System ---- */
+.orbital {
+  width: 420px; height: 420px;
+  position: relative;
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+/* Core — multi-layer glow */
+.orbital-core {
+  width: 56px; height: 56px;
+  background: radial-gradient(circle, #00FFE0 0%, var(--accent) 25%, rgba(79,143,255,0.4) 50%, rgba(139,92,246,0.15) 70%, transparent 85%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 40px rgba(0,230,184,0.6),
+    0 0 80px rgba(0,230,184,0.3),
+    0 0 140px rgba(79,143,255,0.2),
+    0 0 200px rgba(139,92,246,0.1);
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  animation: coreBreath 4s ease-in-out infinite;
+}
+@keyframes coreBreath {
+  0%, 100% { transform: translate(-50%,-50%) scale(1); box-shadow: 0 0 40px rgba(0,230,184,0.6), 0 0 80px rgba(0,230,184,0.3), 0 0 140px rgba(79,143,255,0.2), 0 0 200px rgba(139,92,246,0.1); }
+  50% { transform: translate(-50%,-50%) scale(1.08); box-shadow: 0 0 50px rgba(0,230,184,0.7), 0 0 100px rgba(0,230,184,0.4), 0 0 160px rgba(79,143,255,0.25), 0 0 240px rgba(139,92,246,0.15); }
+}
+/* Pulse ring 1 — slow expanding */
+.orbital-core::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 100%; height: 100%;
+  border: 1.5px solid rgba(0,230,184,0.4);
+  border-radius: 50%;
+  animation: pulseRing 3s ease-out infinite;
+  transform: translate(-50%,-50%) scale(1);
+}
+/* Pulse ring 2 — offset timing */
+.orbital-core::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 100%; height: 100%;
+  border: 1px solid rgba(79,143,255,0.3);
+  border-radius: 50%;
+  animation: pulseRing 3s ease-out infinite 1.5s;
+  transform: translate(-50%,-50%) scale(1);
+}
+@keyframes pulseRing {
+  0% { transform: translate(-50%,-50%) scale(1); opacity: 0.8; }
+  100% { transform: translate(-50%,-50%) scale(4); opacity: 0; }
+}
+/* Ripple waves — CSS generated */
+.orbital-ripple {
+  position: absolute; top: 50%; left: 50%;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,230,184,0.15);
+  transform: translate(-50%,-50%);
+  animation: ripple 5s linear infinite;
+  z-index: 1;
+}
+.orbital-ripple:nth-child(2) { animation-delay: -1.25s; }
+.orbital-ripple:nth-child(3) { animation-delay: -2.5s; }
+.orbital-ripple:nth-child(4) { animation-delay: -3.75s; }
+@keyframes ripple {
+  0% { width: 60px; height: 60px; opacity: 0.4; border-color: rgba(0,230,184,0.2); }
+  100% { width: 400px; height: 400px; opacity: 0; border-color: rgba(139,92,246,0.05); }
+}
+/* Radial light beams */
+.orbital-beams {
+  position: absolute; top: 50%; left: 50%;
+  width: 0; height: 0;
+  z-index: 1;
+}
+.orbital-beam {
+  position: absolute; top: 0; left: 0;
+  width: 1px; height: 160px;
+  background: linear-gradient(180deg, rgba(0,230,184,0.3) 0%, transparent 100%);
+  transform-origin: top center;
+  opacity: 0.4;
+}
+.orbital-beam:nth-child(1) { transform: rotate(0deg); }
+.orbital-beam:nth-child(2) { transform: rotate(60deg); }
+.orbital-beam:nth-child(3) { transform: rotate(120deg); }
+.orbital-beam:nth-child(4) { transform: rotate(180deg); }
+.orbital-beam:nth-child(5) { transform: rotate(240deg); }
+.orbital-beam:nth-child(6) { transform: rotate(300deg); }
+.orbital-ring {
+  position: absolute; top:0;right:0;bottom:0;left:0;
+  border: 1px solid rgba(0,230,184,0.1);
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+/* Flowing light arc on ring */
+.orbital-ring::before {
+  content: '';
+  position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0%, transparent 70%, rgba(0,230,184,0.25) 85%, rgba(79,143,255,0.15) 95%, transparent 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 2px), #fff calc(100% - 1px), transparent 100%);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 2px), #fff calc(100% - 1px), transparent 100%);
+  animation: ringGlow 6s linear infinite;
+}
+.orbital-ring:nth-child(3)::before { animation-direction: reverse; animation-duration: 8s; }
+.orbital-ring:nth-child(4)::before { animation-duration: 10s; }
+@keyframes ringGlow { to { transform: rotate(360deg); } }
+.orbital-ring:nth-child(2) {
+  transform: rotateX(70deg) rotateZ(20deg);
+  border-color: rgba(0,212,170,0.12);
+  animation: orbitSpin 20s linear infinite;
+}
+.orbital-ring:nth-child(3) {
+  transform: rotateX(55deg) rotateZ(-40deg);
+  border-color: rgba(139,92,246,0.12);
+  animation: orbitSpin 25s linear infinite reverse;
+}
+.orbital-ring:nth-child(4) {
+  transform: rotateX(80deg) rotateZ(60deg);
+  border-color: rgba(0,212,170,0.1);
+  animation: orbitSpin 30s linear infinite;
+}
+@keyframes orbitSpin {
+  from { transform: rotateX(var(--rx, 70deg)) rotateZ(var(--rz, 20deg)) rotateY(0deg); }
+  to { transform: rotateX(var(--rx, 70deg)) rotateZ(var(--rz, 20deg)) rotateY(360deg); }
+}
+.orbital-ring:nth-child(2) { --rx: 70deg; --rz: 20deg; }
+.orbital-ring:nth-child(3) { --rx: 55deg; --rz: -40deg; }
+.orbital-ring:nth-child(4) { --rx: 80deg; --rz: 60deg; }
+
+/* Orbital moving dots */
+.orbital-dot {
+  width: 7px; height: 7px;
+  background: #00FFE0;
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent), 0 0 20px rgba(0,230,184,0.5), 0 0 40px rgba(0,230,184,0.2);
+  position: absolute;
+}
+/* Dot trailing glow */
+.orbital-dot::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 20px; height: 20px;
+  background: radial-gradient(circle, rgba(0,230,184,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.orbital-ring:nth-child(2) .orbital-dot { animation: orbitDot1 8s linear infinite; }
+.orbital-ring:nth-child(3) .orbital-dot { animation: orbitDot2 10s linear infinite; }
+.orbital-ring:nth-child(4) .orbital-dot { animation: orbitDot3 12s linear infinite; }
+@keyframes orbitDot1 {
+  0% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  25% { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+  50% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+  75% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+  100% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+}
+@keyframes orbitDot2 {
+  0% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+  25% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  50% { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+  75% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+  100% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+}
+@keyframes orbitDot3 {
+  0% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+  25% { top: 50%; left: 0; transform: translate(-50%, -50%); }
+  50% { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  75% { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+  100% { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+}
+/* Extra small orbiting dots */
+.orbital-dot.sm {
+  width: 3px; height: 3px;
+  opacity: 0.6;
+  box-shadow: 0 0 8px var(--accent);
+}
+.orbital-ring:nth-child(2) .orbital-dot.sm { animation: orbitDot1 8s linear infinite; animation-delay: -4s; }
+.orbital-ring:nth-child(3) .orbital-dot.sm { animation: orbitDot2 10s linear infinite; animation-delay: -5s; }
+.orbital-ring:nth-child(4) .orbital-dot.sm { animation: orbitDot3 12s linear infinite; animation-delay: -6s; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo), background 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo);
+  cursor: pointer;
+  border: none;
+}
+.btn:active {
+  transform: scale(0.97) !important;
+  transition-duration: 0.1s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: #0a0e17;
+  box-shadow: 0 0 20px rgba(0,212,170,0.15), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
+  box-shadow: 0 0 32px var(--accent-glow-strong), 0 0 64px rgba(0,212,170,0.12);
+  transform: translateY(-2px);
+}
+.btn-outline {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 24px var(--accent-glow), 0 0 48px rgba(0,212,170,0.06);
+  transform: translateY(-2px);
+}
+.hero-stats {
+  padding-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+.hero-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.stat-card {
+  background: var(--card-bg-elevated);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
+  position: relative;
+  box-shadow: var(--card-top-light);
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top:0;right:0;bottom:0;left:0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.4s;
+}
+.stat-card:hover {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2), 0 12px 32px rgba(0,0,0,0.15);
+}
+.stat-card:hover::before {
+  background: linear-gradient(135deg, rgba(0,212,170,0.3), rgba(59,130,246,0.2));
+}
+.stat-number {
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  padding-top: 10px;
+  position: relative;
+}
+.stat-label::before {
+  content: '';
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 24px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  border-radius: 1px;
+}
+
+/* ---- Core Cards ---- */
+.core-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.core-card {
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  padding: 36px 28px;
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15), var(--card-top-light);
+}
+.core-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-blue), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.core-card::after {
+  content: '';
+  position: absolute;
+  top:0;right:0;bottom:0;left:0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.4s;
+}
+.core-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2), 0 12px 32px rgba(0,0,0,0.15), 0 0 40px rgba(0,212,170,0.08);
+}
+.core-card:hover::before { opacity: 1; }
+.core-card:hover::after {
+  background: linear-gradient(135deg, rgba(0,212,170,0.35), rgba(59,130,246,0.2), rgba(0,212,170,0.1));
+}
+.core-icon {
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+}
+.stagger-1 .core-icon { background: rgba(0, 230, 184, 0.12); border: 1px solid rgba(0, 230, 184, 0.18); }
+.stagger-2 .core-icon { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.15); }
+.stagger-3 .core-icon { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.15); }
+.stagger-4 .core-icon { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.15); }
+.core-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.core-card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ---- Comparison Table ---- */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: rgba(255,255,255,0.02);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  position: relative;
+}
+.table-wrap::after {
+  content: 'scroll →';
+  position: absolute; right: 8px; bottom: 8px;
+  font-size: 0.7rem; color: var(--text-muted); opacity: 0.6;
+  pointer-events: none; display: none;
+}
+@media (max-width: 768px) {
+  .table-wrap::after { display: block; }
+  .th-full { display: none; }
+}
+@media (min-width: 769px) { .th-short { display: none; } }
+.table-wrap::before {
+  content: '';
+  position: absolute;
+  top:0;right:0;bottom:0;left:0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  font-size: 0.92rem;
+}
+.compare-table thead th {
+  padding: 18px 20px;
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 1px solid var(--card-border);
+  white-space: nowrap;
+  font-size: 0.95rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+}
+.compare-table thead th:nth-child(2) {
+  background: linear-gradient(180deg, rgba(0,212,170,0.12) 0%, rgba(0,212,170,0.04) 100%);
+  color: var(--accent);
+}
+.compare-table tbody td {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  transition: background 0.25s;
+}
+.compare-table tbody td:nth-child(2) {
+  background: rgba(0, 212, 170, 0.04);
+  color: var(--text-primary);
+  font-weight: 500;
+  border-left: 2px solid rgba(0,212,170,0.15);
+}
+.compare-table tbody tr:last-child td { border-bottom: none; }
+.compare-table tbody td:first-child {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.compare-table tbody tr:hover td {
+  background: rgba(0, 230, 184, 0.07);
+}
+.compare-table tbody tr:hover td:nth-child(2) {
+  background: rgba(0, 230, 184, 0.12);
+}
+.ico-yes { color: var(--success); text-shadow: 0 0 8px rgba(0, 212, 170, 0.5); }
+.ico-warn { color: var(--warning); text-shadow: 0 0 6px rgba(245, 158, 11, 0.3); }
+.ico-no { color: #6b7280; text-shadow: none; opacity: 0.7; }
+
+/* ---- Advantages Deep Dive ---- */
+.adv-block { margin-bottom: 80px; }
+.adv-block:last-child { margin-bottom: 0; }
+.adv-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.adv-header .icon { font-size: 1.75rem; }
+.adv-header h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.adv-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.adv-card {
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid var(--card-border);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.1);
+}
+.adv-card.old {
+  background: rgba(239, 68, 68, 0.03);
+  border-color: rgba(239, 68, 68, 0.1);
+  opacity: 0.75;
+}
+.adv-card.new {
+  background: linear-gradient(180deg, rgba(0,212,170,0.08) 0%, rgba(0,212,170,0.02) 100%);
+  border-color: rgba(0, 230, 184, 0.22);
+  box-shadow: 0 0 24px rgba(0, 230, 184, 0.07), inset 0 1px 0 rgba(0, 230, 184, 0.18);
+  position: relative; overflow: hidden;
+}
+.adv-card.new::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.adv-card-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.adv-card.old .adv-card-label { color: var(--danger); }
+.adv-card.new .adv-card-label { color: var(--accent); }
+.adv-card p, .adv-card li {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.adv-card ul {
+  list-style: none;
+  padding: 0;
+}
+.adv-card ul li {
+  padding: 6px 0;
+  padding-left: 24px;
+  position: relative;
+}
+.adv-card ul li::before {
+  position: absolute;
+  left: 0;
+  top: 6px;
+}
+.adv-card.old ul li::before { content: '✗'; color: var(--danger); }
+.adv-card.new ul li::before { content: '✓'; color: var(--accent); }
+
+.adv-scenario {
+  background: rgba(255,255,255,0.03);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 28px;
+  margin-top: 24px;
+}
+.adv-scenario h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+.adv-scenario p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.flow-steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.flow-step {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.flow-step.old-step {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+.flow-step.new-step {
+  background: var(--accent-glow);
+  border: 1px solid rgba(0, 230, 184, 0.22);
+  color: var(--accent);
+}
+.flow-arrow {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ---- Capabilities Grid ---- */
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.cap-item {
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
+  cursor: pointer;
+}
+.cap-item:active { transform: scale(0.97); }
+.cap-item:hover {
+  border-color: var(--card-hover-border);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2), 0 12px 32px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+}
+.cap-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+.cap-item h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cap-item p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ---- Cost Section ---- */
+.cost-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+.cost-card {
+  border-radius: 20px;
+  padding: 36px;
+  border: 1px solid var(--card-border);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15), var(--card-top-light);
+}
+.cost-card.old-cost {
+  background: rgba(239, 68, 68, 0.03);
+  border-color: rgba(239, 68, 68, 0.12);
+}
+.cost-card.new-cost {
+  background: var(--accent-glow);
+  border-color: rgba(0, 230, 184, 0.22);
+}
+.cost-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.cost-card.old-cost h3 { color: var(--text-muted); }
+.cost-card.new-cost h3 { color: var(--accent); }
+.cost-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.cost-metric:last-child { border-bottom: none; }
+.cost-metric span:first-child {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.cost-metric span:last-child {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.cost-metric .val-bad { color: var(--danger); }
+.cost-metric .val-good { color: var(--accent); }
+.cost-big {
+  text-align: center;
+  padding: 32px;
+}
+.cost-big-number {
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+.cost-big-label {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-top: 8px;
+}
+
+/* ---- Code Block ---- */
+.code-section { margin-top: 0; }
+.code-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 0;
+}
+.code-tab {
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(6, 10, 16, 0.5);
+  border: 1px solid var(--card-border);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.code-tab.active {
+  color: var(--accent);
+  background: var(--code-bg);
+}
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0 12px 12px 12px;
+  overflow-x: auto;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+.code-block::before {
+  content: '';
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+}
+.code-block::before {
+  content: '● ● ●';
+  display: block;
+  padding: 10px 16px;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+}
+.code-block code {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  white-space: pre;
+  display: block;
+  padding: 20px 28px;
+  counter-reset: line;
+}
+.code-block .kw { color: #c792ea; }
+.code-block .fn { color: #82aaff; }
+.code-block .str { color: #c3e88d; }
+.code-block .cmt { color: #546e7a; }
+.code-block .num { color: #f78c6c; }
+.code-block .obj { color: #ffcb6b; }
+.code-block .op { color: #89ddff; }
+
+/* ---- Footer CTA ---- */
+.footer-cta {
+  text-align: center;
+  padding: var(--section-gap) 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.footer-cta::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 50%; transform: translateX(-50%);
+  width: 1000px; height: 500px;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,230,184,0.2) 0%, transparent 60%),
+    radial-gradient(circle at 30% 40%, rgba(79,143,255,0.12) 0%, transparent 50%),
+    radial-gradient(circle at 70% 50%, rgba(139,92,246,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+.footer-cta h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+  position: relative;
+}
+.footer-cta p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 36px;
+  position: relative;
+  line-height: 1.75;
+}
+.footer-cta .hero-buttons { justify-content: center; position: relative; }
+.footer-links {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  position: relative;
+}
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--accent); }
+.footer-copy {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--card-border);
+  position: relative;
+}
+
+/* ---- Hover-capable devices only ---- */
+@media (hover: hover) and (pointer: fine) {
+  .core-card:hover { transform: translateY(-4px); }
+  .cap-item:hover { transform: translateY(-4px); }
+  .stat-card:hover { transform: translateY(-2px); }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  :root { --section-gap: 80px; }
+  .hero-content { flex-direction: column; text-align: center; gap: 24px; }
+  .hero-text { flex: 1 1 100%; width: 100%; }
+  .hero-visual { flex: 0 0 auto; order: -1; }
+  .hero-desc { margin-left: auto; margin-right: auto; max-width: 100%; }
+  .hero-buttons { justify-content: center; }
+  .orbital { width: 160px; height: 160px; margin-bottom: 0; }
+  .hero-stats { padding-top: 24px; border-top: 1px solid var(--card-border); }
+  .hero-stats-grid { max-width: 100%; }
+  .orbital-core { width: 40px; height: 40px; }
+  .orbital-dot { width: 4px; height: 4px; }
+  .orbital-dot.sm { width: 2px; height: 2px; }
+  .hero-stats-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .core-grid { grid-template-columns: repeat(2, 1fr); }
+  .adv-compare { grid-template-columns: 1fr; }
+  .cost-compare { grid-template-columns: 1fr; }
+  .section-title { padding-left: 16px; }
+  .section-subtitle { padding-left: 16px; }
+}
+@media (max-width: 600px) {
+  :root { --section-gap: 64px; }
+  .hero-stats-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .stat-card { padding: 12px 8px; border-radius: var(--radius-md); }
+  .stat-number { font-size: 1.25rem; }
+  .stat-label { font-size: 0.68rem; }
+  .hero h1 { font-size: 2.2rem; margin-bottom: 8px; }
+  .hero-tagline { font-size: 1.05rem; margin-bottom: 12px; }
+  .hero-desc { font-size: 0.88rem; margin-bottom: 20px; }
+  .hero-buttons { margin-bottom: 32px; gap: 10px; }
+  .hero-badge { margin-bottom: 12px; }
+  .quick-deploy { margin-bottom: 14px; }
+  .hero-visual { opacity: 0.4; }
+  .orbital { width: 160px; height: 160px; }
+  .orbital-core { width: 24px; height: 24px; }
+  .orbital-beams { display: none; }
+  .orbital-ripple { display: none; }
+  .core-grid { grid-template-columns: 1fr; }
+  .cap-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .cap-item { padding: 14px; }
+  .btn { padding: 12px 20px; font-size: 0.9rem; }
+  .nav { padding: 12px 16px; }
+  .container { padding: 0 16px; }
+  .flow-steps { flex-direction: column; align-items: flex-start; }
+  .section-title { padding-left: 14px; }
+  .section-subtitle { padding-left: 14px; }
+}
+
+/* ---- Supported Chains ---- */
+.chain-grid {
+  display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+}
+.chain-item {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card-bg-elevated); border: 1px solid var(--card-border);
+  border-radius: 100px; padding: 10px 18px;
+  font-size: 0.82rem; font-weight: 600; color: var(--text-primary);
+  transition: border-color 0.3s, transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+  box-shadow: var(--card-top-light);
+}
+.chain-item:hover { border-color: var(--card-hover-border); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,212,170,0.08); }
+.chain-logo { font-size: 1.2rem; }
+
+/* ---- Use Cases ---- */
+.usecase-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;
+}
+.usecase-card {
+  background: var(--card-bg-elevated); border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg); padding: 28px;
+  transition: transform 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo), box-shadow 0.4s;
+  box-shadow: var(--card-top-light);
+  position: relative; overflow: hidden;
+}
+.usecase-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+.usecase-card:hover { border-color: var(--card-hover-border); transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.usecase-icon {
+  font-size: 1.6rem; display: flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: var(--radius-md); margin-bottom: 16px;
+  background: linear-gradient(135deg, rgba(0,212,170,0.08), rgba(59,130,246,0.06));
+  border: 1px solid rgba(0,212,170,0.1);
+}
+.usecase-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.usecase-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ---- Code block copy button ---- */
+.code-section { position: relative; }
+.code-copy-btn {
+  position: absolute; top: 44px; right: 12px; z-index: 2;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 4px 10px; font-size: 0.72rem; color: var(--text-muted);
+  cursor: pointer; transition: background 0.2s, color 0.2s;
+}
+.code-copy-btn:hover { background: rgba(0,212,170,0.1); color: var(--accent); }
+.code-copy-btn.copied { color: var(--accent); }
+
+/* ---- External link indicator ---- */
+a[target="_blank"]::after {
+  content: ' ↗'; font-size: 0.75em; opacity: 0.6;
+}
+.btn[target="_blank"]::after, .footer-links a::after, .nav-logo::after { content: none; }
+
+/* ---- Scroll-to-top ---- */
+.scroll-top {
+  position: fixed; bottom: 32px; right: 32px; z-index: 100;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  color: var(--accent); font-size: 1.1rem; font-weight: 700;
+  cursor: pointer; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(12px);
+}
+.scroll-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.scroll-top:hover { background: rgba(0, 230, 184, 0.12); border-color: var(--accent); }
+@media (max-width: 600px) { .scroll-top { bottom: 20px; right: 20px; width: 40px; height: 40px; } }
+
+/* ---- Divider ---- */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, rgba(0,212,170,0.12) 30%, rgba(0,212,170,0.2) 50%, rgba(0,212,170,0.12) 70%, transparent 95%);
+  margin: 0 auto;
+  max-width: 600px;
+  position: relative;
+}
+.section-divider::after {
+  content: '';
+  position: absolute; left: 50%; top: -3px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); transform: translateX(-50%);
+  box-shadow: 0 0 12px var(--accent), 0 0 24px rgba(0,212,170,0.3);
+}
+
+/* ---- Quick Deploy Bar ---- */
+.quick-deploy {
+  display: inline-flex; align-items: center; gap: 0;
+  background: rgba(0, 230, 184, 0.07);
+  border: 1px solid rgba(0, 230, 184, 0.22);
+  border-radius: 99px; padding: 6px 6px 6px 18px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.quick-deploy code {
+  font-family: var(--font-mono); font-size: 0.88rem;
+  color: var(--accent); letter-spacing: 0.02em;
+}
+.qd-copy {
+  margin-left: 12px; padding: 6px 16px;
+  background: rgba(0, 230, 184, 0.18); border: 1px solid rgba(0, 230, 184, 0.33);
+  border-radius: 99px; color: var(--accent); font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.15s; white-space: nowrap;
+}
+.qd-copy:hover { background: rgba(0, 230, 184, 0.28); }
+.qd-copy:active { transform: scale(0.95); }
+.quick-deploy .copy-ok {
+  font-size: 0.75rem; color: var(--accent); font-weight: 700;
+  opacity: 0; position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  transition: opacity 0.2s; pointer-events: none;
+}
+.quick-deploy.copied .qd-copy { opacity: 0; }
+.quick-deploy.copied .copy-ok { opacity: 1; }
+@media (max-width: 600px) {
+  .quick-deploy { padding: 5px 5px 5px 14px; }
+  .quick-deploy code { font-size: 0.75rem; }
+  .qd-copy { margin-left: 8px; padding: 5px 12px; font-size: 0.7rem; }
+}
+
+/* ---- Hero Slide-Up Animation ---- */
+@keyframes heroSlideUp {
+  from { opacity: 0; transform: translateY(48px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-text.fade-in {
+  animation: heroSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-visual.fade-in {
+  animation: heroSlideUp 0.9s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-stats .fade-in {
+  animation: heroSlideUp 0.9s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ---- Background Ambient Orbs ---- */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(100px);
+}
+@keyframes floatOrb1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.05); }
+  66% { transform: translate(-25px, 20px) scale(0.95); }
+}
+@keyframes floatOrb2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-30px, 25px) scale(0.95); }
+  66% { transform: translate(20px, -35px) scale(1.05); }
+}
+.bg-orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.07), transparent 70%);
+  top: 25%; left: 5%;
+  animation: floatOrb1 22s ease-in-out infinite;
+}
+.bg-orb-2 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(0, 140, 255, 0.05), transparent 70%);
+  top: 55%; right: 0%;
+  animation: floatOrb2 28s ease-in-out infinite;
+}
+
+
+/* ---- Comparison Table Enhancements ---- */
+@keyframes columnGlow {
+  0%, 100% { box-shadow: inset 0 0 15px rgba(0, 212, 170, 0.05), 0 0 15px rgba(0, 212, 170, 0.03); }
+  50% { box-shadow: inset 0 0 25px rgba(0, 212, 170, 0.12), 0 0 25px rgba(0, 230, 184, 0.07); }
+}
+.compare-table tbody td:nth-child(2) {
+  animation: columnGlow 3s ease-in-out infinite;
+}
+.ico-yes {
+  text-shadow: 0 0 8px rgba(0, 212, 170, 0.5);
+}
+.compare-table tbody tr {
+  transition: background 0.25s ease;
+}
+.compare-table tbody tr:hover {
+  background: rgba(0, 212, 170, 0.04);
+}
+/* Table row stagger animation */
+.compare-table tbody tr.row-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ---- Core Card 3D Tilt + Gradient Glow ---- */
+.core-card {
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+}
+
+/* ---- Capability Card Hover Glow Border ---- */
+.cap-item {
+  position: relative;
+}
+.cap-item::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent), rgba(0, 140, 255, 0.5), var(--accent-light));
+  opacity: 0;
+  transition: opacity 0.35s;
+  z-index: -1;
+}
+.cap-item:hover::before {
+  opacity: 1;
+}
+.cap-item:hover {
+  background: var(--bg-secondary);
+  border-color: transparent;
+}
+
+/* ---- Code Block Blinking Cursor ---- */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.code-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1.15em;
+  background: var(--accent);
+  animation: cursorBlink 1.1s step-end infinite;
+  vertical-align: text-bottom;
+  margin-left: 3px;
+  border-radius: 1px;
+}
+
+/* ---- CTA Button Shimmer ---- */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 3.5s ease-in-out infinite;
+}
+
+/* ---- Stat Card Count-Up Ready ---- */
+.stat-number {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Cost Big Number Glow ---- */
+@keyframes costPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(0, 230, 184, 0.33); }
+  50% { text-shadow: 0 0 40px rgba(0, 212, 170, 0.6), 0 0 80px rgba(0, 230, 184, 0.18); }
+}
+.cost-big-number {
+  animation: costPulse 3s ease-in-out infinite;
+}
+
+/* ---- Advantage Card New Glow ---- */
+.adv-card.new {
+  position: relative;
+}
+@keyframes advGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(0, 212, 170, 0.05); }
+  50% { box-shadow: 0 0 30px rgba(0, 212, 170, 0.12); }
+}
+.adv-card.new {
+  animation: advGlow 4s ease-in-out infinite;
+}
+
+/* ---- prefers-reduced-motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+  .bg-orb, .orbital { display: none; }
+  .fade-in, .slide-left, .slide-right {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ---- Mobile: reduce heavy animations ---- */
+@media (max-width: 600px) {
+  .bg-orb { opacity: 0.5; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Ambient Orbs -->
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span class="dot"></span>
+    <span>Bitget Wallet</span>
+  </a>
+  <div class="nav-links">
+    <a href="#core" data-en="Features" data-zh="功能">Features</a>
+    <a href="#compare" data-en="Compare" data-zh="对比">Compare</a>
+    <a href="#advantages" data-en="Advantages" data-zh="优势">Advantages</a>
+    <a href="#quickstart" data-en="Start" data-zh="开始">Start</a>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-set-lang="en" onclick="setLang('en')" aria-label="Switch to English">EN</button>
+    <button class="lang-btn" data-set-lang="zh" onclick="setLang('zh')" aria-label="切换中文">🌐 中文</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<canvas id="hero-particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+<section class="hero">
+  <div class="container hero-content">
+    <div class="hero-text fade-in">
+      <div class="hero-badge">
+        <span class="pulse"></span>
+        <span data-en="Built for Agents" data-zh="为 Agent 而生">Built for Agents</span>
+      </div>
+      <h1>
+        <span data-en="Bitget Wallet Skill" data-zh="Bitget Wallet Skill">Bitget Wallet Skill</span>
+      </h1>
+      <p class="hero-tagline">
+        <span data-en="On-Chain Intelligence," data-zh="链上智能，">On-Chain Intelligence,</span>
+        <span class="gradient-text" data-en="Unlimited Chains. One API." data-zh="无限链。一个 API。">Unlimited Chains. One API.</span>
+      </p>
+      <p class="hero-desc" data-en="The only skill that lets your AI agent swap, bridge, and track markets across 7 chains — gasless, effortless." data-zh="唯一让你的 AI Agent 跨 7 条链 swap、bridge、追踪行情的 Skill — 无 gas，无负担。">The only skill that lets your AI agent swap, bridge, and track markets across 7 chains — gasless, effortless.</p>
+      <!-- Quick deploy one-liner -->
+      <div class="quick-deploy">
+        <code>npm install bitget-wallet-skill</code>
+        <button class="qd-copy" onclick="copyInstall(this.parentElement)">Copy</button>
+        <span class="copy-ok">✓</span>
+      </div>
+      <div class="hero-buttons">
+        <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-primary" target="_blank" rel="noopener">
+          GitHub ⭐
+        </a>
+        <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-outline" target="_blank" rel="noopener">
+          <span data-en="Get Started →" data-zh="快速开始 →">Get Started →</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual fade-in">
+      <div class="orbital">
+        <!-- Ripple waves -->
+        <div class="orbital-ripple"></div>
+        <div class="orbital-ripple"></div>
+        <div class="orbital-ripple"></div>
+        <div class="orbital-ripple"></div>
+        <!-- Light beams -->
+        <div class="orbital-beams">
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+          <div class="orbital-beam"></div>
+        </div>
+        <!-- Core -->
+        <div class="orbital-core"></div>
+        <!-- Rings with flowing arcs -->
+        <div class="orbital-ring">
+          <div class="orbital-dot"></div>
+          <div class="orbital-dot sm"></div>
+        </div>
+        <div class="orbital-ring">
+          <div class="orbital-dot"></div>
+          <div class="orbital-dot sm"></div>
+        </div>
+        <div class="orbital-ring">
+          <div class="orbital-dot"></div>
+          <div class="orbital-dot sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="hero-stats fade-in">
+      <div class="hero-stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">50+</div>
+          <div class="stat-label" data-en="DEX Liquidity Sources" data-zh="DEX 流动性源">DEX Liquidity Sources</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">7+</div>
+          <div class="stat-label" data-en="Chains, 1 API" data-zh="条链，1 个 API">Chains, 1 API</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label" data-en="Zero Gas Required" data-zh="零 Gas 需求">Zero Gas Required</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1</div>
+          <div class="stat-label" data-en="One-Click Cross-Chain" data-zh="一键跨链">One-Click Cross-Chain</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Use Cases -->
+<section class="section" id="usecases">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Use Cases" data-zh="应用场景">Use Cases</h2>
+      <p class="section-subtitle" data-en="Real-world scenarios where Bitget Wallet Skill shines." data-zh="Bitget Wallet Skill 大显身手的真实场景。">Real-world scenarios where Bitget Wallet Skill shines.</p>
+    </div>
+    <div class="usecase-grid fade-in">
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">💼</span>
+        <h3 data-en="Portfolio Agent" data-zh="投资组合 Agent">Portfolio Agent</h3>
+        <p data-en="Auto-rebalance across chains. Buy low on Base, sell high on Ethereum — gasless, one order." data-zh="跨链自动再平衡。在 Base 低买，在 Ethereum 高卖 — 零 gas，一个订单。">Auto-rebalance across chains. Buy low on Base, sell high on Ethereum — gasless, one order.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">🤖</span>
+        <h3 data-en="Trading Bot" data-zh="交易机器人">Trading Bot</h3>
+        <p data-en="24/7 automated trading with security checks before every swap. Never trade a honeypot." data-zh="7×24 自动交易，每笔 swap 前安全检测。永不踩蜜罐。">24/7 automated trading with security checks before every swap. Never trade a honeypot.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">📡</span>
+        <h3 data-en="Market Scanner" data-zh="行情扫描器">Market Scanner</h3>
+        <p data-en="Real-time monitoring of prices, volumes, new tokens, and liquidity changes across all chains." data-zh="实时监控所有链上的价格、交易量、新币和流动性变化。">Real-time monitoring of prices, volumes, new tokens, and liquidity changes across all chains.</p>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon" aria-hidden="true">👥</span>
+        <h3 data-en="Community Bot" data-zh="社区机器人">Community Bot</h3>
+        <p data-en="Telegram/Discord bot that lets community members swap tokens via chat commands." data-zh="Telegram/Discord 机器人，社区成员通过聊天命令即可 swap 代币。">Telegram/Discord bot that lets community members swap tokens via chat commands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Core Capabilities -->
+<section class="section" id="core">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="What It Does" data-zh="它能做什么">What It Does</h2>
+      <p class="section-subtitle" data-en="Four core capabilities that make Bitget Wallet Skill the ultimate on-chain infrastructure for AI agents." data-zh="四大核心能力，让 Bitget Wallet Skill 成为 AI Agent 的终极链上基础设施。">Four core capabilities that make Bitget Wallet Skill the ultimate on-chain infrastructure for AI agents.</p>
+    </div>
+    <div class="core-grid">
+      <div class="core-card fade-in stagger-1">
+        <span class="core-icon" aria-hidden="true">⛽</span>
+        <h3 data-en="Gasless Transactions" data-zh="Gasless 交易">Gasless Transactions</h3>
+        <p data-en="No native tokens needed. EIP-7702 deducts gas from input token automatically." data-zh="无需原生代币。EIP-7702 自动从输入代币扣除 gas。">No native tokens needed. EIP-7702 deducts gas from input token automatically.</p>
+      </div>
+      <div class="core-card fade-in stagger-2">
+        <span class="core-icon" aria-hidden="true">🌉</span>
+        <h3 data-en="One-Step Cross-Chain" data-zh="一步跨链">One-Step Cross-Chain</h3>
+        <p data-en="Bridge + swap in one order, one signature. No manual bridging steps." data-zh="一个订单，一次签名，自动桥接 + swap。">Bridge + swap in one order, one signature. No manual bridging steps.</p>
+      </div>
+      <div class="core-card fade-in stagger-3">
+        <span class="core-icon" aria-hidden="true">📊</span>
+        <h3 data-en="On-Chain Market Data" data-zh="链上行情数据">On-Chain Market Data</h3>
+        <p data-en="Prices, K-lines, volume, rankings, liquidity pools, new token alerts. Full market intelligence." data-zh="价格、K线、交易量、排行榜、流动性池、新币预警。完整市场情报。">Prices, K-lines, volume, rankings, liquidity pools, new token alerts. Full market intelligence.</p>
+      </div>
+      <div class="core-card fade-in stagger-4">
+        <span class="core-icon" aria-hidden="true">🔒</span>
+        <h3 data-en="Security Audit" data-zh="安全审计">Security Audit</h3>
+        <p data-en="Honeypot, permissions, blacklist — auto-scan before every trade." data-zh="蜜罐、权限、黑名单 — 每笔交易前自动扫描。">Honeypot, permissions, blacklist — auto-scan before every trade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Comparison -->
+<section class="section" id="compare">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Why Developers Choose Us" data-zh="开发者为什么选择我们">Why Developers Choose Us</h2>
+      <p class="section-subtitle" data-en="Side-by-side comparison with leading on-chain AI infrastructure." data-zh="与领先链上 AI 基础设施的并排对比。">Side-by-side comparison with leading on-chain AI infrastructure.</p>
+    </div>
+    <div class="table-wrap fade-in">
+      <table class="compare-table" aria-label="Feature comparison between Bitget Wallet Skill, OKX OnchainOS, and Binance Skills Hub">
+        <thead>
+          <tr>
+            <th data-en="Capability" data-zh="能力">Capability</th>
+            <th><span class="th-full">Bitget Wallet Skill</span><span class="th-short">Bitget Wallet</span> ✅</th>
+            <th>OKX OnchainOS</th>
+            <th>Binance Skills Hub</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-en="Gasless Trading" data-zh="Gasless 交易">Gasless Trading</td>
+            <td><span class="ico-yes">✅</span> <span data-en="EIP-7702, zero gas" data-zh="EIP-7702，零 gas">EIP-7702, zero gas</span></td>
+            <td><span class="ico-no">❌</span> <span data-en="Native token for gas" data-zh="需原生代币付 gas">Native token for gas</span></td>
+            <td><span class="ico-no">❌</span> <span data-en="Native token for gas" data-zh="需原生代币付 gas">Native token for gas</span></td>
+          </tr>
+          <tr>
+            <td data-en="Cross-Chain Swap" data-zh="跨链 Swap">Cross-Chain Swap</td>
+            <td><span class="ico-yes">✅</span> <span data-en="One order, bridge+swap" data-zh="一个订单，桥接+swap">One order, bridge+swap</span></td>
+            <td><span class="ico-warn">⚠️</span> <span data-en="Manual bridge + swap" data-zh="需手动桥接+swap 两步">Manual bridge + swap</span></td>
+            <td><span class="ico-no">❌</span> <span data-en="Not supported" data-zh="不支持">Not supported</span></td>
+          </tr>
+          <tr>
+            <td data-en="Cross-Chain Gasless" data-zh="跨链 Gasless">Cross-Chain Gasless</td>
+            <td><span class="ico-yes">✅</span> <span data-en="Zero gas cross-chain" data-zh="源链零 gas 跨链">Zero gas cross-chain</span></td>
+            <td><span class="ico-no">❌</span></td>
+            <td><span class="ico-no">❌</span></td>
+          </tr>
+          <tr>
+            <td>Order Mode</td>
+            <td><span class="ico-yes">✅</span> <span data-en="quote→create→sign→submit" data-zh="quote→create→sign→submit 全流程">quote→create→sign→submit</span></td>
+            <td><span class="ico-no">❌</span> <span data-en="Calldata only" data-zh="仅 calldata 模式">Calldata only</span></td>
+            <td><span class="ico-no">❌</span> <span data-en="Query + simple swap" data-zh="仅查询+简单 swap">Query + simple swap</span></td>
+          </tr>
+          <tr>
+            <td data-en="Chain Coverage" data-zh="链覆盖">Chain Coverage</td>
+            <td><span class="ico-yes">✅</span> 7 EVM + Solana</td>
+            <td><span class="ico-yes">✅</span> <span data-en="60+ chains (basic swap)" data-zh="60+ 链（基础 swap）">60+ chains (basic swap)</span></td>
+            <td><span class="ico-warn">⚠️</span> <span data-en="BNB Chain only" data-zh="仅 BNB Chain">BNB Chain only</span></td>
+          </tr>
+          <tr>
+            <td data-en="DEX Aggregation" data-zh="DEX 聚合">DEX Aggregation</td>
+            <td><span class="ico-yes">✅</span> 50+ DEX</td>
+            <td><span class="ico-yes">✅</span> 50+ DEX</td>
+            <td><span class="ico-warn">⚠️</span> <span data-en="Limited" data-zh="有限">Limited</span></td>
+          </tr>
+          <tr>
+            <td data-en="Token Security" data-zh="Token 安全检测">Token Security</td>
+            <td><span class="ico-yes">✅</span> <span data-en="Built-in" data-zh="内置">Built-in</span></td>
+            <td><span class="ico-yes">✅</span> <span data-en="Available" data-zh="有">Available</span></td>
+            <td><span class="ico-warn">⚠️</span> <span data-en="Limited" data-zh="有限">Limited</span></td>
+          </tr>
+          <tr>
+            <td data-en="Protocol" data-zh="协议">Protocol</td>
+            <td>Skill / MCP / CLI</td>
+            <td>MCP + Skills</td>
+            <td>MCP</td>
+          </tr>
+          <tr>
+            <td data-en="Open Source" data-zh="开源">Open Source</td>
+            <td><span class="ico-yes">✅</span> MIT</td>
+            <td><span class="ico-warn">⚠️</span> Apache-2.0 <span data-en="(partial)" data-zh="（部分）">(partial)</span></td>
+            <td><span class="ico-no">❌</span> <span data-en="Closed source" data-zh="闭源">Closed source</span></td>
+          </tr>
+          <tr>
+            <td data-en="B2B Revenue Share" data-zh="B2B 分佣">B2B Revenue Share</td>
+            <td><span class="ico-yes">✅</span> Built-in <span data-en="revenue sharing" data-zh="分佣机制">revenue sharing</span></td>
+            <td><span class="ico-no">❌</span></td>
+            <td><span class="ico-no">❌</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Advantages Deep Dive -->
+<section class="section" id="advantages">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="The Unfair Advantage" data-zh="不公平的优势">The Unfair Advantage</h2>
+      <p class="section-subtitle" data-en="Capabilities no other on-chain AI infrastructure provides." data-zh="其他链上 AI 基础设施无法提供的能力。">Capabilities no other on-chain AI infrastructure provides.</p>
+    </div>
+
+    <!-- Gasless -->
+    <div class="adv-block fade-in">
+      <div class="adv-header">
+        <span class="icon">🔋</span>
+        <h3 data-en="Gasless — The #1 Pain Point, Solved" data-zh="Gasless — #1 痛点，已解决">Gasless — The #1 Pain Point, Solved</h3>
+      </div>
+      <div class="adv-compare">
+        <div class="adv-card old">
+          <div class="adv-card-label" data-en="Traditional Approach" data-zh="传统方案">Traditional Approach</div>
+          <ul>
+            <li data-en="Manage N chains = N gas tokens" data-zh="管理 N 条链 = N 种 gas 代币">Manage N chains = N gas tokens</li>
+            <li data-en="ETH, BNB, MATIC, AVAX..." data-zh="ETH, BNB, MATIC, AVAX...">ETH, BNB, MATIC, AVAX...</li>
+            <li data-en="Constantly monitor & refill balances" data-zh="持续监控 & 充值余额">Constantly monitor & refill balances</li>
+            <li data-en="Agent fails when gas runs out" data-zh="gas 耗尽时 Agent 就停摆">Agent fails when gas runs out</li>
+          </ul>
+        </div>
+        <div class="adv-card new">
+          <div class="adv-card-label">Bitget Wallet Skill</div>
+          <ul>
+            <li data-en="Zero gas balance required" data-zh="零 gas 余额即可交易">Zero gas balance required</li>
+            <li data-en="EIP-7702 powered" data-zh="EIP-7702 技术驱动">EIP-7702 powered</li>
+            <li data-en="Gas deducted from input token" data-zh="Gas 从输入代币扣除">Gas deducted from input token</li>
+            <li data-en="Agent never stops due to gas" data-zh="Agent 永不因 gas 停摆">Agent never stops due to gas</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- One-Step Cross-Chain -->
+    <div class="adv-block fade-in">
+      <div class="adv-header">
+        <span class="icon">🌉</span>
+        <h3 data-en="One Order Does It All" data-zh="一个订单搞定一切">One Order Does It All</h3>
+      </div>
+      <div class="adv-compare">
+        <div class="adv-card old">
+          <div class="adv-card-label" data-en="Others (e.g. OKX)" data-zh="竞品（如 OKX）">Others (e.g. OKX)</div>
+          <div class="flow-steps">
+            <span class="flow-step old-step" data-en="1. Call Bridge API" data-zh="1. 调桥接 API">1. Call Bridge API</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step old-step" data-en="2. Wait for confirmation" data-zh="2. 等待确认">2. Wait for confirmation</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step old-step" data-en="3. Call Swap API" data-zh="3. 调 Swap API">3. Call Swap API</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step old-step" data-en="4. Wait again" data-zh="4. 再次等待">4. Wait again</span>
+          </div>
+          <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem" data-en="2 steps, 2 signatures, error-prone" data-zh="2 步，2 次签名，容易出错">2 steps, 2 signatures, error-prone</p>
+        </div>
+        <div class="adv-card new">
+          <div class="adv-card-label">Bitget Wallet Skill</div>
+          <div class="flow-steps">
+            <span class="flow-step new-step">order-create</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step new-step" data-en="1 signature" data-zh="1 次签名">1 signature</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step new-step" data-en="Done ✓" data-zh="完成 ✓">Done ✓</span>
+          </div>
+          <p style="margin-top:12px;color:var(--accent);font-size:0.85rem;font-weight:600" data-en="1 step, 1 signature, fully automatic" data-zh="1 步，1 次签名，全自动完成">1 step, 1 signature, fully automatic</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cross-Chain + Gasless Combo -->
+    <div class="adv-block fade-in">
+      <div class="adv-header">
+        <span class="icon">⚡</span>
+        <h3 data-en="Cross-Chain + Gasless — Market Exclusive" data-zh="跨链 + Gasless — 市场独家">Cross-Chain + Gasless — Market Exclusive</h3>
+      </div>
+      <div class="adv-scenario">
+        <h4 data-en="Scenario" data-zh="场景">Scenario</h4>
+        <p data-en="You have USDC on Base, zero ETH. You want USDT on BNB Chain." data-zh="你在 Base 上只有 USDC，没有 ETH。你想换成 BNB Chain 的 USDT。">You have USDC on Base, zero ETH. You want USDT on BNB Chain.</p>
+      </div>
+      <div class="adv-compare" style="margin-top:24px">
+        <div class="adv-card old">
+          <div class="adv-card-label" data-en="OKX / Binance" data-zh="OKX / Binance">OKX / Binance</div>
+          <p style="font-size:2rem;text-align:center;padding:24px 0">❌</p>
+          <p style="text-align:center" data-en="Cannot do it. Need native gas token first." data-zh="做不到。需要先有原生 gas 代币。">Cannot do it. Need native gas token first.</p>
+        </div>
+        <div class="adv-card new">
+          <div class="adv-card-label">Bitget Wallet Skill</div>
+          <p style="font-size:2rem;text-align:center;padding:24px 0">✅</p>
+          <p style="text-align:center" data-en="One order. Zero gas. Cross-chain done." data-zh="一个订单。零 gas。跨链完成。">One order. Zero gas. Cross-chain done.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Supported Chains -->
+<section class="section" id="chains">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Supported Chains" data-zh="支持的链">Supported Chains</h2>
+      <p class="section-subtitle" data-en="One SDK, multiple chains. More coming soon." data-zh="一个 SDK，多条链。更多即将上线。">One SDK, multiple chains. More coming soon.</p>
+    </div>
+    <div class="chain-grid fade-in">
+      <div class="chain-item" title="Ethereum"><span class="chain-logo">Ξ</span><span>Ethereum</span></div>
+      <div class="chain-item" title="Base"><span class="chain-logo">🔵</span><span>Base</span></div>
+      <div class="chain-item" title="BNB Chain"><span class="chain-logo">🟡</span><span>BNB Chain</span></div>
+      <div class="chain-item" title="Arbitrum"><span class="chain-logo">🔷</span><span>Arbitrum</span></div>
+      <div class="chain-item" title="Polygon"><span class="chain-logo">🟣</span><span>Polygon</span></div>
+      <div class="chain-item" title="Solana"><span class="chain-logo">◎</span><span>Solana</span></div>
+      <div class="chain-item" title="Morph"><span class="chain-logo">🌀</span><span>Morph</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Capabilities Grid -->
+<section class="section" id="capabilities">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Everything Built In" data-zh="开箱即用">Everything Built In</h2>
+      <p class="section-subtitle" data-en="Everything your AI agent needs for on-chain operations." data-zh="AI Agent 链上操作所需的一切能力。">Everything your AI agent needs for on-chain operations.</p>
+    </div>
+    <div class="cap-grid fade-in">
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">🪙</span>
+        <h4>Token Info</h4>
+        <p data-en="Token metadata & details" data-zh="代币元数据 & 详情">Token metadata & details</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">💰</span>
+        <h4>Batch Price</h4>
+        <p data-en="Batch token price queries" data-zh="批量代币价格查询">Batch token price queries</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">📈</span>
+        <h4>K-Line</h4>
+        <p data-en="Candlestick chart data" data-zh="K线图数据">Candlestick chart data</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">📊</span>
+        <h4 data-en="Tx Stats" data-zh="交易统计">Tx Stats</h4>
+        <p data-en="Transaction statistics" data-zh="交易统计数据">Transaction statistics</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">🏆</span>
+        <h4 data-en="Rankings" data-zh="排行榜">Rankings</h4>
+        <p data-en="Token rankings by metrics" data-zh="按指标的代币排行">Token rankings by metrics</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">🌊</span>
+        <h4 data-en="Liquidity Pools" data-zh="流动性池">Liquidity Pools</h4>
+        <p data-en="Pool info & analytics" data-zh="池信息 & 分析">Pool info & analytics</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">🔒</span>
+        <h4 data-en="Security Audit" data-zh="安全审计">Security Audit</h4>
+        <p data-en="Contract security check" data-zh="合约安全检测">Contract security check</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">💱</span>
+        <h4>Swap Quote</h4>
+        <p data-en="Get best swap quotes" data-zh="获取最优 swap 报价">Get best swap quotes</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">🔄</span>
+        <h4>Swap Send</h4>
+        <p data-en="Execute token swaps" data-zh="执行代币 swap">Execute token swaps</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">📋</span>
+        <h4>Order Quote</h4>
+        <p data-en="Cross-chain order quotes" data-zh="跨链订单报价">Cross-chain order quotes</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">📝</span>
+        <h4>Order Create</h4>
+        <p data-en="Create cross-chain orders" data-zh="创建跨链订单">Create cross-chain orders</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">📤</span>
+        <h4>Order Submit</h4>
+        <p data-en="Submit signed orders" data-zh="提交已签名订单">Submit signed orders</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">🔍</span>
+        <h4>Order Status</h4>
+        <p data-en="Track order progress" data-zh="追踪订单进度">Track order progress</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">⛓️</span>
+        <h4 data-en="Chain List" data-zh="链列表">Chain List</h4>
+        <p data-en="Supported chains info" data-zh="支持链信息">Supported chains info</p>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon" aria-hidden="true">💎</span>
+        <h4 data-en="Token List" data-zh="代币列表">Token List</h4>
+        <p data-en="Tradeable token catalog" data-zh="可交易代币目录">Tradeable token catalog</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Developer Cost -->
+<section class="section" id="cost">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Save 80%+ Ops Cost" data-zh="运营成本降低 80%+">Save 80%+ Ops Cost</h2>
+      <p class="section-subtitle" data-en="Bitget Wallet Order Mode dramatically reduces operational complexity." data-zh="Bitget Wallet Order Mode 大幅降低运营复杂度。">Bitget Wallet Order Mode dramatically reduces operational complexity.</p>
+    </div>
+    <div class="cost-compare fade-in">
+      <div class="cost-card old-cost">
+        <h3 data-en="Traditional Approach" data-zh="传统方案">Traditional Approach</h3>
+        <div class="cost-metric">
+          <span data-en="Gas Token Types" data-zh="Gas 代币种类">Gas Token Types</span>
+          <span class="val-bad" data-en="7 different tokens" data-zh="7 种不同代币">7 different tokens</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Gas Management" data-zh="Gas 管理">Gas Management</span>
+          <span class="val-bad" data-en="Deposit + Monitor + Refill" data-zh="充值 + 监控 + 补充">Deposit + Monitor + Refill</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Bridge Logic" data-zh="桥接逻辑">Bridge Logic</span>
+          <span class="val-bad" data-en="Custom per chain pair" data-zh="每条链对需自定义">Custom per chain pair</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Error Handling" data-zh="错误处理">Error Handling</span>
+          <span class="val-bad" data-en="Multi-step rollback" data-zh="多步回滚">Multi-step rollback</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Integration Effort" data-zh="集成工作量">Integration Effort</span>
+          <span class="val-bad" data-en="Weeks" data-zh="数周">Weeks</span>
+        </div>
+      </div>
+      <div class="cost-card new-cost">
+        <h3>Bitget Wallet Order Mode</h3>
+        <div class="cost-metric">
+          <span data-en="Gas Token Types" data-zh="Gas 代币种类">Gas Token Types</span>
+          <span class="val-good">0</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Gas Management" data-zh="Gas 管理">Gas Management</span>
+          <span class="val-good" data-en="Not needed" data-zh="无需">Not needed</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Bridge Logic" data-zh="桥接逻辑">Bridge Logic</span>
+          <span class="val-good" data-en="Built-in, automatic" data-zh="内置，自动">Built-in, automatic</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Error Handling" data-zh="错误处理">Error Handling</span>
+          <span class="val-good" data-en="Single order status" data-zh="单一订单状态">Single order status</span>
+        </div>
+        <div class="cost-metric">
+          <span data-en="Integration Effort" data-zh="集成工作量">Integration Effort</span>
+          <span class="val-good" data-en="Hours" data-zh="数小时">Hours</span>
+        </div>
+      </div>
+    </div>
+    <div class="cost-big fade-in">
+      <div class="cost-big-number">80%+</div>
+      <div class="cost-big-label" data-en="Operational Cost Reduction" data-zh="运营成本降低">Operational Cost Reduction</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Quick Start -->
+<section class="section" id="quickstart">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" data-en="Start Building in 60 Seconds" data-zh="60 秒开始构建">Start Building in 60 Seconds</h2>
+      <p class="section-subtitle" data-en="Get your AI agent on-chain in minutes." data-zh="几分钟让你的 AI Agent 上链。">Get your AI agent on-chain in minutes.</p>
+    </div>
+    <div class="code-section fade-in">
+      <div class="code-tabs">
+        <button class="code-tab active" data-en="Install" data-zh="安装">Install</button>
+      </div>
+      <div class="code-block">
+<code><span class="cmt"># Just one line to get started</span>
+npm install bitget-wallet-skill</code>
+      </div>
+    </div>
+    <div class="code-section fade-in" style="margin-top:24px">
+      <div class="code-tabs">
+        <button class="code-tab active" data-en="Swap Example" data-zh="Swap 示例">Swap Example</button>
+      </div>
+      <div class="code-block">
+<code><span class="kw">import</span> { <span class="obj">BitgetWalletSkill</span> } <span class="kw">from</span> <span class="str">'bitget-wallet-skill'</span>;
+
+<span class="cmt">// Set up your skill (takes 2 seconds)</span>
+<span class="kw">const</span> skill = <span class="kw">new</span> <span class="fn">BitgetWalletSkill</span>({
+  apiKey: process.env.<span class="obj">BITGET_WALLET_API_KEY</span>, <span class="cmt">// or your API key</span>
+});
+
+<span class="cmt">// Get the best price for your swap</span>
+<span class="kw">const</span> quote = <span class="kw">await</span> skill.<span class="fn">swapQuote</span>({
+  chainId: <span class="str">'1'</span>,
+  fromToken: <span class="str">'0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'</span>,
+  toToken: <span class="str">'0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'</span>,
+  amount: <span class="str">'1000000000000000000'</span>, <span class="cmt">// 1 ETH</span>
+  slippage: <span class="str">'0.5'</span>,
+});
+
+<span class="cmt">// One call to execute</span>
+<span class="kw">const</span> result = <span class="kw">await</span> skill.<span class="fn">swapSend</span>({
+  ...quote,
+  userAddress: <span class="str">'0xYourAddress'</span>,
+});
+
+console.<span class="fn">log</span>(<span class="str">'Tx Hash:'</span>, result.txHash);</code>
+      </div>
+    </div>
+    <div class="code-section fade-in" style="margin-top:24px">
+      <div class="code-tabs">
+        <button class="code-tab active" data-en="Gasless Cross-Chain in 5 Lines" data-zh="5 行代码 Gasless 跨链">Gasless Cross-Chain in 5 Lines</button>
+      </div>
+      <div class="code-block">
+<code><span class="cmt">// Magic: USDC (Base) → USDT (BNB Chain), zero gas needed</span>
+<span class="kw">const</span> orderQuote = <span class="kw">await</span> skill.<span class="fn">orderQuote</span>({
+  fromChainId: <span class="str">'8453'</span>,     <span class="cmt">// Base</span>
+  toChainId: <span class="str">'56'</span>,         <span class="cmt">// BNB Chain</span>
+  fromToken: <span class="str">'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'</span>, <span class="cmt">// USDC</span>
+  toToken: <span class="str">'0x55d398326f99059fF775485246999027B3197955'</span>,   <span class="cmt">// USDT</span>
+  amount: <span class="str">'100000000'</span>,     <span class="cmt">// 100 USDC</span>
+  gasless: <span class="num">true</span>,           <span class="cmt">// Zero gas required!</span>
+});
+
+<span class="cmt">// Sign and submit — that's it!</span>
+<span class="kw">const</span> order = <span class="kw">await</span> skill.<span class="fn">orderCreate</span>(orderQuote);
+<span class="kw">const</span> signed = <span class="kw">await</span> signer.<span class="fn">signTransaction</span>(order.txData);
+<span class="kw">const</span> status = <span class="kw">await</span> skill.<span class="fn">orderSubmit</span>({ orderId: order.id, signature: signed });
+
+console.<span class="fn">log</span>(<span class="str">'Order:'</span>, status.orderId, <span class="str">'Status:'</span>, status.status);</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer CTA -->
+<section class="footer-cta">
+  <div class="container">
+    <div class="fade-in">
+      <h2 data-en="Ready to Build?" data-zh="准备好了吗？">Ready to Build?</h2>
+      <p data-en="Your agent is one npm install away from going on-chain." data-zh="你的 Agent 距离上链只差一个 npm install。">Your agent is one npm install away from going on-chain.</p>
+      <div class="hero-buttons">
+        <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-primary" target="_blank" rel="noopener">
+          GitHub Star <span style="font-size:1.1em">→</span>
+        </a>
+        <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" class="btn btn-outline" target="_blank" rel="noopener">
+          <span data-en="Read Docs" data-zh="阅读文档">Read Docs</span> <span style="font-size:1.1em">→</span>
+        </a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/bitget-wallet-ai-lab/bitget-wallet-skill" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://web3.bitget.com" target="_blank" rel="noopener">Bitget Wallet</a>
+    </div>
+  </div>
+</section>
+
+<div class="footer-copy">
+  &copy; 2025 Bitget Wallet. <span data-en="All rights reserved." data-zh="保留所有权利。">All rights reserved.</span>
+</div>
+
+<script>
+// ---- Language Toggle ----
+function copyInstall(el) {
+  var text = 'npm install bitget-wallet-skill';
+  function done(){ el.classList.add('copied'); setTimeout(function(){ el.classList.remove('copied'); }, 2000); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done);
+  } else {
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done();
+  }
+}
+
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
+
+  // Update toggle buttons
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-set-lang') === lang);
+  });
+
+  // Update all translatable elements
+  document.querySelectorAll('[data-' + lang + ']').forEach(function(el) {
+    var text = el.getAttribute('data-' + lang);
+    if (text !== null) {
+      el.textContent = text;
+    }
+  });
+}
+
+// Detect browser language
+(function() {
+  var browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  if (browserLang.indexOf('zh') === 0) {
+    setLang('zh');
+  } else {
+    setLang('en');
+  }
+})();
+
+// ---- Mouse glow follower ----
+(function(){
+  var glow = document.createElement('div');
+  glow.className = 'mouse-glow';
+  document.body.appendChild(glow);
+  var mq = window.matchMedia('(hover:hover)');
+  if (mq.matches) {
+    document.addEventListener('mousemove', function(e){
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+  } else { glow.style.display = 'none'; }
+})();
+
+// ---- Hero particle field (Canvas) ----
+(function(){
+  var c = document.getElementById('hero-particles');
+  if (!c) return;
+  var ctx = c.getContext('2d');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var W, H, particles = [];
+  var COLORS = [
+    [0, 230, 184],  // accent green
+    [79, 143, 255],  // blue
+    [139, 92, 246],  // purple
+  ];
+
+  function resize() {
+    W = window.innerWidth; H = window.innerHeight;
+    c.width = W * dpr; c.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Fewer particles on mobile
+  var COUNT = W < 768 ? 30 : 60;
+
+  for (var i = 0; i < COUNT; i++) {
+    var col = COLORS[Math.floor(Math.random() * COLORS.length)];
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.2 - 0.1,
+      alpha: Math.random() * 0.4 + 0.1,
+      color: col,
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: Math.random() * 0.02 + 0.005,
+    });
+  }
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) { c.style.display = 'none'; return; }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.pulse += p.pulseSpeed;
+      var a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+
+      // Wrap around
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
+
+      // Glow
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.color[0] + ',' + p.color[1] + ',' + p.color[2] + ',' + (a * 0.15) + ')';
+      ctx.fill();
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.color[0] + ',' + p.color[1] + ',' + p.color[2] + ',' + a + ')';
+      ctx.fill();
+    }
+
+    // Draw faint connections between nearby particles
+    for (var i = 0; i < particles.length; i++) {
+      for (var j = i + 1; j < particles.length; j++) {
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var dist = dx * dx + dy * dy;
+        if (dist < 15000) { // ~122px
+          var lineAlpha = (1 - dist / 15000) * 0.06;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(0, 230, 184, ' + lineAlpha + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ---- Nav active state ----
+(function(){
+  var links = document.querySelectorAll('.nav-links a');
+  var sections = Array.from(links).map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  var navObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); });
+      }
+    });
+  }, {rootMargin: '-40% 0px -50% 0px'});
+  sections.forEach(function(s){ navObs.observe(s); });
+})();
+
+// ---- Auto-stagger grid children ----
+document.querySelectorAll('.cap-grid .cap-item, .compare-table tbody tr').forEach(function(el, i) {
+  el.classList.add('fade-in');
+  el.style.transitionDelay = (i * 50) + 'ms';
+});
+
+// ---- Code block copy buttons ----
+document.querySelectorAll('.code-section .code-block').forEach(function(block) {
+  var btn = document.createElement('button');
+  btn.className = 'code-copy-btn';
+  btn.textContent = 'Copy';
+  btn.onclick = function() {
+    var text = block.querySelector('code').textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok);
+    } else {
+      var ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); ok();
+    }
+    function ok(){ btn.textContent = '✓ Copied'; btn.classList.add('copied'); setTimeout(function(){ btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000); }
+  };
+  block.parentElement.appendChild(btn);
+});
+
+// ---- Scroll Fade-In (IntersectionObserver) ----
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        requestAnimationFrame(function(){ entry.target.classList.add('visible'); });
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  document.querySelectorAll('.fade-in').forEach(function(el) {
+    observer.observe(el);
+  });
+})();
+
+// Scroll-to-top button
+(function(){
+  var btn = document.createElement('button');
+  btn.innerHTML = '↑';
+  btn.className = 'scroll-top';
+  btn.setAttribute('aria-label', 'Scroll to top');
+  btn.onclick = function(){ window.scrollTo({top:0,behavior:'smooth'}); };
+  document.body.appendChild(btn);
+  window.addEventListener('scroll', function(){
+    btn.classList.toggle('visible', window.scrollY > 600);
+  });
+})();
+</script>
+
+</body>
+</html>

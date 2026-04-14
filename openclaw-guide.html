@@ -1,0 +1,2764 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OpenClaw 完全指南 — 从零开始的 AI 助手</title>
+<meta name="description" content="从零开始学习 AI 基础知识，掌握 OpenClaw 的安装、配置与高级使用技巧。" />
+<script>
+(function(){
+  var t = localStorage.getItem('vibecoding_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+/* ─── Design Tokens ─── */
+:root {
+  --accent:   #00E6B8;
+  --blue:     #4F8FFF;
+  --purple:   #8B5CF6;
+  --orange:   #F59E0B;
+  --red:      #EF4444;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+}
+[data-theme="dark"] {
+  --bg:       #0b1120;
+  --bg2:      #0e1525;
+  --surface:  #182032;
+  --surface2: #1e2a3d;
+  --surface3: #243047;
+  --text:     #e4e9f1;
+  --text2:    #a8b4c8;
+  --muted:    #667080;
+  --border:   #2a3548;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.25);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.35);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.5);
+  --glow:     0 0 20px rgba(0,230,184,.12);
+  --code-bg:  #0d1928;
+}
+[data-theme="light"] {
+  --bg:       #f0f4fa;
+  --bg2:      #f7f8fb;
+  --surface:  #ffffff;
+  --surface2: #f5f7fc;
+  --surface3: #edf1f8;
+  --text:     #1a2030;
+  --text2:    #4a5568;
+  --muted:    #8993a8;
+  --border:   #e0e7f0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+  --glow:     0 0 20px rgba(0,230,184,.08);
+  --code-bg:  #1a2035;
+}
+@media (prefers-color-scheme: light) {
+  [data-theme="dark"] {}
+}
+
+/* ─── Reset & Base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+               'Hiragino Sans GB', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ─── Layout ─── */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform .3s ease;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.sidebar-logo {
+  padding: 20px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-emoji {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px rgba(0,230,184,.5));
+}
+.logo-text {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.logo-sub {
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.nav-section {
+  padding: 14px 12px 6px;
+}
+.nav-label {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  padding: 0 8px;
+  margin-bottom: 4px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  text-decoration: none;
+  color: var(--text2);
+  font-size: .83rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.nav-item:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+.nav-item.active {
+  background: rgba(0,230,184,.1);
+  color: var(--accent);
+  border: 1px solid rgba(0,230,184,.2);
+}
+.nav-item .nav-icon { font-size: .9rem; min-width: 18px; text-align: center; }
+.nav-item .nav-num {
+  margin-left: auto;
+  font-size: .68rem;
+  background: var(--surface3);
+  color: var(--muted);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.nav-item.active .nav-num {
+  background: rgba(0,230,184,.15);
+  color: var(--accent);
+}
+
+.sidebar-progress {
+  margin: 0 12px 12px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+}
+.progress-label {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+.progress-bar {
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--blue));
+  border-radius: 2px;
+  transition: width .3s ease;
+  width: 0%;
+}
+
+.sidebar-footer {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: .78rem;
+  color: var(--text2);
+}
+.theme-toggle:hover { background: var(--surface2); }
+.theme-btn {
+  width: 32px; height: 18px;
+  background: var(--surface3);
+  border-radius: 9px;
+  position: relative;
+  transition: background .2s;
+}
+[data-theme="light"] .theme-btn { background: var(--accent); }
+.theme-knob {
+  width: 14px; height: 14px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px; left: 2px;
+  transition: transform .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+[data-theme="light"] .theme-knob { transform: translateX(14px); }
+
+/* ─── Main Content ─── */
+.main {
+  margin-left: 260px;
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  position: sticky;
+  top: 0; z-index: 50;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 1.2rem;
+}
+.topbar-title {
+  font-size: .85rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.topbar-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .83rem;
+  color: var(--text2);
+}
+.topbar-breadcrumb span { color: var(--muted); }
+
+.content {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+}
+
+/* ─── Hero ─── */
+.hero {
+  text-align: center;
+  margin-bottom: 64px;
+  padding: 56px 32px;
+  background: linear-gradient(135deg, rgba(0,230,184,.05), rgba(79,143,255,.05));
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0,230,184,.08), transparent);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,230,184,.1);
+  border: 1px solid rgba(0,230,184,.25);
+  color: var(--accent);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: 1rem;
+  color: var(--text2);
+  max-width: 560px;
+  margin: 0 auto 28px;
+  line-height: 1.8;
+}
+.hero-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: var(--r-md);
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text2);
+}
+.stat-badge .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+/* ─── Section ─── */
+.section {
+  margin-bottom: 72px;
+  scroll-margin-top: 80px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.section-num {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(0,230,184,.15), rgba(79,143,255,.15));
+  border: 1px solid rgba(0,230,184,.25);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: .85rem;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.section-header .section-emoji {
+  font-size: 1.3rem;
+}
+
+/* ─── Concept Cards ─── */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.concept-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  transition: all .2s ease;
+}
+.concept-card:hover {
+  border-color: rgba(0,230,184,.3);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+.concept-icon {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  display: block;
+}
+.concept-card h3 {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.concept-card p {
+  font-size: .82rem;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+/* ─── Info Blocks ─── */
+.info-block {
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+  margin: 16px 0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.info-block.tip {
+  background: rgba(0,230,184,.07);
+  border: 1px solid rgba(0,230,184,.2);
+}
+.info-block.warn {
+  background: rgba(245,158,11,.07);
+  border: 1px solid rgba(245,158,11,.2);
+}
+.info-block.danger {
+  background: rgba(239,68,68,.07);
+  border: 1px solid rgba(239,68,68,.2);
+}
+.info-block.info {
+  background: rgba(79,143,255,.07);
+  border: 1px solid rgba(79,143,255,.2);
+}
+.info-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.info-block p {
+  font-size: .85rem;
+  color: var(--text2);
+  line-height: 1.7;
+  margin: 0;
+}
+.info-block strong { color: var(--text); }
+
+/* ─── Steps ─── */
+.steps {
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 20px; top: 20px;
+  width: 2px;
+  height: calc(100% - 40px);
+  background: linear-gradient(to bottom, var(--accent), rgba(79,143,255,.3));
+  z-index: 0;
+}
+.step {
+  display: flex;
+  gap: 20px;
+  padding: 0 0 28px;
+  position: relative;
+  z-index: 1;
+}
+.step:last-child { padding-bottom: 0; }
+.step-num {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  font-weight: 800;
+  color: var(--accent);
+  flex-shrink: 0;
+  z-index: 1;
+  position: relative;
+  counter-increment: step;
+  transition: all .2s;
+}
+.step:hover .step-num {
+  border-color: var(--accent);
+  background: rgba(0,230,184,.1);
+  box-shadow: var(--glow);
+}
+.step-body {
+  flex: 1;
+  padding-top: 8px;
+}
+.step-title {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.step-desc {
+  font-size: .85rem;
+  color: var(--text2);
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+
+/* ─── Code Block ─── */
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  margin: 12px 0;
+  overflow: hidden;
+}
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255,255,255,.03);
+  border-bottom: 1px solid var(--border);
+}
+.code-lang {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.copy-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: .72rem;
+  font-weight: 600;
+  transition: all .15s;
+}
+.copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.copy-btn.copied {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0,230,184,.08);
+}
+code, pre {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  font-size: .83rem;
+  line-height: 1.7;
+}
+pre {
+  padding: 18px 20px;
+  overflow-x: auto;
+  color: #c9d1d9;
+  margin: 0;
+}
+pre .kw  { color: #ff79c6; }
+pre .str { color: #f1fa8c; }
+pre .cmt { color: #6272a4; }
+pre .num { color: #bd93f9; }
+pre .fn  { color: #50fa7b; }
+pre .var { color: #8be9fd; }
+pre .op  { color: var(--accent); }
+
+/* inline code */
+p code, li code {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: .82em;
+  color: var(--accent);
+}
+
+/* ─── VPN Cards ─── */
+.vpn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.vpn-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  transition: all .2s ease;
+  cursor: default;
+}
+.vpn-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(79,143,255,.3);
+}
+.vpn-name {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vpn-badge {
+  font-size: .65rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.vpn-badge.rec {
+  background: rgba(0,230,184,.15);
+  color: var(--accent);
+}
+.vpn-badge.ok {
+  background: rgba(79,143,255,.15);
+  color: var(--blue);
+}
+.vpn-card p {
+  font-size: .78rem;
+  color: var(--text2);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.vpn-price {
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+/* ─── Channel Cards ─── */
+.channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+.channel-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  transition: all .2s;
+}
+.channel-item:hover {
+  border-color: rgba(0,230,184,.3);
+  box-shadow: var(--glow);
+}
+.channel-emoji { font-size: 1.6rem; flex-shrink: 0; }
+.channel-info h4 {
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.channel-info p {
+  font-size: .82rem;
+  color: var(--text2);
+  line-height: 1.5;
+}
+.channel-status {
+  margin-left: auto;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: .7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.status-ready {
+  background: rgba(0,230,184,.12);
+  color: var(--accent);
+  border: 1px solid rgba(0,230,184,.2);
+}
+.status-plugin {
+  background: rgba(79,143,255,.12);
+  color: var(--blue);
+  border: 1px solid rgba(79,143,255,.2);
+}
+
+/* ─── Feature Grid ─── */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  transition: all .2s;
+}
+.feature-card:hover {
+  border-color: rgba(139,92,246,.3);
+  transform: translateY(-2px);
+}
+.feature-card .fi { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+.feature-card h4 {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 5px;
+}
+.feature-card p {
+  font-size: .78rem;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+/* ─── FAQ / Accordion ─── */
+.faq-list { margin: 16px 0; }
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.faq-item:hover { border-color: rgba(0,230,184,.2); }
+.faq-q {
+  width: 100%;
+  background: var(--surface);
+  border: none;
+  padding: 14px 18px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: background .15s;
+}
+.faq-q:hover { background: var(--surface2); }
+.faq-chevron {
+  font-size: .7rem;
+  color: var(--muted);
+  transition: transform .2s;
+}
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-a {
+  display: none;
+  padding: 12px 18px 16px;
+  background: var(--surface2);
+  font-size: .85rem;
+  color: var(--text2);
+  line-height: 1.7;
+  border-top: 1px solid var(--border);
+}
+.faq-item.open .faq-a { display: block; }
+
+/* ─── Diagram ─── */
+.diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  margin: 20px 0;
+  text-align: center;
+  overflow-x: auto;
+}
+.flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+.flow-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 18px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+.flow-box.accent {
+  background: rgba(0,230,184,.1);
+  border-color: rgba(0,230,184,.35);
+  color: var(--accent);
+}
+.flow-box.blue {
+  background: rgba(79,143,255,.1);
+  border-color: rgba(79,143,255,.35);
+  color: var(--blue);
+}
+.flow-box.purple {
+  background: rgba(139,92,246,.1);
+  border-color: rgba(139,92,246,.35);
+  color: var(--purple);
+}
+.flow-arrow {
+  color: var(--muted);
+  font-size: 1.1rem;
+  padding: 0 6px;
+  font-weight: 300;
+}
+
+/* ─── JSON Config Preview ─── */
+.config-preview {
+  position: relative;
+}
+
+/* ─── Next Steps ─── */
+.next-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+.next-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: all .2s;
+  display: block;
+}
+.next-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+.next-card .ni { font-size: 1.5rem; margin-bottom: 8px; }
+.next-card h4 { font-size: .9rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.next-card p { font-size: .78rem; color: var(--text2); line-height: 1.5; }
+
+/* ─── Overlay for mobile ─── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 90;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay.show { display: block; }
+  .main { margin-left: 0; }
+  .menu-btn { display: flex; }
+  .topbar { padding: 12px 16px; }
+  .content { padding: 24px 16px 60px; }
+  .hero { padding: 36px 20px; }
+  .hero-stats { gap: 12px; }
+  .concept-grid { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr 1fr; }
+  .vpn-grid { grid-template-columns: 1fr 1fr; }
+  .steps::before { left: 16px; }
+  .step-num { width: 34px; height: 34px; font-size: .78rem; }
+  .diagram .flow { gap: 0; }
+}
+@media (max-width: 480px) {
+  .feature-grid, .vpn-grid { grid-template-columns: 1fr; }
+  .next-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── Utilities ─── */
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 28px 0;
+}
+ul.styled, ol.styled {
+  padding-left: 20px;
+}
+ul.styled li, ol.styled li {
+  margin-bottom: 8px;
+  font-size: .87rem;
+  color: var(--text2);
+  line-height: 1.7;
+}
+ul.styled li strong, ol.styled li strong { color: var(--text); }
+.highlight-text {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Scroll to top */
+.scroll-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .2s;
+  z-index: 50;
+}
+.scroll-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.scroll-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--glow);
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- ─── Sidebar ─── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-emoji">🦞</span>
+    <div>
+      <div class="logo-text">OpenClaw 指南</div>
+      <div class="logo-sub">从零到精通 AI 助手</div>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-section">
+      <div class="nav-label">基础入门</div>
+      <a class="nav-item active" href="#s0">
+        <span class="nav-icon">🏠</span> 课程简介
+        <span class="nav-num">1</span>
+      </a>
+      <a class="nav-item" href="#s1">
+        <span class="nav-icon">🧠</span> AI 基础概念
+        <span class="nav-num">2</span>
+      </a>
+      <a class="nav-item" href="#s2">
+        <span class="nav-icon">🌐</span> VPN 与网络
+        <span class="nav-num">3</span>
+      </a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">OpenClaw</div>
+      <a class="nav-item" href="#s3">
+        <span class="nav-icon">🦞</span> 是什么
+        <span class="nav-num">4</span>
+      </a>
+      <a class="nav-item" href="#s4">
+        <span class="nav-icon">⚙️</span> 安装配置
+        <span class="nav-num">5</span>
+      </a>
+      <a class="nav-item" href="#s5">
+        <span class="nav-icon">📱</span> 接入渠道
+        <span class="nav-num">6</span>
+      </a>
+      <a class="nav-item" href="#s6">
+        <span class="nav-icon">🔑</span> 接入 AI 模型
+        <span class="nav-num">7</span>
+      </a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">进阶使用</div>
+      <a class="nav-item" href="#s7">
+        <span class="nav-icon">🔧</span> 调试技巧
+        <span class="nav-num">8</span>
+      </a>
+      <a class="nav-item" href="#s8">
+        <span class="nav-icon">🚀</span> 进阶功能
+        <span class="nav-num">9</span>
+      </a>
+      <a class="nav-item" href="#s9">
+        <span class="nav-icon">❓</span> 常见问题
+        <span class="nav-num">10</span>
+      </a>
+      <a class="nav-item" href="#s9" onclick="setTimeout(()=>document.querySelector('.next-grid').scrollIntoView({behavior:'smooth'}),100)">
+        <span class="nav-icon">🇨🇳</span> 中文资源
+        <span class="nav-num">附</span>
+      </a>
+    </div>
+  </nav>
+
+  <div style="padding: 8px 12px;">
+    <div class="sidebar-progress">
+      <div class="progress-label">
+        <span>学习进度</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="theme-toggle" onclick="toggleTheme()">
+      <span>🌙 切换主题</span>
+      <div class="theme-btn">
+        <div class="theme-knob"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ─── Main ─── -->
+<main class="main">
+  <div class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()" aria-label="菜单">☰</button>
+    <div class="topbar-breadcrumb">
+      <span>OpenClaw</span>
+      <span>›</span>
+      <span id="current-section-title">课程简介</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Hero -->
+    <section class="section" id="s0">
+      <div class="hero">
+        <div class="hero-tag">✨ 完整学习路径 · 2026 最新版</div>
+        <h1>用 AI 助手改变你的工作方式</h1>
+        <p>从 AI 基础概念出发，一步步掌握 OpenClaw — 让 AI 助手住进你的 Telegram、WhatsApp，随时随地调用。</p>
+        <div class="hero-stats">
+          <div class="stat-badge"><span class="dot"></span>10 章深度内容</div>
+          <div class="stat-badge"><span class="dot"></span>完整代码示例</div>
+          <div class="stat-badge"><span class="dot"></span>从零开始无门槛</div>
+        </div>
+      </div>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <span class="concept-icon">🎯</span>
+          <h3>面向人群</h3>
+          <p>完全没接触过 AI 工具的新手，或想搭建专属 AI 助手的进阶用户。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">⏱️</span>
+          <h3>预计时间</h3>
+          <p>从安装到第一次聊天：约 30 分钟。完整掌握进阶功能：2–3 小时。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">💻</span>
+          <h3>设备要求</h3>
+          <p>macOS、Linux、Windows（WSL2）均支持。需要稳定的网络连接。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Section 1: AI 基础概念 ─── -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <span class="section-emoji">🧠</span>
+        <h2>AI 基础概念</h2>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:20px;font-size:.9rem;">
+        在安装任何工具之前，先弄清楚这些概念——它们是理解 OpenClaw 如何运作的基石。
+      </p>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <span class="concept-icon">🤖</span>
+          <h3>AI（人工智能）</h3>
+          <p>让计算机模拟人类思维的技术。现代 AI 通过海量数据训练，能理解文字、图片和语音。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">📚</span>
+          <h3>LLM（大语言模型）</h3>
+          <p>像 GPT-4、Claude、Gemini 这类模型。训练了数千亿文字，能进行对话、写代码、分析问题。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">🦾</span>
+          <h3>AI Agent（智能体）</h3>
+          <p>比普通 AI 更进一步 — 能主动调用工具、搜索网络、操作文件，像一个真正的助理。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">🔌</span>
+          <h3>API（接口）</h3>
+          <p>你付费购买 AI 模型的「使用权」。OpenAI、Anthropic 等公司提供 API Key 来调用模型。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">🌉</span>
+          <h3>Gateway（网关）</h3>
+          <p>连接你的聊天软件和 AI 模型的桥梁。OpenClaw 就是这样一个 Gateway。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">🪄</span>
+          <h3>Prompt（提示词）</h3>
+          <p>你发给 AI 的指令。写得越清晰，AI 的输出越准确。「会提问」是使用 AI 的核心技能。</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:14px;">常见 AI 模型对比</h3>
+
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">🌏 海外模型（需要 VPN 或海外服务器）</div>
+      <div class="channel-list" style="margin-bottom:20px;">
+        <div class="channel-item">
+          <span class="channel-emoji">🟢</span>
+          <div class="channel-info">
+            <h4>Claude（Anthropic）</h4>
+            <p>对话最自然、理解力强、擅长写作和分析。中文理解质量高。OpenClaw 官方推荐默认模型。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">🔵</span>
+          <div class="channel-info">
+            <h4>GPT-4o（OpenAI）</h4>
+            <p>综合能力强，支持图片输入，插件生态最丰富。最广为人知的 AI 模型。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">🟡</span>
+          <div class="channel-info">
+            <h4>Gemini（Google）</h4>
+            <p>长上下文处理突出，擅长多媒体理解。免费额度较多，适合入门使用。</p>
+          </div>
+          <span class="channel-status status-plugin">可用</span>
+        </div>
+      </div>
+
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">🇨🇳 国产模型（无需 VPN，国内直连）</div>
+      <div class="channel-list">
+        <div class="channel-item">
+          <span class="channel-emoji">🐋</span>
+          <div class="channel-info">
+            <h4>DeepSeek（深度求索）</h4>
+            <p>国内最强开源模型，逻辑推理和代码能力出众，媲美 GPT-4。API 价格极低，国内可直连。访问：<strong>platform.deepseek.com</strong></p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">✨</span>
+          <div class="channel-info">
+            <h4>通义千问 Qwen（阿里云）</h4>
+            <p>阿里出品，中文理解极佳，长文本处理能力强，有免费额度。适合中文写作、分析场景。访问：<strong>dashscope.aliyuncs.com</strong></p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </div>
+      </div>
+
+      <div class="info-block tip mt-4">
+        <span class="info-icon">💡</span>
+        <p><strong>新手建议：</strong>国内用户优先试试 <strong>DeepSeek</strong>，无需 VPN，API 极便宜，能力强。有条件翻墙的话 Claude 是最佳选择。OpenClaw 支持随时切换，不用担心选错。</p>
+      </div>
+    </section>
+
+    <!-- ─── Section 2: VPN ─── -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <span class="section-emoji">🌐</span>
+        <h2>VPN 与网络环境</h2>
+      </div>
+
+      <div class="info-block warn">
+        <span class="info-icon">⚠️</span>
+        <p><strong>为什么需要 VPN：</strong>OpenAI、Anthropic、Google 等主流 AI 服务在中国大陆无法直连。使用 OpenClaw 时，你的服务器或本机需要能访问这些 API。</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🔧 两种部署方案</h3>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">A</div>
+          <div class="step-body">
+            <div class="step-title">本机运行 + VPN</div>
+            <div class="step-desc">
+              在自己的电脑上安装 OpenClaw，配合 VPN 翻墙。<br />
+              <strong>优点：</strong>操作简单，适合个人使用。<br />
+              <strong>缺点：</strong>电脑关机 AI 就离线，VPN 稳定性影响体验。
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">B</div>
+          <div class="step-body">
+            <div class="step-title">海外服务器运行（推荐）</div>
+            <div class="step-desc">
+              在香港、新加坡等地的云服务器上安装 OpenClaw。<br />
+              <strong>优点：</strong>24小时在线，速度快，无需 VPN。<br />
+              <strong>推荐平台：</strong>Hetzner（德国/美国，最便宜）、DigitalOcean、Vultr、AWS Lightsail。
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">选购建议</span>
+              </div>
+              <pre>新加坡 / 香港节点 = 延迟最低（推荐亚洲用户）
+最低配置：1 vCPU + 512MB RAM + 10GB 存储
+月费：约 $4–$6 美元（Hetzner 最便宜）</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">推荐 VPN 工具（本机方案用）</h3>
+      <div class="vpn-grid">
+        <div class="vpn-card">
+          <div class="vpn-name">Clash <span class="vpn-badge rec">推荐</span></div>
+          <p>主流翻墙工具，规则灵活。可以只让 AI API 请求走代理，其他流量直连。</p>
+          <div class="vpn-price">免费客户端 + 需购买订阅</div>
+        </div>
+        <div class="vpn-card">
+          <div class="vpn-name">Shadowrocket</div>
+          <p>iOS 最佳选择（$2.99 一次买断）。配合机场使用，稳定流畅。</p>
+          <div class="vpn-price">$2.99（App Store 美区）</div>
+        </div>
+        <div class="vpn-card">
+          <div class="vpn-name">Surge <span class="vpn-badge ok">进阶</span></div>
+          <p>macOS 最强网络调试工具，能精确控制哪些请求走代理。</p>
+          <div class="vpn-price">$49.99（买断）</div>
+        </div>
+        <div class="vpn-card">
+          <div class="vpn-name">Tailscale <span class="vpn-badge ok">进阶</span></div>
+          <p>P2P 组网工具，用于将手机安全连接到你的服务器，OpenClaw 官方推荐。</p>
+          <div class="vpn-price">免费个人版</div>
+        </div>
+      </div>
+
+      <div class="info-block info mt-4">
+        <span class="info-icon">ℹ️</span>
+        <p><strong>机场推荐：</strong>使用 Clash + 稳定机场是本机部署最省心的方案。建议选择有 API 模式（可设置系统代理或规则代理）的机场。用规则模式只让 <code>openai.com</code>、<code>anthropic.com</code>、<code>api.telegram.org</code> 走代理，其余直连。</p>
+      </div>
+    </section>
+
+    <!-- ─── Section 3: OpenClaw 是什么 ─── -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <span class="section-emoji">🦞</span>
+        <h2>OpenClaw 是什么</h2>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:24px;font-size:.9rem;line-height:1.8;">
+        OpenClaw 是一个开源的 <strong style="color:var(--text)">AI Agent Gateway</strong>（智能体网关）。它运行在你的设备上，把 AI 模型接入你日常使用的聊天软件。
+      </p>
+
+      <div class="diagram">
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:20px;font-weight:600;">系统架构图</div>
+        <div class="flow">
+          <div class="flow-box purple">Telegram / WhatsApp<br /><span style="font-size:.7rem;color:var(--muted)">你的消息入口</span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box accent">🦞 OpenClaw Gateway<br /><span style="font-size:.7rem;color:rgba(0,230,184,.6)">核心路由引擎</span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box blue">Claude / GPT-4<br /><span style="font-size:.7rem;color:rgba(79,143,255,.7)">AI 模型 API</span></div>
+        </div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:20px;">
+          你在 Telegram 发消息 → OpenClaw 接收 → 调用 AI → 返回结果
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">核心功能</h3>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="fi">💬</span>
+          <h4>多渠道支持</h4>
+          <p>Telegram、WhatsApp、Discord、iMessage 全部接入，统一管理。</p>
+        </div>
+        <div class="feature-card">
+          <span class="fi">🔀</span>
+          <h4>多模型切换</h4>
+          <p>随时切换 Claude、GPT-4、Gemini，对比效果，按需使用。</p>
+        </div>
+        <div class="feature-card">
+          <span class="fi">🛠️</span>
+          <h4>Agent 工具</h4>
+          <p>AI 能搜索网络、读写文件、执行代码，不只是聊天。</p>
+        </div>
+        <div class="feature-card">
+          <span class="fi">📱</span>
+          <h4>移动节点</h4>
+          <p>配对 iOS / Android，让 AI 看到你的屏幕、拍照分析。</p>
+        </div>
+        <div class="feature-card">
+          <span class="fi">🌐</span>
+          <h4>Web 控制台</h4>
+          <p>浏览器打开即可管理会话、配置、监控日志。</p>
+        </div>
+        <div class="feature-card">
+          <span class="fi">⏰</span>
+          <h4>定时任务</h4>
+          <p>设置 AI 定时执行任务：每天早报、自动提醒、定期监控。</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">支持的渠道</h3>
+      <div class="channel-list">
+        <div class="channel-item">
+          <span class="channel-emoji">✈️</span>
+          <div class="channel-info">
+            <h4>Telegram Bot</h4>
+            <p>最推荐入门渠道。免费、稳定、功能最完整。国内需翻墙使用。</p>
+          </div>
+          <span class="channel-status status-ready">内置支持</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">💬</span>
+          <div class="channel-info">
+            <h4>WhatsApp</h4>
+            <p>通过 WhatsApp Web 协议接入（非官方），需要扫码登录。</p>
+          </div>
+          <span class="channel-status status-ready">内置支持</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">🎮</span>
+          <div class="channel-info">
+            <h4>Discord</h4>
+            <p>在 Discord 服务器中创建 Bot，支持频道/私信/线程。</p>
+          </div>
+          <span class="channel-status status-ready">内置支持</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">🍎</span>
+          <div class="channel-info">
+            <h4>iMessage</h4>
+            <p>仅 macOS，通过本地 imsg 工具集成。</p>
+          </div>
+          <span class="channel-status status-plugin">macOS 限定</span>
+        </div>
+        <div class="channel-item" style="border-color:rgba(0,230,184,.25);background:rgba(0,230,184,.03);">
+          <span class="channel-emoji">🐧</span>
+          <div class="channel-info">
+            <h4>微信 ClawBot <span style="font-size:.72rem;background:rgba(0,230,184,.15);color:var(--accent);padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;">2026 新上线</span></h4>
+            <p>腾讯官方插件，将微信直接变成 AI 助手入口。国内用户首选！目前灰度测试中，iOS 版本优先支持。</p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </div>
+        <div class="channel-item">
+          <span class="channel-emoji">🐦</span>
+          <div class="channel-info">
+            <h4>飞书 / Lark</h4>
+            <p>字节跳动企业协作平台，原生支持，WebSocket 长连接无需公网 IP，支持群聊、私信、富媒体。企业/团队首选。</p>
+          </div>
+          <span class="channel-status status-ready">内置支持</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Section 4: 安装配置 ─── -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <span class="section-emoji">⚙️</span>
+        <h2>安装与配置</h2>
+      </div>
+
+      <div class="info-block tip">
+        <span class="info-icon">💡</span>
+        <p><strong>前置要求：</strong>需要安装 Node.js 24（最低 Node 22）。检查方式：终端运行 <code>node --version</code>。</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:20px;">📦 安装 Node.js</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">macOS 安装 Node（推荐用 nvm）</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 安装 nvm（Node 版本管理器）</span>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+<span class="cmt"># 重新打开终端后，安装 Node 24</span>
+nvm install 24
+nvm use 24
+
+<span class="cmt"># 验证</span>
+node --version  <span class="cmt"># 应显示 v24.x.x</span></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Linux / 云服务器安装 Node</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># Ubuntu / Debian</span>
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+<span class="cmt"># 验证</span>
+node --version</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">🪟 Windows 安装指南（WSL2 + Node）</div>
+            <div class="step-desc">
+              Windows 推荐通过 <strong>WSL2</strong>（Windows 子系统 Linux）运行 OpenClaw，体验和 Linux 完全一致，且官方强烈推荐。
+            </div>
+            <div class="info-block info">
+              <span class="info-icon">ℹ️</span>
+              <p><strong>为什么用 WSL2？</strong>OpenClaw 是 Node.js 程序，在 WSL2 的 Linux 环境里运行最稳定，避免 Windows 路径/权限等兼容性问题。</p>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">第一步：安装 WSL2</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">PowerShell（以管理员身份运行）</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 一键安装 WSL2 + Ubuntu（Windows 10/11）</span>
+wsl --install
+
+<span class="cmt"># 安装完成后重启电脑，然后打开「Ubuntu」应用</span>
+<span class="cmt"># 首次进入设置用户名和密码</span></pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>如果 <code>wsl --install</code> 报错，先运行：<code>wsl --update</code>，或在「控制面板 → 程序 → 启用或关闭 Windows 功能」里勾选「适用于 Linux 的 Windows 子系统」和「虚拟机平台」。</p>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">第二步：在 WSL2 里安装 Node.js</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash（Ubuntu 终端里执行）</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 安装 nvm</span>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+<span class="cmt"># 重新加载 shell 配置</span>
+source ~/.bashrc
+
+<span class="cmt"># 安装 Node 24</span>
+nvm install 24
+nvm use 24
+
+<span class="cmt"># 验证</span>
+node --version  <span class="cmt"># 显示 v24.x.x 即成功</span></pre>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">第三步：VPN 代理穿透到 WSL2</div>
+            <div class="step-desc">WSL2 默认走 Windows 宿主机的网络，但代理不会自动传入。需要手动配置：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash — 在 WSL2 终端里设置代理</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 获取 Windows 宿主机 IP（每次启动可能变化）</span>
+export HOST_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+
+<span class="cmt"># 设置代理（端口改为你的 Clash/VPN 监听端口，一般是 7890）</span>
+export http_proxy="http://$HOST_IP:7890"
+export https_proxy="http://$HOST_IP:7890"
+
+<span class="cmt"># 验证代理是否生效</span>
+curl -I https://api.telegram.org</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>把上面的 <code>export</code> 命令加到 <code>~/.bashrc</code> 末尾，就不用每次手动设置了。Clash 需要开启「允许局域网连接」选项。</p>
+            </div>
+
+            <div style="font-weight:700;font-size:.88rem;color:var(--text);margin:16px 0 8px;">推荐终端工具</div>
+            <div class="concept-grid" style="margin:8px 0;">
+              <div class="concept-card">
+                <span class="concept-icon">💻</span>
+                <h3>Windows Terminal</h3>
+                <p>微软官方终端，支持多标签，从 Microsoft Store 免费安装。比 cmd 好用 100 倍。</p>
+              </div>
+              <div class="concept-card">
+                <span class="concept-icon">⚡</span>
+                <h3>VS Code + WSL 扩展</h3>
+                <p>安装 VS Code 后装「WSL」扩展，可以直接在 Windows 里编辑 WSL 内的文件，体验极佳。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:20px;">🦞 安装 OpenClaw</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">一键安装脚本（推荐）</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash — macOS / Linux</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>curl -fsSL https://openclaw.ai/install.sh | bash</pre>
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">PowerShell — Windows</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>iwr -useb https://openclaw.ai/install.ps1 | iex</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">或者用 npm 手动安装</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>npm install -g openclaw@latest
+
+<span class="cmt"># 验证安装</span>
+openclaw --version</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">运行新手引导（最重要的一步！）</div>
+            <div class="step-desc">这会配置 AI 模型认证、工作区、Gateway 端口，并安装系统服务。</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>openclaw onboard --install-daemon</pre>
+            </div>
+            <div class="info-block info">
+              <span class="info-icon">ℹ️</span>
+              <p>引导过程中会询问：<strong>选择 AI 提供商</strong>（Claude/GPT/Gemini 等）→ 输入 API Key → 选择渠道（Telegram/WhatsApp）→ 安装后台服务。按提示操作即可。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">检查状态 & 打开控制台</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 查看 Gateway 是否在运行</span>
+openclaw gateway status
+
+<span class="cmt"># 打开浏览器控制台</span>
+openclaw dashboard</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✅</span>
+              <p>控制台地址：<code>http://127.0.0.1:18789/</code>。如果能打开，说明安装成功！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">📁 配置文件位置</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">文件结构</span>
+        </div>
+        <pre>~/.openclaw/
+├── openclaw.json        <span class="cmt"># 主配置文件</span>
+├── workspace/           <span class="cmt"># AI 工作区（可自定义）</span>
+│   ├── SOUL.md          <span class="cmt"># 定义 AI 人格</span>
+│   ├── AGENTS.md        <span class="cmt"># AI 工作指令</span>
+│   └── MEMORY.md        <span class="cmt"># AI 长期记忆</span>
+└── agents/
+    └── main/sessions/   <span class="cmt"># 对话历史</span></pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🔄 常用管理命令</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre><span class="cmt"># 启动 / 停止 / 重启</span>
+openclaw gateway start
+openclaw gateway stop
+openclaw gateway restart
+
+<span class="cmt"># 查看实时日志</span>
+openclaw logs --follow
+
+<span class="cmt"># 更新到最新版</span>
+npm install -g openclaw@latest
+openclaw gateway restart
+
+<span class="cmt"># 重新运行配置向导</span>
+openclaw configure</pre>
+      </div>
+    </section>
+
+    <!-- ─── Section 5: 接入渠道 ─── -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <span class="section-emoji">📱</span>
+        <h2>接入渠道 — 以 Telegram 为例</h2>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:20px;font-size:.9rem;line-height:1.8;">
+        Telegram Bot 是最推荐的入门渠道：免费、稳定、功能最完整。下面完整走一遍接入流程。
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">在 Telegram 创建 Bot</div>
+            <div class="step-desc">
+              打开 Telegram，搜索 <strong>@BotFather</strong>，点击对话，发送 <code>/newbot</code>。
+            </div>
+            <ul class="styled">
+              <li>输入 Bot 名称（如：「我的 AI 助手」）</li>
+              <li>输入 Bot 用户名（必须以 <code>bot</code> 结尾，如 <code>my_ai_bot</code>）</li>
+              <li>BotFather 返回一串 <strong>Token</strong>，格式：<code>1234567890:AAXXXXXXXX</code></li>
+              <li>⚠️ <strong>保存好这个 Token，不要泄露</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">配置 Token 到 OpenClaw</div>
+            <div class="step-desc">编辑配置文件 <code>~/.openclaw/openclaw.json</code>：</div>
+            <div class="code-block config-preview">
+              <div class="code-header">
+                <span class="code-lang">json — ~/.openclaw/openclaw.json</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"channels"</span>: {
+    <span class="str">"telegram"</span>: {
+      <span class="str">"enabled"</span>: <span class="kw">true</span>,
+      <span class="str">"botToken"</span>: <span class="str">"你的Token填这里"</span>,
+      <span class="str">"dmPolicy"</span>: <span class="str">"pairing"</span>
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p><code>dmPolicy: "pairing"</code> 表示第一次有人私信 Bot 时，需要配对验证 — 这样陌生人无法使用你的 AI 助手。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">重启 Gateway 并配对</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>openclaw gateway restart</pre>
+            </div>
+            <div class="step-desc mt-4">
+              然后在 Telegram 搜索你的 Bot，发送任意消息。Bot 会返回一个 <strong>配对码</strong>，在终端执行：
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 查看待配对列表</span>
+openclaw pairing list telegram
+
+<span class="cmt"># 批准配对（CODE 替换为 Bot 返回的验证码）</span>
+openclaw pairing approve telegram CODE</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">🎉 开始聊天！</div>
+            <div class="step-desc">
+              配对成功后，直接在 Telegram 发消息给 Bot，就能和 AI 对话了。<br />
+              试试发送：<code>你好，介绍一下你自己</code>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✨</span>
+              <p><strong>实用命令（发给 Bot 即可）：</strong><br />
+              <code>/status</code> — 查看当前状态<br />
+              <code>/model</code> — 切换 AI 模型<br />
+              <code>/reset</code> — 清空对话历史<br />
+              <code>/new</code> — 开始新会话</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🔒 安全配置（可选但推荐）</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">json — 白名单配置</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre>{
+  <span class="str">"channels"</span>: {
+    <span class="str">"telegram"</span>: {
+      <span class="str">"enabled"</span>: <span class="kw">true</span>,
+      <span class="str">"botToken"</span>: <span class="str">"你的Token"</span>,
+      <span class="str">"dmPolicy"</span>: <span class="str">"allowlist"</span>,
+      <span class="str">"allowFrom"</span>: [<span class="str">"你的Telegram数字ID"</span>]
+    }
+  }
+}</pre>
+      </div>
+      <div class="info-block info">
+        <span class="info-icon">ℹ️</span>
+        <p><strong>如何获取你的 Telegram 用户 ID：</strong>启动 Gateway 后私信你的 Bot，然后运行 <code>openclaw logs --follow</code>，查找 <code>from.id</code> 字段即是你的 ID。</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- WeChat ClawBot -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <span style="font-size:1.4rem;">🐧</span>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--text);">微信 ClawBot — 国内用户首选</h3>
+        <span style="font-size:.72rem;background:rgba(0,230,184,.15);color:var(--accent);border:1px solid rgba(0,230,184,.25);padding:2px 10px;border-radius:10px;font-weight:700;">2026 新上线 · 灰度测试</span>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:16px;font-size:.87rem;line-height:1.8;">
+        2026 年 3 月，腾讯正式推出 <strong style="color:var(--text)">ClawBot</strong> 插件，将微信变成 OpenClaw 的操作入口。国内用户无需 Telegram，直接用微信就能和 AI 助手对话。
+      </p>
+
+      <div class="info-block warn">
+        <span class="info-icon">⚠️</span>
+        <p><strong>当前限制：</strong>ClawBot 处于灰度测试阶段，<strong>iOS 微信 8.0.70+</strong> 优先支持，Android 尚在陆续推送。如果「设置-插件」里没有 ClawBot 入口，重启几次微信或等待灰度覆盖。</p>
+      </div>
+
+      <div class="steps" style="margin-top:20px;">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">更新微信到最新版本</div>
+            <div class="step-desc">
+              App Store 搜索「微信」，更新到 <strong>8.0.70 或以上</strong>。<br />
+              更新后打开微信 → <strong>「我 → 设置 → 插件」</strong>，确认 ClawBot 入口已出现。
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>看不到「插件」入口？先重启微信，或等几天，灰度会逐步推送给所有用户。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">确认 OpenClaw 已安装并运行</div>
+            <div class="step-desc">ClawBot 是将微信绑定到<strong>本机运行的 OpenClaw</strong>，所以你的电脑需要先装好 OpenClaw。</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 确认 OpenClaw 已安装</span>
+openclaw --version
+
+<span class="cmt"># 确认 Gateway 正在运行</span>
+openclaw gateway status</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">安装微信 ClawBot 插件</div>
+            <div class="step-desc">在电脑终端运行腾讯提供的安装命令（无需单独下载，npx 会自动拉取）：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash — 在电脑终端运行</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>npx -y @tencent-weixin/openclaw-weixin-cli@latest install</pre>
+            </div>
+            <div class="info-block info">
+              <span class="info-icon">ℹ️</span>
+              <p>该命令会自动安装腾讯官方的微信-OpenClaw 桥接插件，并启动本地监听服务。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">扫码绑定微信账号</div>
+            <div class="step-desc">
+              命令运行后，终端会弹出一个 <strong>QR 二维码</strong>。<br />
+              拿出手机，打开微信 → <strong>「我 → 设置 → 插件 → ClawBot」</strong> → 点击「扫码绑定」，扫描终端里的二维码。
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✅</span>
+              <p>扫码成功后，微信会提示「ClawBot 绑定成功」。之后直接在微信给 <strong>「ClawBot」联系人</strong>发消息就能和 AI 对话了！</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">🎉 开始用微信聊 AI！</div>
+            <div class="step-desc">
+              在微信「ClawBot」对话框发消息，OpenClaw 会处理并回复。<br />
+              支持发文字、图片、语音（自动转文字）、文件。
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">试着发这些</span>
+              </div>
+              <pre>帮我总结一下今天的工作内容
+帮我写一封请假邮件
+分析一下这张截图（发图片）</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:14px;">⚠️ 微信 ClawBot 重要注意事项</h3>
+      <div class="concept-grid">
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">🔒</span>
+          <h3>腾讯安全审查</h3>
+          <p>微信会对传输内容进行安全审计，涉及敏感内容可能被屏蔽。AI 输出内容由你自己负责。</p>
+        </div>
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">📝</span>
+          <h3>不留存对话</h3>
+          <p>腾讯声明不存储对话内容，但会记录 IP 地址、设备信息和操作日志用于安全审计。</p>
+        </div>
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">👤</span>
+          <h3>仅限私聊</h3>
+          <p>目前只支持一对一私信，不支持群聊。AI 主动推送消息也暂不支持。</p>
+        </div>
+        <div class="concept-card" style="border-color:rgba(245,158,11,.2);">
+          <span class="concept-icon">💻</span>
+          <h3>电脑要保持开机</h3>
+          <p>ClawBot 依赖本地运行的 OpenClaw，电脑关机或 Gateway 停止则微信 AI 不可用。建议用海外服务器。</p>
+        </div>
+      </div>
+
+      <div class="info-block tip" style="margin-top:16px;">
+        <span class="info-icon">🆚</span>
+        <p><strong>微信 vs Telegram：</strong>微信适合国内日常使用，无需翻墙，但受腾讯内容审查限制。Telegram 功能最完整、无审查，但国内需要 VPN。两个都可以同时开着，互不影响。</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 飞书 -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <span style="font-size:1.4rem;">🐦</span>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--text);">飞书 / Lark — 企业团队首选</h3>
+        <span style="font-size:.72rem;background:rgba(79,143,255,.15);color:var(--blue);border:1px solid rgba(79,143,255,.25);padding:2px 10px;border-radius:10px;font-weight:700;">内置支持 · 无需插件</span>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:16px;font-size:.87rem;line-height:1.8;">
+        飞书（Lark）是字节跳动旗下的企业协作平台，OpenClaw 官方原生支持飞书机器人，通过 WebSocket 长连接接入，<strong style="color:var(--text)">无需公网 URL、无需 webhook</strong>，国内直连，适合企业/团队使用。
+      </p>
+
+      <div class="concept-grid" style="margin-bottom:20px;">
+        <div class="concept-card">
+          <span class="concept-icon">✅</span>
+          <h3>无需公网 IP</h3>
+          <p>WebSocket 长连接，本机/内网服务器即可，不需要暴露端口。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">📎</span>
+          <h3>支持富媒体</h3>
+          <p>文字、图片、文件、音频、视频、贴纸全部支持，还有流式卡片输出。</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">👥</span>
+          <h3>群聊 + 私信</h3>
+          <p>支持私信和群组话题，群聊 @ 提及响应，精细权限控制。</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">在飞书开放平台创建应用</div>
+            <div class="step-desc">
+              打开 <strong>open.feishu.cn/app</strong>（国际版 Lark 用 open.larksuite.com/app），登录后点击「创建企业自建应用」，填写名称和图标。
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>创建完成后，进入「凭证与基础信息」，复制 <strong>App ID</strong>（格式：<code>cli_xxx</code>）和 <strong>App Secret</strong>，妥善保存。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">配置权限（批量导入）</div>
+            <div class="step-desc">在应用「权限管理」中，点击「批量导入」，粘贴以下 JSON：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json — 批量导入权限</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"scopes"</span>: {
+    <span class="str">"tenant"</span>: [
+      <span class="str">"im:message"</span>,
+      <span class="str">"im:message:send_as_bot"</span>,
+      <span class="str">"im:message:readonly"</span>,
+      <span class="str">"im:message.p2p_msg:readonly"</span>,
+      <span class="str">"im:message.group_at_msg:readonly"</span>,
+      <span class="str">"im:resource"</span>,
+      <span class="str">"im:chat.members:bot_access"</span>,
+      <span class="str">"contact:user.employee_id:readonly"</span>,
+      <span class="str">"application:bot.menu:write"</span>
+    ]
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">启用机器人能力 + 配置事件订阅</div>
+            <ul class="styled">
+              <li>「应用能力」→「机器人」→ <strong>启用机器人</strong>，设置机器人名称</li>
+              <li>「事件订阅」→ 选择 <strong>「使用长连接接收事件（WebSocket）」</strong></li>
+              <li>添加事件：<strong><code>im.message.receive_v1</code></strong></li>
+            </ul>
+            <div class="info-block warn">
+              <span class="info-icon">⚠️</span>
+              <p>事件订阅要在 <strong>OpenClaw Gateway 运行时</strong>配置，否则长连接设置可能无法保存。建议先完成第 4 步启动 Gateway，再回来保存这里。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">配置 OpenClaw</div>
+            <div class="step-desc">编辑 <code>~/.openclaw/openclaw.json</code>：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"channels"</span>: {
+    <span class="str">"feishu"</span>: {
+      <span class="str">"enabled"</span>: <span class="kw">true</span>,
+      <span class="str">"dmPolicy"</span>: <span class="str">"pairing"</span>,
+      <span class="str">"accounts"</span>: {
+        <span class="str">"main"</span>: {
+          <span class="str">"appId"</span>: <span class="str">"cli_你的AppID"</span>,
+          <span class="str">"appSecret"</span>: <span class="str">"你的AppSecret"</span>,
+          <span class="str">"name"</span>: <span class="str">"我的AI助手"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">💡</span>
+              <p>Lark 国际版用户额外添加：<code>"domain": "lark"</code></p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">发布应用并重启 Gateway</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>openclaw gateway restart</pre>
+            </div>
+            <div class="step-desc" style="margin-top:12px;">
+              回到飞书开放平台 →「版本管理与发布」→ 创建版本 → 提交审核（企业自建应用通常自动批准）。
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">🎉 发消息 + 配对</div>
+            <div class="step-desc">在飞书搜索你的机器人，发一条消息，机器人会返回配对码。终端执行：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 查看待配对列表</span>
+openclaw pairing list feishu
+
+<span class="cmt"># 批准（CODE 替换为机器人返回的验证码）</span>
+openclaw pairing approve feishu CODE</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✅</span>
+              <p>配对成功后正常聊天即可。群聊中需要 @ 机器人触发。常用命令：<code>/status</code>、<code>/reset</code>、<code>/model</code>（以文本形式发送，飞书不支持斜杠菜单）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:14px;">飞书群聊配置示例</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">json — 允许指定群，要求 @ 提及（推荐）</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre>{
+  <span class="str">"channels"</span>: {
+    <span class="str">"feishu"</span>: {
+      <span class="str">"groupPolicy"</span>: <span class="str">"open"</span>,
+      <span class="str">"groups"</span>: {
+        <span class="str">"oc_你的群组ID"</span>: { <span class="str">"requireMention"</span>: <span class="kw">true</span> }
+      }
+    }
+  }
+}</pre>
+      </div>
+      <div class="info-block info">
+        <span class="info-icon">ℹ️</span>
+        <p><strong>如何获取群组 ID：</strong>启动 Gateway 后在群里 @ 机器人，运行 <code>openclaw logs --follow</code> 查找 <code>chat_id</code>（格式为 <code>oc_xxx</code>）。</p>
+      </div>
+    </section>
+
+    <!-- ─── Section 6: 接入 AI 模型 ─── -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <span class="section-emoji">🔑</span>
+        <h2>接入 AI 模型</h2>
+      </div>
+
+      <p style="color:var(--text2);margin-bottom:20px;font-size:.9rem;line-height:1.8;">
+        OpenClaw 支持几乎所有主流 AI 模型。核心区别：有些需要付费 API Key，有些支持免费 OAuth 授权。
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">A</div>
+          <div class="step-body">
+            <div class="step-title">Claude（Anthropic）— OAuth 免费登录</div>
+            <div class="step-desc">Anthropic 官方允许通过 OAuth 使用 Claude.ai 订阅，无需单独购买 API。</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 打开 Anthropic OAuth 授权</span>
+openclaw auth login anthropic
+
+<span class="cmt"># 按提示在浏览器完成授权</span>
+<span class="cmt"># 授权后自动配置，无需填写 API Key</span></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">B</div>
+          <div class="step-body">
+            <div class="step-title">GPT-4（OpenAI）— API Key 方式</div>
+            <div class="step-desc">前往 <code>platform.openai.com</code> 创建 API Key，然后配置：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json — openclaw.json</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"agents"</span>: {
+    <span class="str">"defaults"</span>: {
+      <span class="str">"model"</span>: <span class="str">"openai/gpt-4o"</span>,
+      <span class="str">"auth"</span>: {
+        <span class="str">"openai"</span>: {
+          <span class="str">"apiKey"</span>: <span class="str">"sk-你的Key"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block warn">
+              <span class="info-icon">⚠️</span>
+              <p>API Key 有费用。OpenAI 按 token 计费，日常使用约 $1–5/月。记得在 platform.openai.com 设置用量上限。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">C</div>
+          <div class="step-body">
+            <div class="step-title">Gemini（Google）— 免费额度最多</div>
+            <div class="step-desc">前往 <code>aistudio.google.com</code> 获取免费 API Key（需 VPN）：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"agents"</span>: {
+    <span class="str">"defaults"</span>: {
+      <span class="str">"model"</span>: <span class="str">"google/gemini-2.0-flash"</span>,
+      <span class="str">"auth"</span>: {
+        <span class="str">"google"</span>: {
+          <span class="str">"apiKey"</span>: <span class="str">"AIza你的Key"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">D</div>
+          <div class="step-body">
+            <div class="step-title">🇨🇳 DeepSeek — 国内直连，无需 VPN</div>
+            <div class="step-desc">前往 <code>platform.deepseek.com</code> 注册并创建 API Key，国内可直接访问：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json — 兼容 OpenAI 格式</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"agents"</span>: {
+    <span class="str">"defaults"</span>: {
+      <span class="str">"model"</span>: <span class="str">"openai/deepseek-chat"</span>,
+      <span class="str">"auth"</span>: {
+        <span class="str">"openai"</span>: {
+          <span class="str">"apiKey"</span>: <span class="str">"sk-你的DeepSeekKey"</span>,
+          <span class="str">"baseURL"</span>: <span class="str">"https://api.deepseek.com/v1"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">🐋</span>
+              <p><strong>DeepSeek 优势：</strong>价格极低（约 OpenAI 的 1/30），逻辑推理和代码能力媲美 GPT-4，国内服务器直连无需翻墙。新注册有免费额度。</p>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">E</div>
+          <div class="step-body">
+            <div class="step-title">🇨🇳 通义千问 Qwen — 阿里云，中文最强</div>
+            <div class="step-desc">前往 <code>dashscope.aliyuncs.com</code> 开通服务，获取 API Key：</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">json — 兼容 OpenAI 格式</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre>{
+  <span class="str">"agents"</span>: {
+    <span class="str">"defaults"</span>: {
+      <span class="str">"model"</span>: <span class="str">"openai/qwen-plus"</span>,
+      <span class="str">"auth"</span>: {
+        <span class="str">"openai"</span>: {
+          <span class="str">"apiKey"</span>: <span class="str">"sk-你的QwenKey"</span>,
+          <span class="str">"baseURL"</span>: <span class="str">"https://dashscope.aliyuncs.com/compatible-mode/v1"</span>
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+            <div class="info-block tip">
+              <span class="info-icon">✨</span>
+              <p><strong>Qwen 优势：</strong>阿里云出品，中文理解和长文处理极佳，有免费额度。<code>qwen-plus</code> 性价比最高，<code>qwen-max</code> 能力更强。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🔀 动态切换模型</h3>
+      <p style="color:var(--text2);margin-bottom:12px;font-size:.87rem;">配置好多个模型后，可以在 Telegram 对话中随时切换：</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">Telegram 命令</span>
+        </div>
+        <pre>/model                    <span class="cmt"># 查看可用模型列表</span>
+/model claude-sonnet-4    <span class="cmt"># 切换到 Claude Sonnet</span>
+/model gpt-4o             <span class="cmt"># 切换到 GPT-4o</span></pre>
+      </div>
+    </section>
+
+    <!-- ─── Section 7: 调试技巧 ─── -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <span class="section-emoji">🔧</span>
+        <h2>调试技巧</h2>
+      </div>
+
+      <div class="info-block danger">
+        <span class="info-icon">🚨</span>
+        <p><strong>最重要的调试工具：实时日志。</strong>遇到任何问题，先看日志，90% 的问题都能在日志里找到原因。</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">查看日志</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre><span class="cmt"># 实时追踪日志（最常用）</span>
+openclaw logs --follow
+
+<span class="cmt"># 查看最近 100 行</span>
+openclaw logs --lines 100
+
+<span class="cmt"># 过滤错误</span>
+openclaw logs --follow | grep -i error</pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">常见问题排查</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">❓</div>
+          <div class="step-body">
+            <div class="step-title">Bot 不回复消息</div>
+            <ul class="styled">
+              <li>运行 <code>openclaw gateway status</code> 确认 Gateway 在运行</li>
+              <li>查看日志是否有 <code>error</code> 或 <code>failed</code></li>
+              <li>确认 Telegram API 可访问：<code>curl https://api.telegram.org</code>（需翻墙）</li>
+              <li>检查 Token 是否填写正确（不要有多余空格）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">❓</div>
+          <div class="step-body">
+            <div class="step-title">AI 返回错误 / 无响应</div>
+            <ul class="styled">
+              <li>日志查找 <code>401</code>（API Key 无效）或 <code>429</code>（超过限速）</li>
+              <li>API Key 余额是否充足，登录对应平台检查</li>
+              <li>网络是否能访问 AI 服务：<code>curl https://api.anthropic.com</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">❓</div>
+          <div class="step-body">
+            <div class="step-title">配置修改不生效</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># 修改配置后必须重启</span>
+openclaw gateway restart
+
+<span class="cmt"># 检查配置文件是否是合法 JSON</span>
+cat ~/.openclaw/openclaw.json | python3 -m json.tool</pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">❓</div>
+          <div class="step-body">
+            <div class="step-title">全面诊断</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">复制</button>
+              </div>
+              <pre><span class="cmt"># OpenClaw 内置诊断工具</span>
+openclaw doctor
+
+<span class="cmt"># 检查渠道状态</span>
+openclaw channels status</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Section 8: 进阶功能 ─── -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <span class="section-emoji">🚀</span>
+        <h2>进阶功能</h2>
+      </div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🪄 自定义 AI 人格（SOUL.md）</h3>
+      <p style="color:var(--text2);margin-bottom:12px;font-size:.87rem;">在工作区创建 <code>SOUL.md</code>，让 AI 有自己的个性：</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">markdown — ~/.openclaw/workspace/SOUL.md</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre># 我的专属 AI 助手
+
+你是 Alex，一个聪明、直接、有品位的助手。
+- 默认中文回复
+- 回答简洁有力，不废话
+- 擅长帮助分析问题、写作、编程
+- 遇到不确定的事情，直接说不知道</pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">⏰ 定时任务（Cron）</h3>
+      <p style="color:var(--text2);margin-bottom:12px;font-size:.87rem;">在 Telegram 发送指令，或通过命令行设置定时任务：</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">Telegram 示例</span>
+        </div>
+        <pre>「每天早上 8 点给我发今日天气预报」
+「每周一早上提醒我写周报」
+「30 分钟后提醒我开会」</pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">📱 配对手机节点</h3>
+      <p style="color:var(--text2);margin-bottom:12px;font-size:.87rem;">将 iOS 或 Android 手机配对到 OpenClaw，让 AI 能看到你的屏幕截图、相机拍照：</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre><span class="cmt"># 生成配对二维码</span>
+openclaw nodes pair
+
+<span class="cmt"># 手机扫码完成配对</span>
+<span class="cmt"># 之后可以在 Telegram 发送：</span>
+<span class="cmt"># 「帮我看一下这张截图里写的什么」</span></pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🌐 远程访问（Tailscale）</h3>
+      <p style="color:var(--text2);margin-bottom:12px;font-size:.87rem;">使用 Tailscale 把 OpenClaw 控制台安全暴露给自己的设备：</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre><span class="cmt"># 安装 Tailscale（https://tailscale.com）</span>
+curl -fsSL https://tailscale.com/install.sh | sh
+tailscale up
+
+<span class="cmt"># 在 openclaw.json 中启用 Tailscale</span>
+<span class="cmt"># "gateway": { "tailscale": { "enabled": true } }</span>
+
+<span class="cmt"># 之后可以从任何设备访问：</span>
+<span class="cmt"># http://100.x.x.x:18789/  （Tailscale IP）</span></pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🔍 网页搜索（给 AI 联网能力）</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">json — 添加 Brave Search API</span>
+          <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        </div>
+        <pre>{
+  <span class="str">"tools"</span>: {
+    <span class="str">"webSearch"</span>: {
+      <span class="str">"provider"</span>: <span class="str">"brave"</span>,
+      <span class="str">"apiKey"</span>: <span class="str">"你的BraveSearchAPIKey"</span>
+    }
+  }
+}</pre>
+      </div>
+      <div class="info-block tip">
+        <span class="info-icon">💡</span>
+        <p>Brave Search API 每月有 2000 次免费额度，足够日常使用。在 <code>brave.com/search/api</code> 免费注册获取 Key。</p>
+      </div>
+    </section>
+
+    <!-- ─── Section 9: 常见问题 ─── -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <span class="section-emoji">❓</span>
+        <h2>常见问题</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            OpenClaw 免费吗？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            OpenClaw 本身完全开源免费。你需要自行购买 AI 模型的 API（如 OpenAI 按量付费），或使用 Claude.ai 的订阅（通过 OAuth 授权，无需单独购买 API）。服务器费用如果用海外 VPS 大约每月 $4-6。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            安全吗？我的对话会被看到吗？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            对话直接从你的服务器/电脑发送到 AI 提供商（Anthropic/OpenAI），OpenClaw 只是本地路由，不会上传对话到第三方服务器。只要你自己的服务器安全，对话就是私密的。建议开启 Telegram Bot 的白名单，防止陌生人使用。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            手机关机了 AI 还能用吗？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            取决于 OpenClaw 运行在哪里。如果安装在 24 小时开机的服务器上，随时可用。如果安装在个人电脑上，电脑需要开着。推荐用海外 VPS（$4-6/月），一直在线。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            可以同时接多个 AI 模型吗？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            可以。在配置文件中配置多个模型的 API Key，然后用 <code>/model</code> 命令在 Telegram 里随时切换。或者配置多个 Agent，不同渠道走不同模型。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            AI 会记住之前的对话吗？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            同一个会话内会记住（上下文窗口限制内）。要让 AI 记住跨会话的信息，可以在工作区的 <code>MEMORY.md</code> 里写入，或者指示 AI 更新记忆文件。每次新会话发 <code>/new</code> 会清空上下文重新开始。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            WhatsApp 安全吗？会不会封号？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            WhatsApp 接入使用非官方协议，理论上有封号风险。建议用备用号，不要用主要工作号。Telegram Bot 是官方 API，完全安全，推荐优先使用 Telegram。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            如何让 AI 帮我搜索最新信息？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            配置 Brave Search API（免费 2000 次/月）。配置后，AI 会自动在需要最新信息时调用搜索工具。也可以主动说：「帮我搜索一下 xxx 的最新情况」。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            配置文件格式错了怎么办？
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-a">
+            运行 <code>cat ~/.openclaw/openclaw.json | python3 -m json.tool</code> 检查 JSON 格式是否合法。如果格式错误，修复后重启 Gateway。也可以运行 <code>openclaw doctor</code> 进行全面诊断。
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;">🎯 官方资源</h3>
+      <div class="next-grid">
+        <a class="next-card" href="https://docs.openclaw.ai" target="_blank">
+          <div class="ni">📚</div>
+          <h4>官方文档</h4>
+          <p>完整的配置参考和高级功能说明</p>
+        </a>
+        <a class="next-card" href="https://discord.com/invite/clawd" target="_blank">
+          <div class="ni">💬</div>
+          <h4>Discord 社区</h4>
+          <p>和其他用户交流使用心得，获取帮助</p>
+        </a>
+        <a class="next-card" href="https://github.com/openclaw/openclaw" target="_blank">
+          <div class="ni">⭐</div>
+          <h4>GitHub 源码</h4>
+          <p>查看源码、提 Issue、参与贡献</p>
+        </a>
+        <a class="next-card" href="https://clawhub.ai" target="_blank">
+          <div class="ni">🔌</div>
+          <h4>ClawHub 技能库</h4>
+          <p>发现和安装更多 AI 技能扩展</p>
+        </a>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:6px;">🇨🇳 中文学习资源</h3>
+      <p style="color:var(--muted);font-size:.8rem;margin-bottom:18px;">以下资源由中文社区整理，质量已验证 ✅</p>
+
+      <!-- B站视频 -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">📺 B站视频（从入门到精通）</div>
+      <div class="channel-list" style="margin-bottom:24px;">
+        <a class="channel-item" href="https://www.bilibili.com/video/BV1jEAaz3E6K/" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🎬</span>
+          <div class="channel-info">
+            <h4>一个视频搞懂 OpenClaw！— 林亦LYi</h4>
+            <p>全站播放量最高的入门视频（近 500 万播放），10 分钟讲清楚 OpenClaw 是什么、能干什么。完全零基础可看。</p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </a>
+        <a class="channel-item" href="https://www.bilibili.com/video/BV1TpAZzeEiZ/" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🎬</span>
+          <div class="channel-info">
+            <h4>保姆级全教程：安装+Skills实战+多Agent协作</h4>
+            <p>1 小时完整教学，从安装到 Skills 实战再到多 Agent 协作，2026 最新版本，全 B 站最细。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://www.bilibili.com/video/BV1mScqzqEDN/" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🎬</span>
+          <div class="channel-info">
+            <h4>OpenClaw 原理精讲与从零手搓 — 进阶必看</h4>
+            <p>深入讲解 Agent Skill、无限上下文记忆、自主迭代功能设计原理，适合想深入理解的进阶用户。</p>
+          </div>
+          <span class="channel-status status-plugin">进阶</span>
+        </a>
+      </div>
+
+      <!-- 图文教程 -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">📝 图文教程（收藏备用）</div>
+      <div class="channel-list" style="margin-bottom:24px;">
+        <a class="channel-item" href="https://www.runoob.com/ai-agent/openclaw-weixin.html" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🟢</span>
+          <div class="channel-info">
+            <h4>菜鸟教程 — OpenClaw 接入微信完整图文</h4>
+            <p>菜鸟教程官方出品，图文并茂，包含微信、飞书、Skills 使用，适合新手跟着一步步操作。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://zhuanlan.zhihu.com/p/2002370444339212951" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🔵</span>
+          <div class="channel-info">
+            <h4>知乎 — 我做了个 OpenClaw 入门站，7天教程+70篇资源</h4>
+            <p>社区整理最全的中文资源导航，含 7 天入门计划，全网相关教程汇总，适合系统学习。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://zhuanlan.zhihu.com/p/2019077006235554955" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🔵</span>
+          <div class="channel-info">
+            <h4>知乎 — 微信ClawBot插件，14亿人的AI入口！附Win踩坑</h4>
+            <p>专门讲微信 ClawBot 接入，包含 Windows 踩坑解决方案，国内用户必看。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://damodev.csdn.net/69a7a68d54b52172bc5ee3bb.html" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🟠</span>
+          <div class="channel-info">
+            <h4>CSDN — 云上及本地部署保姆级教程（2026 中文版）</h4>
+            <p>覆盖云服务器部署 + 本地部署两种方案，含国内环境优化配置，偏技术向。</p>
+          </div>
+          <span class="channel-status status-plugin">进阶</span>
+        </a>
+      </div>
+
+      <!-- GitHub 中文项目 -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">⭐ GitHub 中文开源项目</div>
+      <div class="channel-list" style="margin-bottom:8px;">
+        <a class="channel-item" href="https://github.com/xianyu110/awesome-openclaw-tutorial" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">📖</span>
+          <div class="channel-info">
+            <h4>awesome-openclaw-tutorial — 40万字中文教程</h4>
+            <p>GitHub 最全中文教程，15 章节 + 15 附录，涵盖安装、配置、实战案例和避坑指南，持续更新。</p>
+          </div>
+          <span class="channel-status status-ready">强烈推荐</span>
+        </a>
+        <a class="channel-item" href="https://github.com/jiulingyun/openclaw-cn" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">🇨🇳</span>
+          <div class="channel-info">
+            <h4>openclaw-cn — 中文社区版（内置微信/钉钉/飞书/QQ）</h4>
+            <p>国内团队维护的中文分支，已内置钉钉、企业微信、飞书、QQ、微信，国内网络环境优化，开箱即用。</p>
+          </div>
+          <span class="channel-status status-ready">推荐</span>
+        </a>
+        <a class="channel-item" href="https://github.com/ben4claw/openclaw-tutorial" target="_blank" style="text-decoration:none;">
+          <span class="channel-emoji">📖</span>
+          <div class="channel-info">
+            <h4>openclaw-tutorial — 含 Skills 生态详解（1800+ 可用）</h4>
+            <p>详细介绍 49 个内置 Skills + 官方 93 个 + 社区 1715+ 个，含完整 Skills 使用指南。</p>
+          </div>
+          <span class="channel-status status-plugin">进阶</span>
+        </a>
+      </div>
+
+      <div class="info-block tip" style="margin-top:28px;">
+        <span class="info-icon">🦞</span>
+        <p><strong>学习路线建议：</strong>新手先看 B 站林亦LYi 的入门视频 → 跟着本页面动手安装 → 遇到问题查菜鸟教程或知乎 → 想深入研究看 GitHub 中文教程仓库。循序渐进，30 分钟就能用上！</p>
+      </div>
+    </section>
+
+  </div><!-- /content -->
+</main>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ─── Theme ───
+function toggleTheme() {
+  var cur = document.documentElement.getAttribute('data-theme');
+  var next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('vibecoding_theme', next);
+}
+
+// ─── Sidebar ───
+function toggleSidebar() {
+  var s = document.getElementById('sidebar');
+  var o = document.getElementById('overlay');
+  s.classList.toggle('open');
+  o.classList.toggle('show');
+}
+document.getElementById('overlay').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.remove('open');
+  this.classList.remove('show');
+});
+
+// ─── Copy Code ───
+function copyCode(btn) {
+  var pre = btn.closest('.code-block').querySelector('pre');
+  var text = pre.innerText || pre.textContent;
+  navigator.clipboard.writeText(text.trim()).then(function() {
+    btn.textContent = '✓ 已复制';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = '复制';
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+
+// ─── FAQ ───
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) {
+    el.classList.remove('open');
+  });
+  if (!isOpen) item.classList.add('open');
+}
+
+// ─── Scroll Progress & Active Nav ───
+var sections = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+var sectionTitles = ['课程简介','AI 基础概念','VPN 与网络','OpenClaw 是什么',
+  '安装与配置','接入渠道','接入 AI 模型','调试技巧','进阶功能','常见问题'];
+
+function updateProgress() {
+  var scrollTop = window.scrollY || document.documentElement.scrollTop;
+  var docH = document.documentElement.scrollHeight - window.innerHeight;
+  var pct = docH > 0 ? Math.round((scrollTop / docH) * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+
+  // active nav
+  var current = 0;
+  sections.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 120) current = i;
+  });
+  document.querySelectorAll('.nav-item').forEach(function(el, i) {
+    el.classList.toggle('active', i === current);
+  });
+  document.getElementById('current-section-title').textContent = sectionTitles[current];
+
+  // scroll to top btn
+  var st = document.getElementById('scrollTop');
+  st.classList.toggle('visible', scrollTop > 300);
+}
+
+window.addEventListener('scroll', updateProgress, { passive: true });
+updateProgress();
+
+// ─── Nav smooth click ───
+document.querySelectorAll('.nav-item').forEach(function(el) {
+  el.addEventListener('click', function() {
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    }
+  });
+});
+</script>
+</body>
+</html>
